@@ -1,5 +1,5 @@
 <?php
-$host = "localhost:";
+$host = "localhost";
 $dbname = "projet_histoire_arjo_pellegrin";
 $username = "noemine";
 $password = "patioPalmierChat200522";
