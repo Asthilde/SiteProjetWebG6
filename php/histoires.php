@@ -7,7 +7,7 @@ require_once("connect.php");
 <?php include 'templatesHTML/head.php';?>
 <body>
     <div class="container">        
-        <?php include '../templatesHTML/navbar.php';
+        <?php include 'templatesHTML/navbar.php';
         if(isset($_GET['id']) && !empty($_GET['id'])) {
             $req = "SELECT * FROM histoire WHERE id_hist=" . $_GET['id'];
             $res = $BDD -> query($req); 
