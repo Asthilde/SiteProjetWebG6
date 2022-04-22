@@ -94,7 +94,7 @@ CREATE TABLE `page` (
 CREATE TABLE `user` (
   `id_user` int(50) NOT NULL,
   `est_admin` tinyint(1) NOT NULL,
-  `login` varchar(50) NOT NULL,
+  `pseudo` varchar(50) NOT NULL,
   `mdp` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
