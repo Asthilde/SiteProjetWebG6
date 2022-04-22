@@ -11,9 +11,9 @@ if(isset($_POST['titre']) && isset($_POST['resume'])) {
 
     // On vérifie le nombre d'éléments correspondant
     if($ligne['nb'] == 0) {
-        //Avoir un nommage type de l'image et créer un dossier d'images par histoire ?
-        mkdir("../images/".$_POST['nom']);
-        $_FILES["image"]['name'] =  strtolower($_POST['title']) . $_FILES["image"]['name'] . 'jpg';
+        //Avoir un nommage type de l'image en vérifiant son type ! (jpg, jpeg , ... ) et créer un dossier d'images par histoire
+        mkdir("../images/".$_POST['nom']); //Vérifier si ça crée bien un dossier !
+        $_FILES["image"]['name'] =  strtolower("image_accueil.". 'jpg');
         if(move_uploaded_file($_FILES["image"]['tmp_name'], "../images/".$_FILES["image"]['name'])){
             // On prépare une nouvelle requête
             $req2 = "SELECT id_user FROM user WHERE pseudo =" . $_SESSION['login'];
@@ -29,7 +29,9 @@ if(isset($_POST['titre']) && isset($_POST['resume'])) {
                 "img" => $_FILES["image"]['name'] 
             ));
         }
-        header('Location: ajoutPage.php') ;
+        $_SESSION['nom_hist'] = $_POST['nom'];
+        $_SESSION['num_page'] = '0';
+        header('Location: ajout_page.php') ;
     }
     else {
         echo "L'histoire existe déja dans la base !"; ?>
