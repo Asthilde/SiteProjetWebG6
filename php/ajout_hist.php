@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once("connect.php");
-if(isset($_POST['titre']) && isset($_POST['resume'])) {
+if(isset($_POST['nom']) && isset($_POST['resume'])) {
     $req = $BDD->prepare("SELECT COUNT(*) as nb FROM histoire WHERE nom_hist=:titre");
     $req->execute(array(
         "titre" => $_POST['nom']
@@ -12,14 +12,15 @@ if(isset($_POST['titre']) && isset($_POST['resume'])) {
     // On vérifie le nombre d'éléments correspondant
     if($ligne['nb'] == 0) {
         //Avoir un nommage type de l'image en vérifiant son type ! (jpg, jpeg , ... ) et créer un dossier d'images par histoire
-        mkdir("../images/".$_POST['nom']); //Vérifier si ça crée bien un dossier !
-        $_FILES["image"]['name'] =  strtolower("image_accueil.". 'jpg');
-        if(move_uploaded_file($_FILES["image"]['tmp_name'], "../images/".$_FILES["image"]['name'])){
+        //Faire un if pour vérifier si le dossier existe ... 
+        if(is_dir("../images/".$_POST['nom']) || mkdir("../images/".$_POST['nom'])){
+        $_FILES["image"]['name'] =  strtolower("image_accueil.". substr($_FILES["image"]['name'], strpos($_FILES["image"]['name'], '.')));
+        if(move_uploaded_file($_FILES["image"]['tmp_name'], "../images/".$_POST['nom'].'/'.$_FILES["image"]['name'])){
             // On prépare une nouvelle requête
-            $req2 = "SELECT id_user FROM user WHERE pseudo =" . $_SESSION['login'];
+            $req2 = "SELECT id_user FROM user WHERE pseudo ='{$_SESSION['login']}'";
             $res2 = $BDD->query($req2);
             $idUser = $res2->fetch();
-            $sql = "INSERT INTO histoire (nom_hist, illustration, synopsis, id_createur) VALUES (:titre, :img, :synopsis," . $idUser . ")";
+            $sql = "INSERT INTO histoire (nom_hist, illustration, synopsis, id_createur) VALUES (:titre, :img, :synopsis, '{$idUser}')";
             $req = $BDD->prepare($sql);
 
             // On exécute la requête en lui transmettant les données qui nous interessent
@@ -32,7 +33,7 @@ if(isset($_POST['titre']) && isset($_POST['resume'])) {
         $_SESSION['nom_hist'] = $_POST['nom'];
         $_SESSION['num_page'] = '0';
         header('Location: ajout_page.php') ;
-    }
+    }}
     else {
         echo "L'histoire existe déja dans la base !"; ?>
         <a href="index.php">RETOUR</a>
@@ -42,10 +43,10 @@ if(isset($_POST['titre']) && isset($_POST['resume'])) {
 ?>
   <!doctype html>
   <html>
-    <?php include 'head.php';?>
+    <?php include 'templatesHTML/head.php';?>
     <body>
       <div class="container">
-        <?php include 'navbar.php'; ?>
+        <?php include 'templatesHTML/navbar.php'; ?>
           <h2 class="text-center">Ajout d'une histoire</h2>
           <div class="well">
             <form class="form-horizontal" role="form" enctype="multipart/form-data" action="ajout_hist.php" method="post">
@@ -76,13 +77,14 @@ if(isset($_POST['titre']) && isset($_POST['resume'])) {
               </div>
             </form>
           </div>
-          <?php include 'footer.php'; ?>
+          <?php include 'templatesHTML/footer.php'; ?>
         </div>
 
       <!-- jQuery -->
 <script src="../lib/jquery/jquery.min.js"></script>
 <!-- JavaScript Boostrap plugin -->
-<script src="../lib/bootstrap/js/bootstrap.min.js"></script>    </body>
+<script src="../lib/bootstrap/js/bootstrap.min.js"></script>    
+</body>
 
   </html>
 
