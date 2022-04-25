@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once("connect.php");
-if(isset($_POST['nom']) && isset($_POST['resume'])) {
+if(isset($_POST['nom']) && isset($_POST['resume']) && isset($_FILES["image"])) {
     $req = $BDD->prepare("SELECT COUNT(*) as nb FROM histoire WHERE nom_hist=:titre");
     $req->execute(array(
         "titre" => $_POST['nom']
@@ -17,10 +17,10 @@ if(isset($_POST['nom']) && isset($_POST['resume'])) {
         $_FILES["image"]['name'] =  strtolower("image_accueil.". substr($_FILES["image"]['name'], strpos($_FILES["image"]['name'], '.')));
         if(move_uploaded_file($_FILES["image"]['tmp_name'], "../images/".$_POST['nom'].'/'.$_FILES["image"]['name'])){
             // On prépare une nouvelle requête
-            $req2 = "SELECT id_user FROM user WHERE pseudo ='{$_SESSION['login']}'";
+            $req2 = "SELECT * FROM user WHERE pseudo = '{$_SESSION['login']}'";
             $res2 = $BDD->query($req2);
             $idUser = $res2->fetch();
-            $sql = "INSERT INTO histoire (nom_hist, illustration, synopsis, id_createur) VALUES (:titre, :img, :synopsis, '{$idUser}')";
+            $sql = "INSERT INTO histoire (nom_hist, illustration, synopsis, id_createur) VALUES (:titre, :img, :synopsis, '{$idUser['id_user']}')";
             $req = $BDD->prepare($sql);
 
             // On exécute la requête en lui transmettant les données qui nous interessent
@@ -49,18 +49,25 @@ if(isset($_POST['nom']) && isset($_POST['resume'])) {
         <?php include 'templatesHTML/navbar.php'; ?>
           <h2 class="text-center">Ajout d'une histoire</h2>
           <div class="well">
+          <?php if (count($_POST) > 0) { ?>
+                <div class="alert alert-danger">
+                    <strong>Attention</strong> Un des champs n'a pas été renseigné !
+                </div>
+            <?php } ?>
             <form class="form-horizontal" role="form" enctype="multipart/form-data" action="ajout_hist.php" method="post">
               <input type="hidden" name="id" value="">
               <div class="form-group">
                 <label class="col-sm-4 control-label">Titre</label>
                 <div class="col-sm-6">
-                  <input type="text" name="nom" value="" class="form-control" placeholder="Entrez le nom de votre histoire" required autofocus>
+                  
+                  <input type="text" name="nom" value="<?php if(isset($_POST['nom'])){ echo $_POST['nom']; } ?>" class="form-control" placeholder="Entrez le nom de votre histoire" required autofocus>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-4 control-label">Synopsis</label>
                 <div class="col-sm-6">
                     <textarea name="resume" class="form-control" placeholder="Entrez son synopsis" required>
+                    <?php if(isset($_POST['resume'])){ echo str_replace('  ', '', $_POST['resume']); } ?>
                     </textarea>
                 </div>
               </div>

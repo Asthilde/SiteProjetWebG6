@@ -20,7 +20,7 @@ require_once 'connect.php' ?>
 
 
             while ($ligne = $res->fetch()) {
-                $req2 = "SELECT pseudo FROM user WHERE id_user =" . $ligne['id_createur'];
+                $req2 = "SELECT * FROM user WHERE id_user =" . $ligne['id_createur'];
                 $res2 = $BDD->query($req2);
                 $maLigne = $res2->fetch();
         ?>
@@ -29,7 +29,7 @@ require_once 'connect.php' ?>
                     <!--Il faut vérifier ici si l'utilisateur est connecté -->
                     <div class="row align-items-end">
                         <h3 class="col"><a id="titreHistoire" href="histoires.php?id=<?= $ligne['id_hist'] ?>"><?php echo $ligne['nom_hist']; ?></a></h3>
-                        <div class="col" id="nomCreateur"> <?= $maLigne[0]; ?> </div>
+                        <div class="col" id="nomCreateur"> <?= $maLigne['pseudo']; ?> </div>
                         <div class="form-group">
                             <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
                                 <a class="btn btn-default btn-primary" href=<?= $demarrage ?>> Démarrer </a>

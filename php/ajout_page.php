@@ -2,12 +2,12 @@
 session_start();
 require_once("connect.php");
 if($_SESSION['num_page'] == 0){
-    $req2 = "SELECT id_hist FROM histoire WHERE nom_hist = '{$_SESSION['nom_hist']}'";
+    $req2 = "SELECT * FROM histoire WHERE nom_hist = '{$_SESSION['nom_hist']}'";
     $res2 = $BDD->query($req2);
     $idHist = $res2->fetch();
-    $_SESSION['id_hist'] = $idHist[0];
+    $_SESSION['id_hist'] = $idHist['id_hist'];
 }
-setcookie("'{$_SESSION['num_page']}'", $_SESSION['num_page']);
+setcookie("'{count($_COOKIE)+1}'", $_SESSION['num_page']);
 if(isset($_POST['para1']) || isset($_POST['img1'])) {
     $req = $BDD->prepare("SELECT COUNT(*) as nb FROM page WHERE id_page=:idPage");
     $req->execute(array(
@@ -43,6 +43,25 @@ if(isset($_POST['para1']) || isset($_POST['img1'])) {
                 $req->execute($tab);
             }
         }
+        if($_SESSION['num_page'] == 0){
+          $_SESSION['num_page'] = 'A1';
+        }
+        else if(count_chars($_SESSION['num_page']) == 2) {
+          if(str_contains($_SESSION['num_page'], '3')){
+            $_SESSION['num_page'] = 'A1B1';
+          }
+          else{
+            $_SESSION['num_page'] = 'A'. ((count($_COOKIE)-2)%3);
+          }
+        }
+        else if(count_chars($_SESSION['num_page']) == 4) {
+          if(str_contains($_SESSION['num_page'], '3')){ //Il faudrait commencer à vérifier si les pages ont des enfants ou non pour prendre le bon nom de cookie
+            $_SESSION['num_page'] = 'A1B1';
+          }
+          else{
+            $_SESSION['num_page'] = 'A'. ((count($_COOKIE)-2)%3);
+          }
+        }
         //Trouver comment savoir quelle page est renseignée
     }
     else {
@@ -61,20 +80,22 @@ if(isset($_POST['para1']) || isset($_POST['img1'])) {
       <div class="container">
         <?php include 'templatesHTML/navbar.php'; ?>
           <h2 class="text-center">Ajout de la page du choix <?= $_SESSION['num_page']; ?></h2>
-          <div class="well">
-          <div>
-            <div class="col-sm-4 col-sm-offset-4">
+          <div class="col-sm-4 col-sm-offset-4">
+            <div>
               Liste des choix déja renseignés :
-              <?php for($i = 0 ; $i < count($_COOKIE) ; $i++){
-                
+              <?php for($i = 1 ; $i <= count($_COOKIE) ; $i++){
+                echo '0' . '<br/>';
+                if($i < 5){
+                  echo($_COOKIE['A{$i}'] . ', ');
+                }
+                else if($i < 11){
+                  echo($_COOKIE['B{$i}'] . ', ');
+                }
                 }?>
             </div>
+            <a href="fin_hist.php" class="btn btn-default btn-primary"> Terminer l'histoire</a>
           </div>
-          <div class="form-group">
-                <div class="col-sm-4 col-sm-offset-4">
-                  <a href="fin_hist.php" class="btn btn-default btn-primary"> Terminer l'histoire</a> <!--Gérer la suppression des cookies ? -->
-                </div>
-            </div>
+          <div class="well">
             <form class="form-horizontal" role="form" enctype="multipart/form-data" action="ajout_page.php" method="post">
               <input type="hidden" name="id" value="">
               <!--Faire du JS si possible -->
@@ -94,7 +115,7 @@ if(isset($_POST['para1']) || isset($_POST['img1'])) {
               <?php } ?>
               <?php for($i = 1; $i < 4; $i++) {?>
               <div class="form-group">
-                <label class="col-sm-4 control-label">Choix <?= $i ?></label>
+                <label class="col-sm-4 control-label">Choix <?= $i ?> (si c'est la fin de la branche écrire NULL dans l'encadré)</label>
                 <div class="col-sm-6">
                   <input type="text" name="choix<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le choix<?= $i ?>" <?php if($i == 1) { ?>required <?php } ?> autofocus>
                 </div>
@@ -107,6 +128,7 @@ if(isset($_POST['para1']) || isset($_POST['img1'])) {
               </div>
             </form>
           </div>
+
           <?php include 'templatesHTML/footer.php'; ?>
         </div>
 
