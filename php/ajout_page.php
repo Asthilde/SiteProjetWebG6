@@ -7,7 +7,16 @@ if($_SESSION['num_page'] == 0){
     $idHist = $res2->fetch();
     $_SESSION['id_hist'] = $idHist['id_hist'];
 }
-setcookie("'{count($_COOKIE)+1}'", $_SESSION['num_page']);
+$tabPages = array();
+for($i=0; $i < 5; $i++){
+  for($j = 1; $j < 4 ; $j++){
+
+  }
+}
+array(
+  "A" => ["1", "2", "3"],
+  "A1B" => ["1", "2", "3"]
+);
 if(isset($_POST['para1']) || isset($_POST['img1'])) {
     $req = $BDD->prepare("SELECT COUNT(*) as nb FROM page WHERE id_page=:idPage");
     $req->execute(array(
