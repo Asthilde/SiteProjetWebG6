@@ -1,5 +1,7 @@
 <?php 
 function pages ($tab, $racine, $niv, $num_actuel) {
+    var_dump($tab);
+    echo "<br/>";
     if($racine.$niv.$num_actuel == "A3B3C3D3")
         return $tab;
     if($niv == "A"){
@@ -16,7 +18,7 @@ function pages ($tab, $racine, $niv, $num_actuel) {
             pages($tab, $racine.$niv.'1', chr((ord($niv)+1)), 1);
         }
         else{ //Cas où on atteint le dernier choix du niveau actuel mais pas parent
-            pages($tab, substr($racine,0,strlen($racine-1)).$niv.(string)(substr($racine,-1) - '-1'), $niv, 1);
+            pages($tab, substr($racine,0,strlen($racine)-1).((string)(substr($racine,-1) - '-1')), $niv, 1);
         }
     }
     else{
@@ -29,6 +31,6 @@ function pages ($tab, $racine, $niv, $num_actuel) {
     }
 };
 //echo (string)(substr("1",-1) - '-1');
-$tab=null;
-echo var_dump(pages($tab, null, 'A', 1));
+$tab=array();
+var_dump(pages($tab, null, 'A', 1));
 ?>
