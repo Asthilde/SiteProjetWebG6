@@ -6,9 +6,6 @@ if(isset($_POST['nom']) && isset($_POST['resume']) && isset($_FILES["image"])) {
     $req->execute(array(
         "titre" => $_POST['nom']
     ));
-    // On récupère la première ligne.
-    $ligne = $req->fetch();
-
     // On vérifie le nombre d'éléments correspondant
     if($ligne['nb'] == 0) {
         //Avoir un nommage type de l'image en vérifiant son type ! (jpg, jpeg , ... ) et créer un dossier d'images par histoire
