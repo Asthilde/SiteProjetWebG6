@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 15 avr. 2022 à 15:19
+-- Généré le : mer. 27 avr. 2022 à 10:18
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.1.2
 
@@ -50,6 +50,13 @@ CREATE TABLE `histoire` (
   `nb_morts` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Déchargement des données de la table `histoire`
+--
+
+INSERT INTO `histoire` (`id_hist`, `nom_hist`, `illustration`, `synopsis`, `id_createur`, `nb_fois_jouee`, `nb_reussites`, `nb_morts`) VALUES
+(2, 'Zoubi dans la forêt', '', 'Bienvenue sur la planète Ziblub. A des années lumières du système solaire, ce monde abrite une civilisation pacifiste et bienveillante de grenouilles extraterrestres, vivant en parfaite harmonie avec l’écosystème environnant. Le rêve quoi. Ou presque.\r\n', 1, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -85,6 +92,41 @@ CREATE TABLE `page` (
   `img_5` varchar(600) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Déchargement des données de la table `page`
+--
+
+INSERT INTO `page` (`id_page`, `id_hist`, `para_1`, `para_2`, `para_3`, `para_4`, `para_5`, `img_1`, `img_2`, `img_3`, `img_4`, `img_5`) VALUES
+(1, 2, 'paragraphe 0', NULL, NULL, NULL, NULL, 'aboutyou12.jpg', NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `page_hist`
+--
+
+CREATE TABLE `page_hist` (
+  `id_page` int(11) NOT NULL,
+  `id_hist` int(11) NOT NULL,
+  `para_1` varchar(500) NOT NULL,
+  `para_2` varchar(500) DEFAULT NULL,
+  `para_3` varchar(500) DEFAULT NULL,
+  `para_4` varchar(500) DEFAULT NULL,
+  `para_5` varchar(500) DEFAULT NULL,
+  `img_1` varchar(100) NOT NULL,
+  `img_2` varchar(100) DEFAULT NULL,
+  `img_3` varchar(100) DEFAULT NULL,
+  `img_4` varchar(100) DEFAULT NULL,
+  `img_5` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `page_hist`
+--
+
+INSERT INTO `page_hist` (`id_page`, `id_hist`, `para_1`, `para_2`, `para_3`, `para_4`, `para_5`, `img_1`, `img_2`, `img_3`, `img_4`, `img_5`) VALUES
+(2, 2, 'paragraphe début 0', NULL, NULL, NULL, NULL, 'aboutyou12.jpg', NULL, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -97,6 +139,15 @@ CREATE TABLE `user` (
   `pseudo` varchar(50) NOT NULL,
   `mdp` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `user`
+--
+
+INSERT INTO `user` (`id_user`, `est_admin`, `pseudo`, `mdp`) VALUES
+(1, 1, 'correcteur_admin', 'mdp_correcteur_1234'),
+(2, 0, 'correcteur', 'mdp_correcteur_1234'),
+(5, 0, 'juju', 'bubuffalo');
 
 --
 -- Index pour les tables déchargées
@@ -127,6 +178,12 @@ ALTER TABLE `page`
   ADD PRIMARY KEY (`id_page`);
 
 --
+-- Index pour la table `page_hist`
+--
+ALTER TABLE `page_hist`
+  ADD PRIMARY KEY (`id_page`);
+
+--
 -- Index pour la table `user`
 --
 ALTER TABLE `user`
@@ -140,13 +197,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `histoire`
 --
 ALTER TABLE `histoire`
-  MODIFY `id_hist` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_hist` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT pour la table `page_hist`
+--
+ALTER TABLE `page_hist`
+  MODIFY `id_page` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(50) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

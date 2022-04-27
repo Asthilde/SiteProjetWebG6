@@ -1,8 +1,6 @@
 <?php
 session_start();
 require_once("connect.php");
-
-
 ?>
 
 
@@ -13,23 +11,18 @@ require_once("connect.php");
 <body>
     <?php include 'templatesHTML/navbar.php';
     if ($BDD) {
-        $req = "SELECT * FROM 'page'";
+        $req = "SELECT * FROM page_hist";
         $res = $BDD->query($req);
         $ligne = $res->fetch();
         for ($i = 1; $i <= 5; $i++) {
             $para = "para_" . $i;
-            $image = "img_" . $i;
-            if ($ligne[$para] == null) { ?>
-                ?>
-                <div>
-                    <?php $ligne[$para]; ?>
-                </div>
-            <?php } ?>
-            <?php if ($ligne[$image] == null) { ?>
-                <div>
-                    <img src="<?php $ligne[$image]; ?>" alt="<?php $ligne[$image]; ?>" />
-                </div>
-            <?php } ?>
+            $image = "img_" . $i; ?>
+            <div>
+                <?= $ligne[$para]; ?>
+            </div>
+            <div>
+                <img src="../images/moi aussi je suis un test/<?= $ligne[$image]; ?>" alt="<?= $ligne[$image]; ?>" />
+            </div>
         <?php } ?>
     <?php } ?>
 

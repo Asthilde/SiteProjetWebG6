@@ -33,4 +33,7 @@ function pages ($tab, $racine, $niv, $num_actuel) {
 //echo (string)(substr("1",-1) - '-1');
 $tab=array();
 var_dump(pages($tab, null, 'A', 1));
-?>
+
+function escape($valeur){
+    return htmlspecialchars($valeur,ENT_QUOTES,'UTF-8',false);
+}
