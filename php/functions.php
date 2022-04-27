@@ -1,9 +1,12 @@
 <?php 
-function pages ($tab, $racine, $niv, $num_actuel) {
-    var_dump($tab);
-    echo "<br/>";
-    if($racine.$niv.$num_actuel == "A3B3C3D3")
+function pages (&$tab, $racine, $niv, $num_actuel) {
+    //var_dump($tab);
+    //echo "<br/>";
+    if($racine.$niv.$num_actuel == "A3B3C3D3"){
+        array_push($tab, "A3B3C3D3");
+        var_dump($tab);
         return $tab;
+    }
     if($niv == "A"){
         array_push($tab, "A".$num_actuel);
     }
@@ -32,5 +35,7 @@ function pages ($tab, $racine, $niv, $num_actuel) {
 };
 //echo (string)(substr("1",-1) - '-1');
 $tab=array();
-var_dump(pages($tab, null, 'A', 1));
+pages($tab, null, 'A', 1);
+echo'<br/>';
+//var_dump($tab);
 ?>
