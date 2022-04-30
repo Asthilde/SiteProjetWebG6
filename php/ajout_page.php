@@ -20,8 +20,18 @@ if (isset($_POST['para_1']) || isset($_POST['img_1'])) {
   if ($ligne['nb'] == 0) {
     $cpt = 1;
     $tab = array(
-      'numero' => $_SESSION['num_page'],
-      'numHist' => $_SESSION['id_hist']
+      'numero' => (int)$_SESSION['num_page'],
+      'numHist' => (int)$_SESSION['id_hist'],
+      'para_1' => ' ',
+      'para_2' => ' ',
+      'para_3' => ' ',
+      'para_4' => ' ',
+      'para_5' => ' ',
+      'img_1' => ' ',
+      'img_2' => ' ',
+      'img_3' => ' ',
+      'img_4' => ' ',
+      'img_5' => ' '
     );
     for($i=1; $i < 6; $i++){
       $nom = "para_" . $cpt;
@@ -29,17 +39,13 @@ if (isset($_POST['para_1']) || isset($_POST['img_1'])) {
         $tab[$nom] = $_POST[$nom];
         //array_push($tab, $_POST[$nom]);
       }
-      else{
-        $tab[$nom] = "";
-        //array_push($tab, null);
-      }
     }
     for($i=1; $i < 6; $i++){
       $nom = "img_" . $cpt;
       if(isset($_FILES[$nom])) { //Voir comment gérer le nom
-        $_FILES[$nom]['name'] =  strtolower("image_'{$_SESSION['num_page']}'_'{$cpt}'" . substr($_FILES[$nom]['name'], strpos($_FILES[$nom]['name'], '.')));
+        $_FILES[$nom]['name'] =  strtolower("image_{$_SESSION['num_page']}_{$cpt}" . substr($_FILES[$nom]['name'], strpos($_FILES[$nom]['name'], '.')));
         if (move_uploaded_file($_FILES[$nom]['tmp_name'], "../images/" . $_SESSION['nom_hist'] . $_FILES[$nom]['name'])) {
-          $tab[$nom] = $_POST[$nom];  
+          $tab[$nom] = $_FILES[$nom]['name'];  
         }
       }
       else{
@@ -50,9 +56,22 @@ if (isset($_POST['para_1']) || isset($_POST['img_1'])) {
       //$nom = "para_" . $cpt;
       //echo $_POST[$nom];
       var_dump($tab);
-      $sql = "INSERT INTO page_hist VALUES (:numero, :numHist, :para_1, :para_2, :para_3, para_4, :para_5, :img_1, :img_2, :img_3, :img_4, :img_5)"; //'{$_SESSION['num_page']}','{$_SESSION['id_hist']}', :para'{$cpt}')";
+      $sql = "INSERT INTO page_hist (id_page, id_hist, para_1, para_2, para_3, para_4, para_5, img_1, img_2, img_3, img_4, img_5) VALUES (:numero, :numHist, :para_1, :para_2, :para_3, :para_4, :para_5, :img_1, :img_2, :img_3, :img_4, :img_5)"; //'{$_SESSION['num_page']}','{$_SESSION['id_hist']}', :para'{$cpt}')";
       $req = $BDD->prepare($sql);
       $req->execute($tab);
+      /*$req->bindValue('numero', (int) $tab['numero'], PDO::PARAM_INT);
+      $req->bindValue('numHist', (int) $tab['numHist'], PDO::PARAM_INT);
+      $req->bindValue('para_1', $tab['para_1'], PDO::PARAM_STR);
+      $req->bindValue('para_2', $tab['para_2'], PDO::PARAM_STR);
+      $req->bindValue('para_3', $tab['para_3'], PDO::PARAM_STR);
+      $req->bindValue('para_4', $tab['para_4'], PDO::PARAM_STR);
+      $req->bindValue('para_5', $tab['para_5'], PDO::PARAM_STR);
+      $req->bindValue('img_1', $tab['img_1'], PDO::PARAM_STR);
+      $req->bindValue('img_2', $tab['img_2'], PDO::PARAM_STR);
+      $req->bindValue('img_3', $tab['img_3'], PDO::PARAM_STR);
+      $req->bindValue('img_4', $tab['img_4'], PDO::PARAM_STR);
+      $req->bindValue('img_5', $tab['img_5'], PDO::PARAM_STR);
+      $req->execute();*/
       //$cpt++;
     //}
     //$cpt = 1;
@@ -90,6 +109,7 @@ if (isset($_POST['para_1']) || isset($_POST['img_1'])) {
     <a href="index.php">RETOUR</a>
     <a href="fin_hist.php"> TERMINER L'HISTOIRE</a>
 <?php
+ var_dump($ligne['nb']);
   }
 }
 ?>

@@ -11,7 +11,7 @@ if(isset($_POST['nom']) && isset($_POST['resume']) && isset($_FILES["image"])) {
         //Avoir un nommage type de l'image en vérifiant son type ! (jpg, jpeg , ... ) et créer un dossier d'images par histoire
         //Faire un if pour vérifier si le dossier existe ... 
         if(is_dir("../images/".$_POST['nom']) || mkdir("../images/".$_POST['nom'])){
-        $_FILES["image"]['name'] =  strtolower("image_accueil.". substr($_FILES["image"]['name'], strpos($_FILES["image"]['name'], '.')));
+        $_FILES["image"]['name'] =  strtolower("image_accueil_". $_POST['nom'] . substr($_FILES["image"]['name'], strpos($_FILES["image"]['name'], '.')));
         if(move_uploaded_file($_FILES["image"]['tmp_name'], "../images/".$_POST['nom'].'/'.$_FILES["image"]['name'])){
             // On prépare une nouvelle requête
             $req2 = "SELECT * FROM user WHERE pseudo = '{$_SESSION['login']}'";
