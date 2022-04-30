@@ -9,35 +9,35 @@ if ($_SESSION['num_page'] == 0) {
   $_SESSION['id_hist'] = $idHist['id_hist'];
 }
 if (isset($_POST['para_1']) || isset($_POST['img_1'])) {
-  $req = $BDD->prepare("SELECT COUNT(*) as nb FROM page_hist WHERE id_page=:idPage");
-  $req->execute(array(
+  $req = $BDD->prepare("SELECT COUNT(*) as nb FROM page_hist WHERE id_page='{$_POST['pageChoisie']}'");
+  $req->execute();
+  /*$req->execute(array(
     "idPage" => $_POST['pageChoisie']
   ));
-  // On récupère la première ligne.
+  // On récupère la première ligne.*/
   $ligne = $req->fetch();
-
+  var_dump($ligne);
   // On vérifie le nombre d'éléments correspondant
   if ($ligne['nb'] == 0) {
     $cpt = 1;
     $tab = array(
-      'numero' => (int)$_SESSION['num_page'],
+      'numero' => $_SESSION['num_page'],
       'numHist' => (int)$_SESSION['id_hist'],
-      'para_1' => ' ',
-      'para_2' => ' ',
-      'para_3' => ' ',
-      'para_4' => ' ',
-      'para_5' => ' ',
-      'img_1' => ' ',
-      'img_2' => ' ',
-      'img_3' => ' ',
-      'img_4' => ' ',
-      'img_5' => ' '
+      'para_1' => '',
+      'para_2' => '',
+      'para_3' => '',
+      'para_4' => '',
+      'para_5' => '',
+      'img_1' => '',
+      'img_2' => '',
+      'img_3' => '',
+      'img_4' => '',
+      'img_5' => ''
     );
     for($i=1; $i < 6; $i++){
       $nom = "para_" . $cpt;
       if (isset($_POST[$nom])) {
         $tab[$nom] = $_POST[$nom];
-        //array_push($tab, $_POST[$nom]);
       }
     }
     for($i=1; $i < 6; $i++){
@@ -52,48 +52,16 @@ if (isset($_POST['para_1']) || isset($_POST['img_1'])) {
         $tab[$nom] = "";
       }
     }
-    //while (isset($_POST[$nom])) {
-      //$nom = "para_" . $cpt;
-      //echo $_POST[$nom];
       var_dump($tab);
       $sql = "INSERT INTO page_hist (id_page, id_hist, para_1, para_2, para_3, para_4, para_5, img_1, img_2, img_3, img_4, img_5) VALUES (:numero, :numHist, :para_1, :para_2, :para_3, :para_4, :para_5, :img_1, :img_2, :img_3, :img_4, :img_5)"; //'{$_SESSION['num_page']}','{$_SESSION['id_hist']}', :para'{$cpt}')";
       $req = $BDD->prepare($sql);
       $req->execute($tab);
-      /*$req->bindValue('numero', (int) $tab['numero'], PDO::PARAM_INT);
-      $req->bindValue('numHist', (int) $tab['numHist'], PDO::PARAM_INT);
-      $req->bindValue('para_1', $tab['para_1'], PDO::PARAM_STR);
-      $req->bindValue('para_2', $tab['para_2'], PDO::PARAM_STR);
-      $req->bindValue('para_3', $tab['para_3'], PDO::PARAM_STR);
-      $req->bindValue('para_4', $tab['para_4'], PDO::PARAM_STR);
-      $req->bindValue('para_5', $tab['para_5'], PDO::PARAM_STR);
-      $req->bindValue('img_1', $tab['img_1'], PDO::PARAM_STR);
-      $req->bindValue('img_2', $tab['img_2'], PDO::PARAM_STR);
-      $req->bindValue('img_3', $tab['img_3'], PDO::PARAM_STR);
-      $req->bindValue('img_4', $tab['img_4'], PDO::PARAM_STR);
-      $req->bindValue('img_5', $tab['img_5'], PDO::PARAM_STR);
-      $req->execute();*/
-      //$cpt++;
-    //}
-    //$cpt = 1;
-    /*while (isset($_POST[$nom])) {
-      $nom = "img" . $cpt;
-      $sql = "INSERT INTO page_hist (id_page, id_hist, para_'{$i}') VALUES ('{$_SESSION['num_page']}','{$_SESSION['id_hist']}', :para'{$i}')";
-      $req = $BDD->prepare($sql);
-      $req->execute($tab);
-      $cpt++;
-    }
-    for ($i = 1; $i <= $nbPara; $i++) {
-      //Il faut vérifier ce que l'utilisateur rentre comme texte !
-      $sql = "INSERT INTO page_hist (id_page, id_hist, para_'{$i}') VALUES ('{$_SESSION['num_page']}','{$_SESSION['id_hist']}', :para'{$i}')";
-      $req = $BDD->prepare($sql);
-      $req->execute($tab);
-    }*/
     for($i=1; $i < 4; $i++){
       $nom = "choix" . $cpt; 
       $nivSuiv = chr(ord(substr($_SESSION['num_page'], -2, 1))+1) ;
       $nomPageCible = $_SESSION['num_page'] . $nivSuiv . $i;   
       $sql = "INSERT INTO choix (id_page, id_page_cible, id_hist, contenu) VALUES (:numPage, :numPageCible, :numHist, :choix)"; //'{$_SESSION['num_page']}','{$_SESSION['id_hist']}', :para'{$cpt}')";
-      $req = $BDD->prepare($sql);
+      $req = $BDD->prepare($sql);//Problème au niveau du num_page car il n'y a que des int
       $req->execute(array(
         'numPage' => $_SESSION['num_page'],
         'numPageCible' => $nomPageCible,
@@ -109,7 +77,7 @@ if (isset($_POST['para_1']) || isset($_POST['img_1'])) {
     <a href="index.php">RETOUR</a>
     <a href="fin_hist.php"> TERMINER L'HISTOIRE</a>
 <?php
- var_dump($ligne['nb']);
+ //var_dump($ligne['nb']);
   }
 }
 ?>
@@ -120,7 +88,7 @@ if (isset($_POST['para_1']) || isset($_POST['img_1'])) {
 <body>
   <div class="container">
     <?php include 'templatesHTML/navbar.php'; ?>
-    <h2 class="text-center">Ajout de la page <? if(isset($_POST['pageChoisie'])){echo $_POST['pageChoisie']; } else { echo '0';} ?></h2>
+    <h2 class="text-center">Ajout de la page <? if(isset($_POST['pageChoisie'])){echo $_POST['pageChoisie']; } else { echo '0';} //Problème car m'affiche que 0 ?></h2>
     <div class="col-sm-4 col-sm-offset-4">
       <div>
         Liste des choix déja renseignés :
