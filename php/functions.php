@@ -33,8 +33,4 @@ function pages (&$tab, $racine, $niv, $num_actuel) {
         }
     }
 };
-//echo (string)(substr("1",-1) - '-1');
-/*$tab=array();
-pages($tab, null, 'A', 1);
-echo'<br/>';*/
-//var_dump($tab);
+

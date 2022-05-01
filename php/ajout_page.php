@@ -2,7 +2,7 @@
 session_start();
 require_once("connect.php");
 require("functions.php");
-if ($_SESSION['num_page'] == 0) {
+if (!isset($_POST['pageChoisie'])) { //$_SESSION['num_page'] == 0) {
   $req2 = "SELECT * FROM histoire WHERE nom_hist = '{$_SESSION['nom_hist']}'";
   $res2 = $BDD->query($req2);
   $idHist = $res2->fetch();
@@ -16,12 +16,11 @@ if (isset($_POST['para_1']) || isset($_POST['img_1'])) {
   ));
   // On récupère la première ligne.*/
   $ligne = $req->fetch();
-  var_dump($ligne);
   // On vérifie le nombre d'éléments correspondant
   if ($ligne['nb'] == 0) {
     $cpt = 1;
     $tab = array(
-      'numero' => $_SESSION['num_page'],
+      'numero' => $_POST['pageChoisie'],
       'numHist' => (int)$_SESSION['id_hist'],
       'para_1' => '',
       'para_2' => '',
@@ -43,7 +42,7 @@ if (isset($_POST['para_1']) || isset($_POST['img_1'])) {
     for($i=1; $i < 6; $i++){
       $nom = "img_" . $cpt;
       if(isset($_FILES[$nom])) { //Voir comment gérer le nom
-        $_FILES[$nom]['name'] =  strtolower("image_{$_SESSION['num_page']}_{$cpt}" . substr($_FILES[$nom]['name'], strpos($_FILES[$nom]['name'], '.')));
+        $_FILES[$nom]['name'] =  strtolower("image_{$_POST['pageChoisie']}_{$cpt}" . substr($_FILES[$nom]['name'], strpos($_FILES[$nom]['name'], '.')));
         if (move_uploaded_file($_FILES[$nom]['tmp_name'], "../images/" . $_SESSION['nom_hist'] . $_FILES[$nom]['name'])) {
           $tab[$nom] = $_FILES[$nom]['name'];  
         }
@@ -52,18 +51,27 @@ if (isset($_POST['para_1']) || isset($_POST['img_1'])) {
         $tab[$nom] = "";
       }
     }
-      var_dump($tab);
+      //var_dump($tab);
       $sql = "INSERT INTO page_hist (id_page, id_hist, para_1, para_2, para_3, para_4, para_5, img_1, img_2, img_3, img_4, img_5) VALUES (:numero, :numHist, :para_1, :para_2, :para_3, :para_4, :para_5, :img_1, :img_2, :img_3, :img_4, :img_5)"; //'{$_SESSION['num_page']}','{$_SESSION['id_hist']}', :para'{$cpt}')";
       $req = $BDD->prepare($sql);
       $req->execute($tab);
+
     for($i=1; $i < 4; $i++){
       $nom = "choix" . $cpt; 
-      $nivSuiv = chr(ord(substr($_SESSION['num_page'], -2, 1))+1) ;
-      $nomPageCible = $_SESSION['num_page'] . $nivSuiv . $i;   
+      if($_POST['pageChoisie'] == 0){
+        $nivSuiv = 'A';
+        $nomPageCible = 'A' . $i;
+      }
+      else {
+        $nivSuiv = chr(ord(substr($_POST['pageChoisie'], -2, 1))+1) ;
+        //echo 'Niveau suivant : ' . $nivSuiv;
+        $nomPageCible = $_POST['pageChoisie'] . $nivSuiv . $i;   
+        //echo ' - PageCible : ' . $nomPageCible . '<br/>';
+      }
       $sql = "INSERT INTO choix (id_page, id_page_cible, id_hist, contenu) VALUES (:numPage, :numPageCible, :numHist, :choix)"; //'{$_SESSION['num_page']}','{$_SESSION['id_hist']}', :para'{$cpt}')";
       $req = $BDD->prepare($sql);//Problème au niveau du num_page car il n'y a que des int
       $req->execute(array(
-        'numPage' => $_SESSION['num_page'],
+        'numPage' => $_POST['pageChoisie'],
         'numPageCible' => $nomPageCible,
         'numHist' => $_SESSION['id_hist'],
         'choix' => $_POST[$nom]
@@ -101,10 +109,9 @@ if (isset($_POST['para_1']) || isset($_POST['img_1'])) {
           while ($ligne = $req->fetch()) {
             array_push($tabPages, $ligne['id_page']);
           }
-          echo '0';
-        }
-        foreach($tabPages as $pageRenseignee) {
-            echo (', ' . $pageRenseignee);
+          foreach($tabPages as $pageRenseignee) {
+            echo ($pageRenseignee . ',');
+          }
         } ?>
       </div>
       <a href="fin_hist.php" class="btn btn-default btn-primary"> Terminer l'histoire</a>
@@ -117,12 +124,17 @@ if (isset($_POST['para_1']) || isset($_POST['img_1'])) {
           <label class="col-sm-4 control-label">Page à remplir</label>
           <div class="col-sm-6">
             <select class="form-control" id="pageChoisie" name="pageChoisie" required>
-                <?php if(!isset($_POST['page'])){ ?>
+                <?php if(!isset($_POST['pageChoisie'])){ ?>
                   <option value="0">0</option>
                 <?php }
                 $tab = array();
                 pages($tab, null, 'A', 1);
-                // On récupère la première ligne.
+                /*$pagesImpossible = array();
+                if(isset($_POST['para_1']) || isset($_POST['img_1'])){
+                  $req = $BDD->prepare("SELECT * FROM page_hist WHERE id_hist=:numero");
+                  $req->execute(array(
+                    "numero" => $_SESSION['id_hist']
+                  )); CONTINUER CA*/
                 foreach($tab as $page){ 
                   $dejaRenseigne = false;
                   foreach($tabPages as $pageRenseignee){
