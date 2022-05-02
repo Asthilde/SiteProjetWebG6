@@ -9,10 +9,6 @@ require_once 'connect.php' ?>
   <div class="container">
     <?php
     include 'templatesHTML/navbar.php';
-    $demarrage = "connexion.php";
-    if (isset($_SESSION['login'])) {
-      $demarrage = "jeu.php?id=";
-    }
 
     if ($BDD) {
       $req = "SELECT * FROM histoire ORDER BY nom_hist";
@@ -21,6 +17,10 @@ require_once 'connect.php' ?>
         $req2 = "SELECT * FROM user WHERE id_user =" . $ligne['id_createur'];
         $res2 = $BDD->query($req2);
         $maLigne = $res2->fetch();
+        $demarrage = "connexion.php";
+        if (isset($_SESSION['login'])) {
+          $demarrage = "jeu.php?id=".$ligne['id_hist'];
+        }
     ?>
         <article>
           <!--Il faut vérifier ici si l'utilisateur est connecté -->
@@ -29,7 +29,7 @@ require_once 'connect.php' ?>
             <div class="col" id="nomCreateur"> <?= $maLigne['pseudo']; ?> </div>
             <div class="form-group">
               <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
-                <a class="btn btn-default btn-primary" href="<?= $demarrage . $ligne['id_hist'] ?>"> Démarrer </a>
+                <a class="btn btn-default btn-primary" href="<?= $demarrage ?>"> Démarrer </a>
               </div>
 
               <?php

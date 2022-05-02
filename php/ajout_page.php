@@ -2,8 +2,22 @@
 session_start();
 require_once("connect.php");
 //require("functions.php");
+/*if(isset($_POST['fin1'])){
+  var_dump($_POST['fin1']);
+}
+else
+  echo 'Choix 1 pas une fin';
+if(isset($_POST['fin2'])){
+  var_dump($_POST['fin2']);
+}
+else
+  echo 'Choix 2 pas une fin';
+if(isset($_POST['fin3'])){
+  var_dump($_POST['fin3']);
+}
+else
+  echo 'Choix 3 pas une fin';*/
 if (!isset($_POST['pageChoisie']) || isset($_SESSION['num_page'])) {
-  echo "Je passe la";
   $req2 = "SELECT * FROM histoire WHERE nom_hist = '{$_SESSION['nom_hist']}'";
   $res2 = $BDD->query($req2);
   $idHist = $res2->fetch();
@@ -30,33 +44,31 @@ if (!isset($_POST['pageChoisie']) || isset($_SESSION['num_page'])) {
       'img_5' => ''
     );
     for ($i = 1; $i < 6; $i++) {
-      $nom = "para_" . $cpt;
+      $nom = "para_" . $i;
       if (isset($_POST[$nom])) {
         $tab[$nom] = htmlspecialchars($_POST[$nom], ENT_QUOTES, 'UTF-8', false);
       }
     }
     for ($i = 1; $i < 6; $i++) {
-      $nom = "img_" . $cpt;
+      $nom = "img_" . $i;
       if (isset($_FILES[$nom])) {
         $_FILES[$nom]['name'] =  strtolower("img_{$_SESSION['id_hist']}_{$_POST['pageChoisie']}_{$cpt}" . substr($_FILES[$nom]['name'], strpos($_FILES[$nom]['name'], '.')));
         if (move_uploaded_file($_FILES[$nom]['tmp_name'], "../images/" . $_SESSION['nom_hist'] . '/' . $_FILES[$nom]['name'])) {
           $tab[$nom] = $_FILES[$nom]['name'];
         }
       }
-      /*else{
-        $tab[$nom] = "";
-      }*/
     }
     $sql = "INSERT INTO page_hist (id_page, id_hist, para_1, para_2, para_3, para_4, para_5, img_1, img_2, img_3, img_4, img_5) VALUES (:numero, :numHist, :para_1, :para_2, :para_3, :para_4, :para_5, :img_1, :img_2, :img_3, :img_4, :img_5)"; //'{$_SESSION['num_page']}','{$_SESSION['id_hist']}', :para'{$cpt}')";
     $req = $BDD->prepare($sql);
     $req->execute($tab);
 
     for ($i = 1; $i < 4; $i++) {
-      $nom = "choix" . $cpt;
+      $nom = "choix" . $i;
       if ($_POST['pageChoisie'] == '0') {
         $nivSuiv = 'A';
         $nomPageCible = 'A' . $i;
-      } else {
+      } 
+      else {
         $nivSuiv = chr(ord(substr($_POST['pageChoisie'], -2, 1)) + 1);
         $nomPageCible = $_POST['pageChoisie'] . $nivSuiv . $i;
       }
@@ -66,9 +78,8 @@ if (!isset($_POST['pageChoisie']) || isset($_SESSION['num_page'])) {
         'numPage' => $_POST['pageChoisie'],
         'numPageCible' => $nomPageCible,
         'numHist' => $_SESSION['id_hist'],
-        'choix' => $_POST[$nom] //Il faut faire une modif pour rajouter une case à cocher
-      ));
-      $cpt++;
+        'choix' => $_POST[$nom] //Il faut faire une modif pour rajouter une ligne si choix de fin et rajouter dans id_page_cible FIN
+      ));//<!--Gérer le nombre de pdv perdus un espace pour demander le nb pdv perdu -->
     }
   } else {
     echo "Les données existent déja dans la base !"; ?>
@@ -176,7 +187,14 @@ if (!isset($_POST['pageChoisie']) || isset($_SESSION['num_page'])) {
         <div class="form-group">
           <label class="col-sm-4 control-label">Choix <?= $i ?> (si c'est la fin de la branche écrire FIN dans l'encadré)</label>
           <div class="col-sm-6">
-            <input type="text" name="choix<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le choix<?= $i ?>" <?php if ($i == 1) { ?>required <?php } ?> autofocus>
+            <input type="text" name="choix<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le choix <?= $i ?>" <?php if ($i == 1) { ?>required <?php } ?> autofocus>
+          </div>
+          <div class="col-sm-6">
+            <input type="checkbox" id="fin" name="fin<?= $i ?>" value="<?= $i ?>" class="form-control">
+            <label for="fin<?= $i ?>">Fin de l'histoire ?</label>
+          </div>
+          <div class="col-sm-6">
+            <input type="text" name="pdv<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le nombre de points de vie perdu (ou rien sinon)">
           </div>
         </div>
         <?php } ?>

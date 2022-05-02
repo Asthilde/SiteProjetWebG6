@@ -18,10 +18,9 @@ require_once 'connect.php' ?>
     <h2 class="text-center">Modification de la page <?= $_POST['pageChoisie'] ?></h2>
       <form class="form-horizontal" role="form" action="modifierPage.php" method="post">
         <input type="hidden" name="id" value="">
-        <!--Faire du JS si possible pour afficher les éléments déja renseignés et les nouveaux à renseigner sinon faire une page accueil choix de la page et une page pour renseigner les infos -->
         <?php for ($i = 1; $i < 6; $i++) {
           $nomPara = "para_".$i; 
-          $nomImg = "img".$i;?>
+          $nomImg = "img_".$i;?>
         <div class="form-group">
           <label class="col-sm-4 control-label">Paragraphe <?= $i ?></label>
           <div class="col-sm-6">
@@ -30,20 +29,29 @@ require_once 'connect.php' ?>
         </div>
         <div class="form-group">
           <label class="col-sm-4 control-label">Image <?= $i ?></label>
-          <div class="col-sm-4"> <!--Afficher le nom de l'image -->
-            <input type="file" name="<?= $nomImg ?>" />
+          <div class="col-sm-4"> 
+            <p>Image renseignée :</p><!--Afficher le nom de l'image -->
+            <input type="file" name="img_<?= $i ?>"/>
           </div>
         </div>
         <?php } ?>
-        <?php for ($i = 1; $i < 4; $i++) { //Faire une requête pour récupérer le nom des choix
+        <?php //Faire une requête pour récupérer le nom des choix
+        $req = $BDD->prepare("SELECT * FROM choix WHERE id_page='{$_POST['pageChoisie']}' AND id_hist = '{$_SESSION['id_hist']}'");
+        $req->execute();
+        $i = 1;
+        while($ligne = $req->fetch()){
         ?>
         <div class="form-group">
-          <label class="col-sm-4 control-label">Choix <?= $i ?> (si c'est la fin de la branche écrire FIN dans l'encadré)</label>
+          <label class="col-sm-4 control-label">Choix <?= $i ?></label>
           <div class="col-sm-6">
-            <input type="text" name="choix<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le choix<?= $i ?>" <?php if ($i == 1) { ?>required <?php } ?> autofocus>
+            <input type="text" name="choix<?= $i ?>" value="<?= $ligne['contenu']?>" class="form-control" placeholder="Ecrivez le choix<?= $i ?>" required autofocus>
+          </div>
+          <div class="col-sm-6">
+            <input type="checkbox" id="fin" name="fin<?= $i ?>" value="<?= $i ?>" class="form-control">
+            <label for="fin<?= $i ?>">Fin de l'histoire ?</label>
           </div>
         </div>
-        <?php } ?>
+        <?php $i++; }?>
         <div class="form-group">
           <div class="col-sm-4 col-sm-offset-4">
             <button type="submit" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-save"></span> Enregistrer</button>
