@@ -13,7 +13,7 @@ require_once("connect.php");
 
     if (isset($_POST['login']) && isset($_POST['mdp'])) {
       $pseudo = $_POST['login'];
-      $mdp = $_POST['mdp'];
+      $mdp = password_hash($_POST['mdp'], PASSWORD_BCRYPT);
       $sql = "INSERT INTO user(est_admin,pseudo,mdp) VALUES (?,?,?)";
       $req = $BDD->prepare($sql);
       $req->execute(array(0, $pseudo, $mdp));
