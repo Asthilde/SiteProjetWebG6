@@ -18,8 +18,9 @@ require_once("connect.php");
       $req = $BDD->prepare($sql);
       $req->execute(array(0, $pseudo, $mdp));
 
-      $sql2 = "SELECT * FROM user WHERE pseudo= " . $pseudo . "AND mdp = " . $mdp;
-      $req2 = $BDD->query($sql2);
+      $sql2 = "SELECT * FROM user WHERE pseudo='{$pseudo}' AND mdp = '{$mdp}'";
+      $req2 = $BDD->prepare($sql2);
+      $req2->execute();
       $ligne = $req2->fetch();
       if (!empty($ligne)) {
         $_SESSION['login'] = $pseudo;
