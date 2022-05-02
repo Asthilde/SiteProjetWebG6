@@ -16,11 +16,9 @@ require_once("connect.php");
       $_SESSION['notreId'] = $_GET['id'];
     }
     $pageHist;
-    if (isset($_POST['idPageCible'])) {
-      $pageHist = $_POST['idPageCible'];
-    } 
-    
-    else {
+    if (isset($_GET['idPageCible'])) {
+      $pageHist = $_GET['idPageCible'];
+    } else {
       $req3 = "SELECT * FROM hist_jouee WHERE id_hist = '{$_SESSION['notreId']}'";
       $res3 = $BDD->prepare($req3);
       $res3->execute();
@@ -53,11 +51,11 @@ require_once("connect.php");
   <?php } ?>
 
   <?php
+
   if ($BDD) {
     $req2 = "SELECT * FROM choix WHERE id_page = '{$identPage}'";
     $res2 = $BDD->prepare($req2);
     $res2->execute();
-    $ligne2 = $res2->fetch();
     while ($ligne2 = $res2->fetch()) { ?>
       <div>
         <a href=<?= "jeu.php?idPageCible=" . $ligne2['id_page_cible']; ?> a> <?= $ligne2['id_page_cible']; ?> </a>

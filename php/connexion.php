@@ -6,6 +6,7 @@ require_once("connect.php");
 <!doctype html>
 <html>
 <?php include 'templatesHTML/head.php'; ?>
+
 <body>
   <div class="container">
     <?php include 'templatesHTML/navbar.php';
@@ -19,9 +20,16 @@ require_once("connect.php");
       $ligne = $req->fetch();
       if (!empty($ligne) && password_verify($_POST['mdp'], $ligne['mdp'])) {
         $_SESSION['login'] = $_POST['login'];
+
+        # on peut pas utiliser de booléen car quand on met false ça marche pas dans le tableau associatif
+        # donc on met des chiffres
         if ($ligne["est_admin"] == 1) {
-          $_SESSION['admin'] = true;
+          $_SESSION['admin'] = 1;
+        } else {
+          $_SESSION['admin'] = 0;
         }
+
+
         header('Location: index.php');
       }
     }

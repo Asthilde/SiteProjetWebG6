@@ -1,6 +1,10 @@
 <?php
 session_start();
 require_once("connect.php");
+if ($_SESSION['admin'] == 0) {
+  echo "ERREUR";
+}
+
 if (isset($_POST['nom']) && ($_POST['nom'] != ' ') && isset($_POST['resume']) && ($_POST['nom'] != ' ') && isset($_FILES["image"]['name'])) {
   $req = $BDD->prepare("SELECT COUNT(*) as nb FROM histoire WHERE nom_hist=:titre");
   $req->execute(array(
@@ -57,7 +61,9 @@ if (isset($_POST['nom']) && ($_POST['nom'] != ' ') && isset($_POST['resume']) &&
         <div class="form-group">
           <label class="col-sm-4 control-label">Titre</label>
           <div class="col-sm-6">
-            <input type="text" name="nom" value="<?php if (isset($_POST['nom'])) { echo $_POST['nom'];} ?>" class="form-control" placeholder="Entrez le nom de votre histoire" required autofocus>
+            <input type="text" name="nom" value="<?php if (isset($_POST['nom'])) {
+                                                    echo $_POST['nom'];
+                                                  } ?>" class="form-control" placeholder="Entrez le nom de votre histoire" required autofocus>
           </div>
         </div>
         <div class="form-group">
