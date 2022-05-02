@@ -17,7 +17,7 @@ require_once("connect.php");
       $sql = "INSERT INTO user(est_admin,pseudo,mdp) VALUES (?,?,?)";
       $req = $BDD->prepare($sql);
       $req->execute(array(0, $pseudo, $mdp));
-
+      
       $sql2 = "SELECT * FROM user WHERE pseudo='{$pseudo}' AND mdp = '{$mdp}'";
       $req2 = $BDD->prepare($sql2);
       $req2->execute();
@@ -27,7 +27,7 @@ require_once("connect.php");
         header('Location: index.php');
       }
     } ?>
-
+    <h2 class="text-center">Création de compte</h2>
     <div class="well">
       Bienvenue sur notre site ! Inscrivez-vous :
       <form class="form-signin form-horizontal" role="form" action="creation_compte.php" method="post">
