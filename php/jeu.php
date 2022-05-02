@@ -12,14 +12,16 @@ require_once("connect.php");
   <?php include 'templatesHTML/navbar.php';
 
   if ($BDD) {
-    if (isset($_POST['id'])) {
-      $_SESSION['notreId'] = $_POST['id'];
+    if (isset($_GET['id'])) {
+      $_SESSION['notreId'] = $_GET['id'];
     }
     $pageHist;
     if (isset($_POST['idPageCible'])) {
       $pageHist = $_POST['idPageCible'];
-    } else {
-      $req3 = "SELECT choix_eff FROM hist_jouee WHERE id_hist = '{$_SESSION['notreId']}'";
+    } 
+    
+    else {
+      $req3 = "SELECT * FROM hist_jouee WHERE id_hist = '{$_SESSION['notreId']}'";
       $res3 = $BDD->prepare($req3);
       $res3->execute();
       $ligne3 = $res3->fetch();
@@ -31,7 +33,7 @@ require_once("connect.php");
     }
 
 
-    $req = "SELECT * FROM page_hist WHERE id_page = '{$pageHist}' AND WHERE id_hist = '{$_SESSION['notreId']}'";
+    $req = "SELECT * FROM page_hist WHERE id_page = '{$pageHist}' AND id_hist = '{$_SESSION['notreId']}'";
     $res = $BDD->prepare($req);
     $res->execute();
     $ligne = $res->fetch();

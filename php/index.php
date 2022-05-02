@@ -29,7 +29,7 @@ require_once 'connect.php' ?>
             <div class="col" id="nomCreateur"> <?= $maLigne['pseudo']; ?> </div>
             <div class="form-group">
               <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
-                <a class="btn btn-default btn-primary" href=<?= $demarrage . $ligne['id_hist'] ?>> Démarrer </a>
+                <a class="btn btn-default btn-primary" href="<?= $demarrage . $ligne['id_hist'] ?>"> Démarrer </a>
               </div>
 
               <?php
