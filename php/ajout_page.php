@@ -66,7 +66,7 @@ if (!isset($_POST['pageChoisie']) || isset($_SESSION['num_page'])) {
         'numPage' => $_POST['pageChoisie'],
         'numPageCible' => $nomPageCible,
         'numHist' => $_SESSION['id_hist'],
-        'choix' => $_POST[$nom]
+        'choix' => $_POST[$nom] //Il faut faire une modif pour rajouter une case à cocher
       ));
       $cpt++;
     }
