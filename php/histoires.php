@@ -15,7 +15,7 @@ require_once("connect.php");
         <div class="jumbotron">
             <div class="row">
                 <div class="col-md-5 col-sm-7">
-                    <img class="img-responsive movieImage" src="../images/<?php echo strtolower($ligne['illustration']); ?>" title="<?= $ligne['nom_hist']; ?>" />
+                    <img class="img-responsive movieImage" src="../images/<?php echo $ligne['nom_hist'].'/'. strtolower($ligne['illustration']); ?>" alt ="Affiche histoire" title="<?= $ligne['nom_hist']; ?>" />
                 </div>
                 <div class="col-md-7 col-sm-5">
                     <h2><?= $ligne['nom_hist']; ?></h2>

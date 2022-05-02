@@ -1,15 +1,15 @@
 <?php
 session_start();
 require_once("connect.php");
-if(isset($_POST['nom']) && isset($_POST['resume']) && isset($_FILES["image"])) {
+if(isset($_POST['nom']) && ($_POST['nom'] != ' ') && isset($_POST['resume']) && ($_POST['nom'] != ' ') && isset($_FILES["image"]['name'])) {
     $req = $BDD->prepare("SELECT COUNT(*) as nb FROM histoire WHERE nom_hist=:titre");
     $req->execute(array(
         "titre" => $_POST['nom']
     ));
+    $ligne = $req->fetch();
     // On vérifie le nombre d'éléments correspondant
     if($ligne['nb'] == 0) {
         //Avoir un nommage type de l'image en vérifiant son type ! (jpg, jpeg , ... ) et créer un dossier d'images par histoire
-        //Faire un if pour vérifier si le dossier existe ... 
         if(is_dir("../images/".$_POST['nom']) || mkdir("../images/".$_POST['nom'])){
         $_FILES["image"]['name'] =  strtolower("image_accueil_". $_POST['nom'] . substr($_FILES["image"]['name'], strpos($_FILES["image"]['name'], '.')));
         if(move_uploaded_file($_FILES["image"]['tmp_name'], "../images/".$_POST['nom'].'/'.$_FILES["image"]['name'])){
@@ -22,14 +22,14 @@ if(isset($_POST['nom']) && isset($_POST['resume']) && isset($_FILES["image"])) {
 
             // On exécute la requête en lui transmettant les données qui nous interessent
             $req->execute(array(
-                "titre" => $_POST['nom'],
-                "synopsis" => $_POST['resume'],
+                "titre" => htmlspecialchars($_POST['nom'], ENT_QUOTES, 'UTF-8', false),
+                "synopsis" => htmlspecialchars($_POST['resume'], ENT_QUOTES, 'UTF-8', false),
                 "img" => $_FILES["image"]['name'] 
             ));
-        }
-        $_SESSION['nom_hist'] = $_POST['nom'];
-        $_SESSION['num_page'] = '0';
-        header('Location: ajout_page.php') ;
+            $_SESSION['nom_hist'] = $_POST['nom'];
+            $_SESSION['num_page'] = '0';
+            header('Location: ajout_page.php') ;
+          }
     }}
     else {
         echo "L'histoire existe déja dans la base !"; ?>

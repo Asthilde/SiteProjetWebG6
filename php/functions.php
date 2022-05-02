@@ -94,11 +94,15 @@ $pagesARenseigner = array("A1", "A2", "A3",
                 "A2B2C1D1", "A2B2C1D2", "A2B2C1D3", "A2B2C2D1", "A2B2C2D2", "A2B2C2D3", "A2B2C3D1", "A2B2C3D2", "A2B2C3D3",
                 "A3B3C1D1", "A3B3C1D2", "A3B3C1D3", "A3B3C2D1", "A3B3C2D2", "A3B3C2D3", "A3B3C3D1", "A3B3C3D2", "A3B3C3D3",
                 );
+$pagesImpossible = array();
 for($i = 0; $i < count($pagesARenseigner); $i++){ 
-    echo count($pagesARenseigner);
-    var_dump($pagesARenseigner[$i]); //Le str_contains ne fonctionne pas je ne sais pas pourquoi ...
-    if($pagesARenseigner[$i] == 'A1' || (str_contains($pagesARenseigner[$i], 'A1') && strlen($pagesARenseigner[$i]) >= strlen('A1'))){
-      unset($pagesARenseigner[$i]);
+    //echo count($pagesARenseigner);
+    //var_dump($pagesARenseigner[$i]); //Le str_contains ne fonctionne pas je ne sais pas pourquoi ...
+    if($pagesARenseigner[$i] == 'A1' || (strpos($pagesARenseigner[$i], 'A1') !== false && strlen($pagesARenseigner[$i]) >= strlen('A1'))){
+      array_push($pagesImpossible, $pagesARenseigner[$i]);
     }
   }
+  var_dump($pagesImpossible);
+  echo '<br/> ------------------------ <br/>';
+  $pagesARenseigner = array_diff($pagesARenseigner, $pagesImpossible);
   var_dump($pagesARenseigner);
