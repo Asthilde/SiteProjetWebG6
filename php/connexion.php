@@ -11,15 +11,13 @@ require_once("connect.php");
     <?php include 'templatesHTML/navbar.php';
     $ligne = "rien";
     if (isset($_POST['login']) && isset($_POST['mdp'])) {
-      $sql = "SELECT * FROM user WHERE pseudo=:nom_user AND mdp=:motdepasse";
+      $sql = "SELECT * FROM user WHERE pseudo=:nom_user";
       $req = $BDD->prepare($sql);
       $req->execute(array(
-        "nom_user" => $_POST['login'],
-        "motdepasse" => $_POST['mdp']
+        "nom_user" => $_POST['login']
       ));
       $ligne = $req->fetch();
-      
-      if (!empty($ligne)) {
+      if (!empty($ligne) && password_verify($_POST['mdp'], $ligne['mdp'])) {
         $_SESSION['login'] = $_POST['login'];
         if ($ligne["est_admin"] == 1) {
           $_SESSION['admin'] = true;
