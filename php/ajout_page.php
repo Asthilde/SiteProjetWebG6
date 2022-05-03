@@ -70,8 +70,8 @@ else {
           'numPageCible' => $nomPageCible,
           'numHist' => $_SESSION['id_hist'],
           'choix' => $_POST[$nom],
-          'nbPdv' => (-1*$_POST[$nomPdv]) //Il faut faire une modif pour rajouter une ligne si choix de fin et rajouter dans id_page_cible FIN
-        ));//<!--Gérer le nombre de pdv perdus un espace pour demander le nb pdv perdu -->;
+          'nbPdv' => (-1*$_POST[$nomPdv]) 
+        ));//Gérer le nb de pdv perdus
         echo $nomChoix;
         if(isset($_POST[$nomChoix])){
           $req = $BDD->prepare($sql);
@@ -80,7 +80,7 @@ else {
             'numPageCible' => 'FIN',
             'numHist' => $_SESSION['id_hist'],
             'choix' => '',
-            'nbPdv' => 0 //Il faut faire une modif pour rajouter une ligne si choix de fin et rajouter dans id_page_cible FIN
+            'nbPdv' => 0 
           ));
         }
       }
@@ -95,7 +95,7 @@ else {
   else {
     echo "Les données existent déja dans la base !"; ?>
     <a href="ajout_page.php">CONTINUER</a>
-    <a href="fin_hist.php"> TERMINER L'HISTOIRE</a>
+    <a href="fin_hist.php">TERMINER L'HISTOIRE</a>
 <?php
   }
 }
@@ -196,7 +196,7 @@ else {
           <?php } //Trouver un moyen de gérer l'affichage si on a rentré tous les choix possibles
           for ($i = 1; $i < 4; $i++) { ?>
           <div id="choix<?= $i ?>" class="form-group">
-            <label class="col-sm-4 control-label">Choix <?= $i ?> (si c'est la fin de la branche écrire FIN dans l'encadré)</label>
+            <label class="col-sm-4 control-label">Choix <?= $i ?></label>
             <div class="col-sm-6">
               <input type="text" name="choix<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le choix <?= $i ?>" <?php if ($i == 1) { ?>required <?php } ?> autofocus>
             </div>

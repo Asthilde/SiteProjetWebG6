@@ -11,7 +11,6 @@ require_once 'connect.php' ?>
   <div class="well">
     <form class="form-horizontal" role="form" action="modifierPage.php" method="post">
       <input type="hidden" name="id" value="">
-      <!--Faire du JS si possible pour afficher les éléments déja renseignés et les nouveaux à renseigner sinon faire une page accueil choix de la page et une page pour renseigner les infos -->
       <div class="form-group">
         <label class="col-sm-4 control-label">Page à modifier</label>
         <div class="col-sm-6">
