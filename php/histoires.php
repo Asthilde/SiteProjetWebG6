@@ -9,8 +9,10 @@ require_once("connect.php");
   <div class="container">
     <?php include 'templatesHTML/navbar.php';
     if (isset($_GET['id']) && !empty($_GET['id'])) {
-      $req = "SELECT * FROM histoire WHERE id_hist=" . $_GET['id'];
-      $res = $BDD->query($req);
+      $res = $BDD->prepare("SELECT * FROM histoire WHERE id_hist=:numero");
+      $res->execute(array(
+        "numero" => htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8', false)
+      ));
       $ligne = $res->fetch(); ?>
       <div class="jumbotron">
         <div class="row">
@@ -19,7 +21,11 @@ require_once("connect.php");
           </div>
           <div class="col-md-7 col-sm-5">
             <h2><?= $ligne['nom_hist']; ?></h2>
-            <p>Créateur : <?= $ligne['id_createur']; ?></p>
+            <?php
+              $req2 = $BDD->prepare("SELECT * FROM user WHERE id_user= '{$ligne['id_createur']}'");
+              $req2->execute();
+              $ligne2 = $req2->fetch();?>
+            <p>Créateur : <?= $ligne2['pseudo']; ?></p>
             <p>Nombre de fois joué : <?= $ligne['nb_fois_jouee']; ?><br />
               Nombre de réussites : <?= $ligne['nb_reussites']; ?><br />
               Nombre d'échecs : <?= $ligne['nb_morts']; ?></p>
