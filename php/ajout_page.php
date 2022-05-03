@@ -1,29 +1,14 @@
 <?php
 session_start();
 require_once("connect.php");
-//require("functions.php");
-/*if(isset($_POST['fin1'])){
-  var_dump($_POST['fin1']);
-}
-else
-  echo 'Choix 1 pas une fin';
-if(isset($_POST['fin2'])){
-  var_dump($_POST['fin2']);
-}
-else
-  echo 'Choix 2 pas une fin';
-if(isset($_POST['fin3'])){
-  var_dump($_POST['fin3']);
-}
-else
-  echo 'Choix 3 pas une fin';*/
 if (!isset($_POST['pageChoisie']) || isset($_SESSION['num_page'])) {
   $req2 = "SELECT * FROM histoire WHERE nom_hist = '{$_SESSION['nom_hist']}'";
   $res2 = $BDD->query($req2);
   $idHist = $res2->fetch();
   $_SESSION['id_hist'] = $idHist['id_hist'];
   unset($_SESSION['num_page']);
-} else {
+} 
+else {
   $req = $BDD->prepare("SELECT COUNT(*) as nb FROM page_hist WHERE id_page='{$_POST['pageChoisie']}' AND id_hist = '{$_SESSION['id_hist']}'");
   $req->execute();
   $ligne = $req->fetch();
@@ -62,29 +47,54 @@ if (!isset($_POST['pageChoisie']) || isset($_SESSION['num_page'])) {
     $req = $BDD->prepare($sql);
     $req->execute($tab);
 
-    for ($i = 1; $i < 4; $i++) {
-      $nom = "choix" . $i;
-      if ($_POST['pageChoisie'] == '0') {
-        $nivSuiv = 'A';
-        $nomPageCible = 'A' . $i;
-      } 
-      else {
-        $nivSuiv = chr(ord(substr($_POST['pageChoisie'], -2, 1)) + 1);
-        $nomPageCible = $_POST['pageChoisie'] . $nivSuiv . $i;
+    $req2 = $BDD->prepare("SELECT COUNT(*) as nb FROM choix WHERE id_page='{$_POST['pageChoisie']}' AND id_page_cible ='FIN'");
+    $req2->execute();
+    $ligne2 = $req2->fetch();
+    if ($ligne2['nb'] == 0) {
+      for ($i = 1; $i < 4; $i++) {
+        $nom = "choix" . $i;
+        if ($_POST['pageChoisie'] == '0') {
+          $nivSuiv = 'A';
+          $nomPageCible = 'A' . $i;
+        } 
+        else {
+          $nivSuiv = chr(ord(substr($_POST['pageChoisie'], -2, 1)) + 1);
+          $nomPageCible = $_POST['pageChoisie'] . $nivSuiv . $i;
+        }
+        $nomPdv = "pdv".$i;
+        $nomChoix = "fin".$i;
+        $sql = "INSERT INTO choix (id_page, id_page_cible, id_hist, contenu, nb_pdv_perdu) VALUES (:numPage, :numPageCible, :numHist, :choix, :nbPdv)"; //'{$_SESSION['num_page']}','{$_SESSION['id_hist']}', :para'{$cpt}')";
+        $req = $BDD->prepare($sql);
+        $req->execute(array(
+          'numPage' => $_POST['pageChoisie'],
+          'numPageCible' => $nomPageCible,
+          'numHist' => $_SESSION['id_hist'],
+          'choix' => $_POST[$nom],
+          'nbPdv' => (-1*$_POST[$nomPdv]) //Il faut faire une modif pour rajouter une ligne si choix de fin et rajouter dans id_page_cible FIN
+        ));//<!--Gérer le nombre de pdv perdus un espace pour demander le nb pdv perdu -->;
+        echo $nomChoix;
+        if(isset($_POST[$nomChoix])){
+          $req = $BDD->prepare($sql);
+          $req->execute(array(
+            'numPage' => $nomPageCible,
+            'numPageCible' => 'FIN',
+            'numHist' => $_SESSION['id_hist'],
+            'choix' => '',
+            'nbPdv' => 0 //Il faut faire une modif pour rajouter une ligne si choix de fin et rajouter dans id_page_cible FIN
+          ));
+        }
       }
-      $sql = "INSERT INTO choix (id_page, id_page_cible, id_hist, contenu) VALUES (:numPage, :numPageCible, :numHist, :choix)"; //'{$_SESSION['num_page']}','{$_SESSION['id_hist']}', :para'{$cpt}')";
-      $req = $BDD->prepare($sql);
-      $req->execute(array(
-        'numPage' => $_POST['pageChoisie'],
-        'numPageCible' => $nomPageCible,
-        'numHist' => $_SESSION['id_hist'],
-        'choix' => $_POST[$nom] //Il faut faire une modif pour rajouter une ligne si choix de fin et rajouter dans id_page_cible FIN
-      ));//<!--Gérer le nombre de pdv perdus un espace pour demander le nb pdv perdu -->
     }
-  } else {
+    else{
+      $req = $BDD->prepare("UPDATE choix SET contenu =:choix WHERE id_page = '{$_POST['pageChoisie']}'");
+      $req->execute(array(
+        'choix' => $_POST[$nom],
+      ));
+    }
+  } 
+  else {
     echo "Les données existent déja dans la base !"; ?>
     <a href="ajout_page.php">CONTINUER</a>
-    <a href="index.php">RETOUR</a>
     <a href="fin_hist.php"> TERMINER L'HISTOIRE</a>
 <?php
   }
@@ -146,9 +156,9 @@ if (!isset($_POST['pageChoisie']) || isset($_SESSION['num_page'])) {
                   "numero" => $_SESSION['id_hist']
                 ));
                 while ($ligne = $req->fetch()) {
-                  if ($ligne['contenu'] == "FIN") {
+                  if ($ligne['id_page_cible'] == "FIN") {
                     foreach ($pagesARenseigner as $pagesPossibles) {
-                      if ((strpos($pagesPossibles, $ligne['id_page_cible']) !== false && strlen($pagesPossibles) > strlen($ligne['id_page_cible'])))
+                      if ((strpos($pagesPossibles, $ligne['id_page']) !== false && strlen($pagesPossibles) > strlen($ligne['id_page'])))
                         array_push($pagesImpossibles, $pagesPossibles);
                     }
                   }
@@ -169,45 +179,55 @@ if (!isset($_POST['pageChoisie']) || isset($_SESSION['num_page'])) {
             </select>
           </div>
         </div>
-        <?php for ($i = 1; $i < 6; $i++) { ?>
-        <div class="form-group">
-          <label class="col-sm-4 control-label">Paragraphe <?= $i ?></label>
-          <div class="col-sm-6">
-            <input type="text" name="para_<?= $i ?>" value=" " class="form-control" placeholder="Ecrivez votre paragraphe" <?php if ($i == 1) { ?> <?php } ?> autofocus>
+        <?php 
+        for ($i = 1; $i < 6; $i++) { ?>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Paragraphe <?= $i ?></label>
+            <div class="col-sm-6">
+              <input type="text" name="para_<?= $i ?>" value=" " class="form-control" placeholder="Ecrivez votre paragraphe" <?php if ($i == 1) { ?> <?php } ?> autofocus>
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-4 control-label">Image <?= $i ?></label>
-          <div class="col-sm-4">
-            <input type="file" name="img_<?= $i ?>" />
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Image <?= $i ?></label>
+            <div class="col-sm-4">
+              <input type="file" name="img_<?= $i ?>" />
+            </div>
           </div>
-        </div>
-        <?php } ?>
-        <?php for ($i = 1; $i < 4; $i++) { ?>
-        <div class="form-group">
-          <label class="col-sm-4 control-label">Choix <?= $i ?> (si c'est la fin de la branche écrire FIN dans l'encadré)</label>
-          <div class="col-sm-6">
-            <input type="text" name="choix<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le choix <?= $i ?>" <?php if ($i == 1) { ?>required <?php } ?> autofocus>
+          <?php } //Trouver un moyen de gérer l'affichage si on a rentré tous les choix possibles
+          for ($i = 1; $i < 4; $i++) { ?>
+          <div id="choix<?= $i ?>" class="form-group">
+            <label class="col-sm-4 control-label">Choix <?= $i ?> (si c'est la fin de la branche écrire FIN dans l'encadré)</label>
+            <div class="col-sm-6">
+              <input type="text" name="choix<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le choix <?= $i ?>" <?php if ($i == 1) { ?>required <?php } ?> autofocus>
+            </div>
+            <div class="col-sm-6">
+              <input type="checkbox" id="fin<?= $i ?>" name="fin<?= $i ?>" value="<?= $i ?>" class="form-control">
+              <label for="fin<?= $i ?>">Fin de l'histoire ?</label>
+            </div>
+            <div class="col-sm-6">
+              Nombre de points de vie perdus :
+              <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="0" class="form-control" required>
+              <label for="pdv<?= $i ?>">0</label>   
+              <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="1" class="form-control">
+              <label for="pdv<?= $i ?>">1</label> 
+              <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="2" class="form-control">
+              <label for="pdv<?= $i ?>">2</label> 
+              <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="3" class="form-control">
+              <label for="pdv<?= $i ?>">3</label>        
+            </div>
           </div>
-          <div class="col-sm-6">
-            <input type="checkbox" id="fin" name="fin<?= $i ?>" value="<?= $i ?>" class="form-control">
-            <label for="fin<?= $i ?>">Fin de l'histoire ?</label>
+          <?php } ?>
+          <div class="form-group">
+            <div class="col-sm-4 col-sm-offset-4">
+              <button type="submit" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-save"></span> Enregistrer</button>
+            </div>
           </div>
-          <div class="col-sm-6">
-            <input type="text" name="pdv<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le nombre de points de vie perdu (ou rien sinon)">
-          </div>
-        </div>
-        <?php } ?>
-        <div class="form-group">
-          <div class="col-sm-4 col-sm-offset-4">
-            <button type="submit" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-save"></span> Enregistrer</button>
-          </div>
-        </div>
       </form>
     </div>
     <?php include 'templatesHTML/footer.php'; ?>
   </div>
   
+  <script src="../affichageChoix.js"></script>
   <!-- jQuery -->
   <script src="../lib/jquery/jquery.min.js"></script>
   <!-- JavaScript Boostrap plugin -->

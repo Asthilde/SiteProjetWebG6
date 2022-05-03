@@ -8,7 +8,8 @@ require_once 'connect.php' ?>
 <body>
 <div class="container">
   <?php include 'templatesHTML/navbar.php'; ?>
-  <!--Faire un form pour modifier les valeurs et faire le php pour envoyer ça -->
+  <!--Faire la gestion de l'envoi du form pour modifier les valeurs dans la BDD -->
+
   <div class="well">
     <?php if(isset($_POST['pageChoisie'])){
        $req = $BDD->prepare("SELECT * FROM page_hist WHERE id_page='{$_POST['pageChoisie']}' AND id_hist = '{$_SESSION['id_hist']}'");
