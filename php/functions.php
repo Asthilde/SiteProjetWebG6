@@ -1,4 +1,21 @@
 <?php
+require_once("connect.php");
+/*$i = 2;
+$nom = "para_" . $i;
+$_SESSION['pageModifiee'] = "A1B1";
+$req = $BDD -> prepare("UPDATE page_hist SET {$nom} = :nomPara WHERE id_page = :idPage"); 
+$req->execute(array(
+  'nomPara' => htmlspecialchars('blabla je tente quelque chose', ENT_QUOTES, 'UTF-8', false),
+  'idPage' => $_SESSION['pageModifiee']
+));*/
+
+$fichiers = glob("../images/" . "Autre test/*");
+foreach($fichiers as $fichier){
+  unlink($fichier);
+}
+rmdir("../images/" . "Autre test");
+
+
 $pagesARenseigner = array("A1", "A2", "A3", 
                 "A1B1", "A1B2", "A1B3", "A2B1", "A2B2", "A2B3", "A3B1", "A3B2", "A3B3", 
                 "A1B1C1", "A1B1C2", "A1B1C3", "A1B2C1", "A1B2C2", "A1B2C3", "A1B3C1", "A1B3C2", "A1B3C3", 
@@ -16,6 +33,7 @@ for($i = 0; $i < count($pagesARenseigner); $i++){
     array_push($pagesImpossible, $pagesARenseigner[$i]);
   }
 }
+
   //var_dump($pagesImpossible);
   echo '<br/> ------------------------ <br/>';
   $pagesARenseigner = array_diff($pagesARenseigner, $pagesImpossible);

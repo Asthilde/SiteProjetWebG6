@@ -1,9 +1,13 @@
 <?php
 session_start();
-require_once 'connect.php' ?>
+require_once 'connect.php';?>
 <!doctype html>
 <html>
-<?php include 'templatesHTML/head.php'; ?>
+<?php include 'templatesHTML/head.php';
+if(isset($_SESSION['pageModifiee'])){
+  unset($_SESSION['pageModifiee']);
+}
+?>
 
 <body>
 <div class="container">

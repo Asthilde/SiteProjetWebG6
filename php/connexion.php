@@ -25,11 +25,7 @@ require_once("connect.php");
         # donc on met des chiffres
         if ($ligne["est_admin"] == 1) {
           $_SESSION['admin'] = 1;
-        } else {
-          $_SESSION['admin'] = 0;
-        }
-
-
+        } 
         header('Location: index.php');
       }
     }
@@ -62,6 +58,12 @@ require_once("connect.php");
         </form>
       </div>
     <?php } ?>
+    <div class="form-group">
+      <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+        <p>Si je n'ai pas de compte</p>
+        <a href="creation_compte.php" class="btn btn-default btn-primary"> Se créer un compte</a>
+      </div>
+    </div>
     <?php include 'templatesHTML/footer.php'; ?>
   </div>
 

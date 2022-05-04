@@ -9,6 +9,7 @@ if (!isset($_POST['pageChoisie']) || isset($_SESSION['num_page'])) {
   unset($_SESSION['num_page']);
 } 
 else {
+  //echo $_SESSION['id_hist'];
   $req = $BDD->prepare("SELECT COUNT(*) as nb FROM page_hist WHERE id_page='{$_POST['pageChoisie']}' AND id_hist = '{$_SESSION['id_hist']}'");
   $req->execute();
   $ligne = $req->fetch();
@@ -47,7 +48,7 @@ else {
     $req = $BDD->prepare($sql);
     $req->execute($tab);
 
-    $req2 = $BDD->prepare("SELECT COUNT(*) as nb FROM choix WHERE id_page='{$_POST['pageChoisie']}' AND id_page_cible ='FIN'");
+    $req2 = $BDD->prepare("SELECT COUNT(*) as nb FROM choix WHERE id_page='{$_POST['pageChoisie']}' AND id_page_cible ='FIN' AND id_hist = '{$_SESSION['id_hist']}'");
     $req2->execute();
     $ligne2 = $req2->fetch();
     if ($ligne2['nb'] == 0) {
@@ -72,8 +73,8 @@ else {
           'choix' => $_POST[$nom],
           'nbPdv' => (-1*$_POST[$nomPdv]) 
         ));//Gérer le nb de pdv perdus
-        echo $nomChoix;
-        if(isset($_POST[$nomChoix])){
+        //echo $nomPageCible .' ';
+        if(isset($_POST[$nomChoix]) || strlen($nomPageCible) == 8){ //Ca à pas l'air de trop fonctionner
           $req = $BDD->prepare($sql);
           $req->execute(array(
             'numPage' => $nomPageCible,
@@ -84,12 +85,6 @@ else {
           ));
         }
       }
-    }
-    else{
-      $req = $BDD->prepare("UPDATE choix SET contenu =:choix WHERE id_page = '{$_POST['pageChoisie']}'");
-      $req->execute(array(
-        'choix' => $_POST[$nom],
-      ));
     }
   } 
   else {

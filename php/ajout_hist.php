@@ -1,9 +1,9 @@
 <?php
 session_start();
 require_once("connect.php");
-if ($_SESSION['admin'] == 0) {
+/*if ($_SESSION['admin'] == 0) {
   echo "ERREUR";
-}
+}*/
 
 if (isset($_POST['nom']) && ($_POST['nom'] != ' ') && isset($_POST['resume']) && ($_POST['nom'] != ' ') && isset($_FILES["image"]['name'])) {
   $req = $BDD->prepare("SELECT COUNT(*) as nb FROM histoire WHERE nom_hist=:titre");
