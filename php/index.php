@@ -3,7 +3,7 @@ session_start();
 require_once 'connect.php' ?>
 <!doctype html>
 <html>
-<?php include 'templatesHTML/head.php'; ?>
+<?php include 'templatesHTML/head.php'; ?> <!--Modifier tous les chemins pour mettre index en dehors de php-->
 
 <body>
   <div class="container">
