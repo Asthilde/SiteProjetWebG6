@@ -10,25 +10,33 @@ require_once 'connect.php';?>
   <?php include 'templatesHTML/navbar.php';
   if(isset($_POST['pageChoisie'])){
     $_SESSION['pageModifiee'] = $_POST['pageChoisie'];
+    $req = "SELECT * FROM histoire WHERE id_hist = '{$_SESSION['id_hist']}'";
+    $res = $BDD->query($req);
+    $ligne = $res->fetch();
+    $_SESSION['nom_hist'] = $ligne['nom_hist'];
   }
   else if(isset($_SESSION['pageModifiee'])){
     for ($i = 1; $i < 6; $i++) {
       $nom = "para_" . $i;
       if (isset($_POST[$nom])) {
-        $req = $BDD -> prepare("UPDATE page_hist SET {$nom}=:nomPara WHERE id_page = '{$_SESSION['pageModifiee']}'"); 
+        $req = $BDD -> prepare("UPDATE page_hist SET {$nom}=:nomPara WHERE id_page =:nomPage  AND id_hist=:numHist"); 
         $req->execute(array(
-          'nomPara' => htmlspecialchars($_POST[$nom], ENT_QUOTES, 'UTF-8', false)
-        )); //Ne fonctionne pas je ne sais pas pourquoi
+          'nomPara' => htmlspecialchars($_POST[$nom], ENT_QUOTES, 'UTF-8', false),
+          'nomPage' => $_SESSION['pageModifiee'],
+          'numHist' => $_SESSION['id_hist']
+        )); 
       }
     }
     for ($i = 1; $i < 6; $i++) {
       $nom = "img_" . $i;
-      if (isset($_FILES[$nom])) {
+      if (isset($_FILES[$nom]['name'])) {
         $_FILES[$nom]['name'] =  strtolower("img_{$_SESSION['id_hist']}_{$_POST['pageChoisie']}_{$cpt}" . substr($_FILES[$nom]['name'], strpos($_FILES[$nom]['name'], '.')));
         if (move_uploaded_file($_FILES[$nom]['tmp_name'], "../images/" . $_SESSION['nom_hist'] . '/' . $_FILES[$nom]['name'])) {
-          $req = $BDD -> prepare("UPDATE page_hist SET {$nom} =:nomImg WHERE id_page = '{$_SESSION['pageModifiee']}'"); 
+          $req = $BDD -> prepare("UPDATE page_hist SET {$nom} =:nomImg WHERE id_page =:nomPage  AND id_hist=:numHist"); 
           $req->execute(array(
-            'nomImg' => $_FILES[$nom]['name']
+            'nomImg' => $_FILES[$nom]['name'], //N'est pas renseigné dans la BDD
+            'nomPage' => $_SESSION['pageModifiee'],
+            'numHist' => $_SESSION['id_hist']
         ));
         }
       }

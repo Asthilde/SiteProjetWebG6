@@ -25,12 +25,12 @@ require_once 'connect.php' ?>
         while ($ligne = $res->fetch()) {
           if($i==0){ ?>
           <div class="row align-items-end">
-            <h2 class="col">Histoires en cours</h3>
+            <h2 class="col">Histoires en cours</h2>
           </div>
           <?php 
             $i++;
           }
-          $demarrage = "jeu.php?id='{$ligne['id_hist']}'&pageDebut='{$ligne['choix_eff']}'";
+          $demarrage = "jeu.php?id={$ligne['id_hist']}&pageDebut={$ligne['choix_eff']}&nbPdv={$ligne['nb_pts_vie']}'";
           array_push($tabHistJouee, $ligne['id_hist']); 
           $idHist = (int) $ligne['id_hist'];
           $req2 = "SELECT * FROM histoire WHERE id_hist = {$idHist}";
@@ -88,7 +88,7 @@ require_once 'connect.php' ?>
         $res2 = $BDD->query($req2);
         $maLigne = $res2->fetch();
         if (isset($_SESSION['login'])) {
-          $demarrage = "jeu.php?id='{$ligne['id_hist']}'&pageDebut='0'";
+          $demarrage = "jeu.php?id={$ligne['id_hist']}&pageDebut=0&nbPdv=3";
         }
         if(!in_array($ligne['id_hist'], $tabHistJouee)) {
         ?>
