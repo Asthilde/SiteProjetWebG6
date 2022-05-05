@@ -53,7 +53,7 @@ require_once("connect.php");
   <?php
 
   if ($BDD) {
-    $req2 = "SELECT * FROM choix WHERE id_page = '{$identPage}'";
+    $req2 = "SELECT * FROM choix WHERE id_page = '{$identPage}' AND id_hist = '{$_SESSION['notreId']}'";
     $res2 = $BDD->prepare($req2);
     $res2->execute();
     while ($ligne2 = $res2->fetch()) { ?>
