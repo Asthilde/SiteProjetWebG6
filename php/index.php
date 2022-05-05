@@ -33,7 +33,7 @@ require_once 'connect.php' ?>
               </div>
 
               <?php
-              if (isset($_SESSION["admin"])) {
+              if (isset($_SESSION["admin"]) &&  $_SESSION["admin"]== 1) {
               ?>
                 <div class="col" id="imgModifSuppr">
                   <a class="bi bi-pencil-square" href="modifier.php?id=<?= $ligne['id_hist'] ?>"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">

@@ -9,7 +9,7 @@
             <a class="navbar-brand" href="index.php"><span class="glyphicon glyphicon-film"></span> Une histoire dont vous êtes le héros</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse-target">
-            <?php if (isset($_SESSION['login'])) { ?>
+            <?php if (isset($_SESSION['admin']) &&  $_SESSION['admin'] == 1) { ?>
                 <ul class="nav navbar-nav">
                     <li><a href="ajout_hist.php">Ajouter une histoire</a></li>
                 </ul>
