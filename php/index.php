@@ -32,10 +32,12 @@ require_once 'connect.php' ?>
           }
           $demarrage = "jeu.php?id='{$ligne['id_hist']}'&pageDebut='{$ligne['choix_eff']}'";
           array_push($tabHistJouee, $ligne['id_hist']); 
-          $req2 = "SELECT * FROM histoire WHERE id_hist = '{$ligne['id_hist']}'";
-          $res2 = $BDD->prepare($req2);
+          $idHist = (int) $ligne['id_hist'];
+          $req2 = "SELECT * FROM histoire WHERE id_hist = {$idHist}";
+          $res2 = $BDD->query($req2);
           $ligne2 = $res2->fetch(); 
-          $req3 = "SELECT * FROM user WHERE id_user =" . $ligne2['id_createur'];
+          $idCrea = (int) $ligne2['id_createur'];
+          $req3 = "SELECT * FROM user WHERE id_user = {$idCrea}";
           $res3 = $BDD->query($req3);
           $maLigne = $res3->fetch();?>
           <article>
@@ -72,7 +74,12 @@ require_once 'connect.php' ?>
       <?php }
       } ?>
       <div class="row align-items-end">
-        <h2 class="col">Autres histoires</h2>
+        <?php if(isset($_SESSION['login'])){ ?>
+          <h2 class="col">Autres histoires</h2>
+        <?php } else { ?>
+          <h2 class="col">Histoires</h2>
+        <?php } ?>
+        
       </div>
       <?php $req = "SELECT * FROM histoire ORDER BY nom_hist";
       $res = $BDD->query($req);
