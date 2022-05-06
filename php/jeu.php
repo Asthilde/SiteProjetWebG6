@@ -15,11 +15,11 @@ require_once("connect.php");
     $_SESSION['nbpv'] = 3;
     $pageHist;
     if (isset($_GET['id']) && !empty($_GET['id'])) {
-      $_SESSION['notreId'] = htmlspecialchars($_GET['id'],ENT_QUOTES, 'UTF-8', false);
+      $_SESSION['idHist'] = htmlspecialchars($_GET['id'],ENT_QUOTES, 'UTF-8', false);
     }
     if (isset($_GET['idPageCible']) && !empty($_GET['idPageCible'])) {
       $pageHist = htmlspecialchars($_GET['idPageCible'],ENT_QUOTES, 'UTF-8', false);
-      $req4 = "SELECT * FROM choix WHERE id_hist = {$_SESSION['notreId']} AND id_page_cible = '{$pageHist}'";
+      $req4 = "SELECT * FROM choix WHERE id_hist = {$_SESSION['idHist']} AND id_page_cible = '{$pageHist}'";
       $res4 = $BDD->prepare($req4);
       $res4->execute();
       $ligne4 = $res4->fetch();
@@ -27,8 +27,8 @@ require_once("connect.php");
       $req2 = $BDD -> prepare("UPDATE hist_jouee SET choix_eff =:choix WHERE id_hist = :idHist AND id_user = idUser"); 
       $req2->execute(array(
         'choix' => htmlspecialchars($_GET['idPageCible'], ENT_QUOTES, 'UTF-8', false),
-        'idHist' => $_SESSION['notreId'],
-        'idUser' => 
+        'idHist' => $_SESSION['idHist'],
+        'idUser' => $_SESSION['']
       ));
     } 
     else if(isset($_GET['pageDebut'])){
@@ -42,7 +42,7 @@ require_once("connect.php");
     </div>";
     }
     /*else {
-      $req3 = "SELECT * FROM hist_jouee WHERE id_hist = {$_SESSION['notreId']}";
+      $req3 = "SELECT * FROM hist_jouee WHERE id_hist = {$_SESSION['idHist']}";
       $res3 = $BDD->prepare($req3);
       $res3->execute();
       $ligne3 = $res3->fetch();
@@ -54,8 +54,8 @@ require_once("connect.php");
         $_SESSION['nbpv'] = 3;
       }
     }*/
-    if(isset($_SESSION['notreId']) && isset($pageHist)){
-      $req = "SELECT * FROM page_hist WHERE id_page = '{$pageHist}' AND id_hist = {$_SESSION['notreId']}";
+    if(isset($_SESSION['idHist']) && isset($pageHist)){
+      $req = "SELECT * FROM page_hist WHERE id_page = '{$pageHist}' AND id_hist = {$_SESSION['idHist']}";
       $res = $BDD->prepare($req);
       $res->execute();
       $ligne = $res->fetch();
@@ -80,7 +80,7 @@ require_once("connect.php");
       ?>
       </div>
       <?php
-      $req2 = "SELECT * FROM choix WHERE id_page = '{$identPage}' AND id_hist = {$_SESSION['notreId']}";
+      $req2 = "SELECT * FROM choix WHERE id_page = '{$identPage}' AND id_hist = {$_SESSION['idHist']}";
       $res2 = $BDD->prepare($req2);
       $res2->execute();
       while ($ligne2 = $res2->fetch()) { ?>

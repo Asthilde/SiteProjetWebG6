@@ -8,6 +8,7 @@ require_once 'connect.php';?>
 <body>
 <div class="container">
   <?php include 'templatesHTML/navbar.php';
+  if($BDD){
   if(isset($_POST['pageChoisie'])){
     $_SESSION['pageModifiee'] = $_POST['pageChoisie'];
     $req = "SELECT * FROM histoire WHERE id_hist = '{$_SESSION['id_hist']}'";
@@ -120,6 +121,7 @@ require_once 'connect.php';?>
       </div>
     </form>
   <?php } 
+  }
   else{
     header('Location:modifier.php');
     unset($_SESSION['pageModifiee']);
