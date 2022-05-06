@@ -3,28 +3,41 @@ body {
 }
 
 .footer {
-  border-top: 1px solid #ccc;
+  border-top: 3px dotted rgb(9, 48, 2);
   padding-top: 10px;
   margin-bottom: 10px;
   text-align: center;
 }
 
-h1 {
-  color: rgb(153, 255, 102);
+.navbar {
+  background-color: rgb(18, 24, 18);
+  color: rgb(170, 228, 141);
+  font-style: italic;
+  text-align: center;
+  font-size: 120%;
+}
+
+.navbar-brand {
+  font-size: 120%;
+}
+
+a {
+  color: rgb(159, 228, 147);
   text-align: center;
 }
 h2 {
-  color: rgb(153, 255, 102);
-  font-style: italic;
+  color: rgb(170, 228, 141);
+  font-style: bold;
   text-align: center;
+  font-size: 400%;
 }
 h3 {
   color: rgb(221, 255, 204);
 }
 
 .joliparagraphe {
-  color: rgb(255, 180, 218);
-  text-align: center;
+  color: rgb(221, 150, 186);
+  text-align: left;
 }
 
 .imagecentr {
@@ -41,9 +54,18 @@ h3 {
 * {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-  color: rgb(215, 215, 215);
+  color: rgb(84, 198, 99);
 }
 
-div {
-  background-color: rgb(0, 26, 0);
+body {
+  background-color: rgb(18, 24, 18);
+}
+
+a:hover {
+  color: rgb(159, 228, 147);
+}
+
+div ul li a:hover {
+  background-color: rgb(18, 24, 18);
+  color: rgb(159, 228, 147);
 }
