@@ -22,11 +22,21 @@ require_once("connect.php");
       ));
       $ligne = $res->fetch();
       $_SESSION['nom_hist'] = $ligne['nom_hist'];
-
-
     }
     if(isset($_GET['pageDebut'])){
       $pageHist = htmlspecialchars($_GET['pageDebut'],ENT_QUOTES, 'UTF-8', false);
+      if($_GET['pageDebut'] === 0){
+        echo $_GET['pageDebut'];
+        $sql = "INSERT INTO hist_jouee (id_hist, id_user, choix_eff, nb_pts_vie, type_fin) VALUES (:idHist, :idUser, :choix, :nbPV, :fin)";
+        $req = $BDD->prepare($sql);
+        $req->execute(array(
+          'idHist' => $_SESSION['id_hist'],
+          'idUser' => $_SESSION['id_user'],
+          'choix' => '0',
+          'nbPV' => 3,
+          'fin' => ''
+        ));
+      }
     }
     if(isset($_GET['nbPdv']) && $_GET['nbPdv'] >= 0 && $_GET['nbPdv'] <= 3){
       $_SESSION['nbpv'] = (int) htmlspecialchars($_GET['nbPdv'],ENT_QUOTES, 'UTF-8', false);
@@ -42,16 +52,16 @@ require_once("connect.php");
       $ligne = $res->fetch();
       $_SESSION['nbpv'] += $ligne['nb_pdv_perdu'];
       //Mise à jour des données dans la base de données
-      $req2 = $BDD -> prepare("UPDATE hist_jouee SET choix_eff =:choix WHERE id_hist = :id_hist AND id_user = :idUser"); 
+      $req2 = $BDD -> prepare("UPDATE hist_jouee SET choix_eff =:choix WHERE id_hist = :idHist AND id_user = :idUser"); 
       $req2->execute(array(
         'choix' => htmlspecialchars($_GET['idPageCible'], ENT_QUOTES, 'UTF-8', false),
-        'id_hist' => $_SESSION['id_hist'],
+        'idHist' => $_SESSION['id_hist'],
         'idUser' => $_SESSION['id_user']
       ));
-      $req2 = $BDD -> prepare("UPDATE hist_jouee SET nb_pts_vie =:nbPV WHERE id_hist = :id_hist AND id_user = :idUser"); 
+      $req2 = $BDD -> prepare("UPDATE hist_jouee SET nb_pts_vie =:nbPV WHERE id_hist = :idHist AND id_user = :idUser"); 
       $req2->execute(array(
         'nbPV' => $_SESSION['nbpv'],
-        'id_hist' => $_SESSION['id_hist'],
+        'idHist' => $_SESSION['id_hist'],
         'idUser' => $_SESSION['id_user']
       ));
     } 
