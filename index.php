@@ -58,13 +58,8 @@ require_once 'php/connect.php' ?>
     if ($BDD) {
       $tabHistJouee = array();
       $demarrage = "php/connexion.php";
-      if (isset($_SESSION['login'])) {
-        $req = "SELECT * FROM user WHERE pseudo = '{$_SESSION['login']}'";
-        $res = $BDD->prepare($req);
-        $res->execute();
-        $ligne = $res->fetch();
-        $idUser = $ligne['id_user'];
-        $req = "SELECT * FROM hist_jouee WHERE id_user = '{$idUser}'";
+      if (isset($_SESSION['id_user'])) {
+        $req = "SELECT * FROM hist_jouee WHERE id_user = '{$_SESSION['id_user']}'";
         $res = $BDD->prepare($req);
         $res->execute();
         $i = 0;
@@ -115,7 +110,6 @@ require_once 'php/connect.php' ?>
                 }
                 ?>
               </div>
-
             </div>
           </article>
       <?php }

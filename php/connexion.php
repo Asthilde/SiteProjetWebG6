@@ -21,7 +21,8 @@ require_once("connect.php");
         $ligne = $req->fetch();
         if (!empty($ligne) && password_verify($_POST['mdp'], $ligne['mdp'])) {
           $_SESSION['login'] = $_POST['login']; //Il faut faire une variable de session pour avoir l'idUser
-
+          $_SESSION['id_user'] = (int) $ligne['id_user'];
+          
           if ($ligne["est_admin"] == 1) {
             $_SESSION['admin'] = 1;
           } 

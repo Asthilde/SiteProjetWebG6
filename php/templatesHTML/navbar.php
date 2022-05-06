@@ -6,7 +6,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.php"><span class="glyphicon glyphicon-book"></span> Une histoire dont vous êtes le héros</a>
+      <a class="navbar-brand" href="../index.php"><span class="glyphicon glyphicon-book"></span> Une histoire dont vous êtes le héros</a>
     </div>
     <div class="collapse navbar-collapse" id="navbar-collapse-target">
       <?php if (isset($_SESSION['admin']) &&  $_SESSION['admin'] == 1) { ?>
