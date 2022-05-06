@@ -71,7 +71,7 @@ require_once 'php/connect.php' ?>
           <?php
             $i++;
           }
-          $demarrage = "php/jeu.php?id={$ligne['id_hist']}&pageDebut={$ligne['choix_eff']}&nbPdv={$ligne['nb_pts_vie']}'";
+          $demarrage = "php/jeu.php?id={$ligne['id_hist']}&pageDebut={$ligne['choix_eff']}&nbPdv={$ligne['nb_pts_vie']}";
           array_push($tabHistJouee, $ligne['id_hist']);
           $idHist = (int) $ligne['id_hist'];
           $req2 = "SELECT * FROM histoire WHERE id_hist = {$idHist}";
@@ -82,14 +82,13 @@ require_once 'php/connect.php' ?>
           $res3 = $BDD->query($req3);
           $maLigne = $res3->fetch(); ?>
           <article>
-            <!--Il faut vérifier ici si l'utilisateur est connecté -->
             <div class="row align-items-end">
               <h3 class="col"><?php echo $ligne2['nom_hist']; ?></h3>
-              <div class="col" id="nomCreateur"> une histoire créée par <?= $maLigne['pseudo']; ?> </div>
+              <div class="col" id="nomCreateur">Une histoire créée par <?= $maLigne['pseudo']; ?> </div>
               <div class="contenuHistoire"><?= $ligne2['synopsis'] ?></div>
               <div class="form-group">
                 <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
-                  <a class="btn btn-default btn-success" href="<?= $demarrage ?>"> Démarrer </a>
+                  <a class="btn btn-default btn-success" href="<?= $demarrage ?>">Continuer</a>
                 </div>
                 <?php
                 if (isset($_SESSION["admin"]) &&  $_SESSION["admin"] == 1) {

@@ -63,15 +63,17 @@ if ($BDD) {
           }
           $nomPdv = "pdv" . $i;
           $nomChoix = "fin" . $i;
-          $sql = "INSERT INTO choix (id_page, id_page_cible, id_hist, contenu, nb_pdv_perdu) VALUES (:numPage, :numPageCible, :numHist, :choix, :nbPdv)";
-          $req = $BDD->prepare($sql);
-          $req->execute(array(
-            'numPage' => $_POST['pageChoisie'],
-            'numPageCible' => $nomPageCible,
-            'numHist' => $_SESSION['id_hist'],
-            'choix' => $_POST[$nom],
-            'nbPdv' => (-1 * $_POST[$nomPdv])
-          )); 
+          if($_POST[$nom] != ''){
+            $sql = "INSERT INTO choix (id_page, id_page_cible, id_hist, contenu, nb_pdv_perdu) VALUES (:numPage, :numPageCible, :numHist, :choix, :nbPdv)";
+            $req = $BDD->prepare($sql);
+            $req->execute(array(
+              'numPage' => $_POST['pageChoisie'],
+              'numPageCible' => $nomPageCible,
+              'numHist' => $_SESSION['id_hist'],
+              'choix' => $_POST[$nom],
+              'nbPdv' => (-1 * $_POST[$nomPdv])
+            )); 
+          }
           if (isset($_POST[$nomChoix]) || strlen($nomPageCible) == 8) {
             $req = $BDD->prepare($sql);
             $req->execute(array(
@@ -195,7 +197,7 @@ if ($BDD) {
         for ($i = 1; $i < 4; $i++) { ?>
           <div id="choix<?= $i ?>" class="form-group">
             <label class="col-sm-4 control-label">Choix <?= $i ?></label>
-            <div class="col-sm-6">
+            <div class="col-sm-6"> <!-- Trouver le moyen d'enlever le required pour une fin -->
               <input type="text" name="choix<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le choix <?= $i ?>" <?php if ($i == 1) { ?>required <?php } ?> autofocus>
             </div>
             <div class="col-sm-6">
