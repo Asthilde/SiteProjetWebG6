@@ -54,7 +54,7 @@ require_once 'connect.php'; ?>
   <?php } 
   if(isset($_POST['suppr'])){ 
     unset($_SESSION['id_hist']); 
-    header('Location:index.php');?>
+    header('Location:../index.php');?>
   <?php }
   ?>
   <?php include 'templatesHTML/footer.php'; ?>

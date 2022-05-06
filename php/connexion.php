@@ -28,7 +28,7 @@ require_once("connect.php");
         } 
         else
           $_SESSION['admin'] = 0;
-        header('Location: index.php');
+        header('Location: ../index.php');
       }
     }
     if (empty($ligne) || $ligne === "rien") {

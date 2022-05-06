@@ -24,7 +24,7 @@ require_once("connect.php");
       $ligne = $req2->fetch();
       if (!empty($ligne)) {
         $_SESSION['login'] = $pseudo;
-        header('Location: index.php');
+        header('Location: ../index.php');
       }
     } ?>
     <h2 class="text-center">Création de compte</h2>

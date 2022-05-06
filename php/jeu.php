@@ -32,7 +32,7 @@ require_once("connect.php");
     else{
       echo "<div class='row align-items-end'>
       <p class='col'>Le numéro d'histoire ou de page n'est pas renseigné, veuillez recommencer.</p>
-      <a href='index.php' class='btn btn-default btn-primary'>Retour accueil</a>
+      <a href='../index.php' class='btn btn-default btn-primary'>Retour accueil</a>
     </div>";
     }
     /*else {
