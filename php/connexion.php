@@ -11,24 +11,24 @@ require_once("connect.php");
   <div class="container">
     <?php include 'templatesHTML/navbar.php';
     $ligne = "rien";
-    if (isset($_POST['login']) && isset($_POST['mdp'])) {
-      $sql = "SELECT * FROM user WHERE pseudo=:nom_user";
-      $req = $BDD->prepare($sql);
-      $req->execute(array(
-        "nom_user" => $_POST['login']
-      ));
-      $ligne = $req->fetch();
-      if (!empty($ligne) && password_verify($_POST['mdp'], $ligne['mdp'])) {
-        $_SESSION['login'] = $_POST['login']; //Il faut faire une variable de session pour avoir l'idUser
+    if($BDD){
+      if (isset($_POST['login']) && isset($_POST['mdp'])) {
+        $sql = "SELECT * FROM user WHERE pseudo=:nom_user";
+        $req = $BDD->prepare($sql);
+        $req->execute(array(
+          "nom_user" => $_POST['login']
+        ));
+        $ligne = $req->fetch();
+        if (!empty($ligne) && password_verify($_POST['mdp'], $ligne['mdp'])) {
+          $_SESSION['login'] = $_POST['login']; //Il faut faire une variable de session pour avoir l'idUser
 
-        # on peut pas utiliser de booléen car quand on met false ça marche pas dans le tableau associatif
-        # donc on met des chiffres
-        if ($ligne["est_admin"] == 1) {
-          $_SESSION['admin'] = 1;
-        } 
-        else
-          $_SESSION['admin'] = 0;
-        header('Location: ../index.php');
+          if ($ligne["est_admin"] == 1) {
+            $_SESSION['admin'] = 1;
+          } 
+          else
+            $_SESSION['admin'] = 0;
+          header('Location: ../index.php');
+        }
       }
     }
     if (empty($ligne) || $ligne === "rien") {

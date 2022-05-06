@@ -20,6 +20,7 @@ if(isset($_SESSION['pageModifiee'])){
         <div class="col-sm-6">
           <select class="form-control" id="pageChoisie" name="pageChoisie" required>
             <?php 
+            if($BDD){
             if (isset($_GET['id']) && !empty($_GET['id']))
               $_SESSION['id_hist'] = $_GET['id'];
             if(isset($_SESSION['id_hist'])){
@@ -29,7 +30,7 @@ if(isset($_SESSION['pageModifiee'])){
               ));
               while ($ligne = $req->fetch()) {?>
               <option value="<?= $ligne['id_page'] ?>"><?= $ligne['id_page'] ?></option>
-              <?php }} ?>
+              <?php }}} ?>
           </select>
         </div>
       </div>

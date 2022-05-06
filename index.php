@@ -57,6 +57,7 @@ require_once 'php/connect.php' ?>
     <?php
     if ($BDD) {
       $tabHistJouee = array();
+      $demarrage = "php/connexion.php";
       if (isset($_SESSION['login'])) {
         $req = "SELECT * FROM user WHERE pseudo = '{$_SESSION['login']}'";
         $res = $BDD->prepare($req);
@@ -66,7 +67,6 @@ require_once 'php/connect.php' ?>
         $req = "SELECT * FROM hist_jouee WHERE id_user = '{$idUser}'";
         $res = $BDD->prepare($req);
         $res->execute();
-        $demarrage = "php/connexion.php";
         $i = 0;
         while ($ligne = $res->fetch()) {
           if ($i == 0) { ?>
