@@ -62,6 +62,8 @@ require_once 'connect.php';?>
       }
       $i++;
     }
+    header('Location:modifier.php');
+    unset($_SESSION['pageModifiee']);
   }
 ?>
 
@@ -121,10 +123,6 @@ require_once 'connect.php';?>
       </div>
     </form>
   <?php } 
-  }
-  else{
-    header('Location:modifier.php');
-    unset($_SESSION['pageModifiee']);
   }?>
   <?php include 'templatesHTML/footer.php'; ?>
 </div>
