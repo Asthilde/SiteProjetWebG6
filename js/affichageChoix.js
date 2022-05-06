@@ -9,6 +9,10 @@
     }
     console.log(fin);
     if(fin){
+      /*const elements = document.querySelectorAll(".formControl");
+      for (var i = 0; i < elements.length; i++) {
+        //elements[i].removeAttribute('required');        
+      }*/
       document.getElementById("choix1").style.display = "none";
       document.getElementById("choix2").style.display = "none";
       document.getElementById("choix3").style.display = "none";
