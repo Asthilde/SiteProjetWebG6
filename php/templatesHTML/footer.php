@@ -1,3 +1,3 @@
 <footer class="footer">
-    Construit par Justine et Noémie !
+  Construit par Justine et Noémie ♪♫ !
 </footer>
