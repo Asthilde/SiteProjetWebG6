@@ -27,6 +27,10 @@ require_once 'connect.php'; ?>
         $req->execute(array(
           "numero" => $_SESSION['id_hist']
         ));
+        $req = $BDD->prepare("DELETE FROM hist_jouee WHERE id_hist=:numero");
+        $req->execute(array(
+          "numero" => $_SESSION['id_hist']
+        ));
         $fichiers = glob("../images/" . $_SESSION['nom_hist'] . "/*");
         foreach($fichiers as $fichier){
           unlink($fichier);

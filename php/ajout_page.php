@@ -222,7 +222,7 @@ else {
     <?php include 'templatesHTML/footer.php'; ?>
   </div>
   
-  <script src="../affichageChoix.js"></script>
+  <script src="../js/affichageChoix.js"></script>
   <!-- jQuery -->
   <script src="../lib/jquery/jquery.min.js"></script>
   <!-- JavaScript Boostrap plugin -->
