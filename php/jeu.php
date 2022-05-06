@@ -24,6 +24,12 @@ require_once("connect.php");
       $res4->execute();
       $ligne4 = $res4->fetch();
       $_SESSION['nbpv'] += $ligne4['nb_pdv_perdu'];
+      $req2 = $BDD -> prepare("UPDATE hist_jouee SET choix_eff =:choix WHERE id_hist = :idHist AND id_user = idUser"); 
+      $req2->execute(array(
+        'choix' => htmlspecialchars($_GET['idPageCible'], ENT_QUOTES, 'UTF-8', false),
+        'idHist' => $_SESSION['notreId'],
+        'idUser' => 
+      ));
     } 
     else if(isset($_GET['pageDebut'])){
       $pageHist = htmlspecialchars($_GET['pageDebut'],ENT_QUOTES, 'UTF-8', false);

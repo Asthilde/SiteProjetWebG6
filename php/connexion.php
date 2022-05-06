@@ -19,7 +19,7 @@ require_once("connect.php");
       ));
       $ligne = $req->fetch();
       if (!empty($ligne) && password_verify($_POST['mdp'], $ligne['mdp'])) {
-        $_SESSION['login'] = $_POST['login'];
+        $_SESSION['login'] = $_POST['login']; //Il faut faire une variable de session pour avoir l'idUser
 
         # on peut pas utiliser de booléen car quand on met false ça marche pas dans le tableau associatif
         # donc on met des chiffres
