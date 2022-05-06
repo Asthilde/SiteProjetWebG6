@@ -14,32 +14,31 @@ require_once("connect.php");
     $_SESSION['nbpv'] = 3;
     $pageHist;
     //Cas ou on démarre l'histoire
-    if (isset($_GET['id']) && !empty($_GET['id'])) {
-      $_SESSION['id_hist'] = (int) htmlspecialchars($_GET['id'],ENT_QUOTES, 'UTF-8', false);
-      $res = $BDD->prepare("SELECT * FROM histoire WHERE id_hist = :idHist");
-      $res->execute(array(
-        'idHist' => $_SESSION['id_hist']
-      ));
-      $ligne = $res->fetch();
-      $_SESSION['nom_hist'] = $ligne['nom_hist'];
-    }
-    if(isset($_GET['pageDebut'])){
-      $pageHist = htmlspecialchars($_GET['pageDebut'],ENT_QUOTES, 'UTF-8', false);
-      if($_GET['pageDebut'] === 0){
-        echo $_GET['pageDebut'];
+    if (isset($_GET['id']) && !empty($_GET['id'])){
+      if(isset($_GET['nbPdv']) && $_GET['nbPdv'] >= 0 && $_GET['nbPdv'] <= 3 && isset($_GET['pageDebut'])) {
+        $_SESSION['id_hist'] = (int) htmlspecialchars($_GET['id'],ENT_QUOTES, 'UTF-8', false);
+        $res = $BDD->prepare("SELECT * FROM histoire WHERE id_hist = :idHist");
+        $res->execute(array(
+          'idHist' => $_SESSION['id_hist']
+        ));
+        $ligne = $res->fetch();
+        $_SESSION['nom_hist'] = $ligne['nom_hist'];
+        $_SESSION['nbpv'] = (int) htmlspecialchars($_GET['nbPdv'],ENT_QUOTES, 'UTF-8', false);
+        $pageHist = $_GET['pageDebut'];
+      }
+      else {
+        $pageHist = '0';
+        $_SESSION['nbpv'] = 3;
         $sql = "INSERT INTO hist_jouee (id_hist, id_user, choix_eff, nb_pts_vie, type_fin) VALUES (:idHist, :idUser, :choix, :nbPV, :fin)";
         $req = $BDD->prepare($sql);
         $req->execute(array(
           'idHist' => $_SESSION['id_hist'],
           'idUser' => $_SESSION['id_user'],
-          'choix' => '0',
+          'choix' => $pageHist,
           'nbPV' => 3,
           'fin' => ''
         ));
       }
-    }
-    if(isset($_GET['nbPdv']) && $_GET['nbPdv'] >= 0 && $_GET['nbPdv'] <= 3){
-      $_SESSION['nbpv'] = (int) htmlspecialchars($_GET['nbPdv'],ENT_QUOTES, 'UTF-8', false);
     }
     //Cas où on est en train de jouer
     else if (isset($_GET['idPageCible']) && !empty($_GET['idPageCible'])) {
@@ -69,9 +68,10 @@ require_once("connect.php");
       <div class='row align-items-end'>
         <div class='col'>Le numéro d'histoire ou de page n'est pas renseigné, veuillez recommencer.</div>
         <a href='../index.php' class='btn btn-default btn-primary'>Retour accueil</a>
-      </div>";
-    <?php }
-    if(isset($_SESSION['id_hist'])){
+      </div>
+    </div>
+    <?php } ?>
+    <?php if(isset($_SESSION['id_hist']) && !empty($pageHist)){
       $res = $BDD->prepare("SELECT * FROM page_hist WHERE id_page = :idPage AND id_hist = :idHist");
       $res->execute(array(
         'idPage' => $pageHist,
@@ -81,34 +81,47 @@ require_once("connect.php");
       for ($i = 1; $i <= 5; $i++) {
         $para = "para_" . $i;
         $image = "img_" . $i; ?>
-        <div>
-          <?= $ligne[$para]; ?>
+        <div class='row align-items-end'>
+          <div class = 'col'>
+            <?= $ligne[$para]; ?>
+          </div>
         </div>
-        <div>
+        <div class='row align-items-end'>
           <!--remodifier le nom de la source-->
-          <img src="../images/<?= $_SESSION['nom_hist']. '/'.$ligne[$image]; ?>" alt="<?= $ligne[$image]; ?>" />
+          <div class = 'col'>
+            <img src="../images/<?= $_SESSION['nom_hist']. '/'.$ligne[$image]; ?>" alt="<?= $ligne[$image]; ?>" />
+          </div>
         </div>
-      <?php } ?>
-      <div>
-      <?php
-      if ($_SESSION['nbpv'] == 0) {
-        echo "Vous avez perdu."; 
-        ?>
+      <?php } 
+      if ($_SESSION['nbpv'] == 0) { ?>
+        <div class='row align-items-end'>
+          <div class = 'col'>
+            Vous avez perdu ...
+          </div>
+        </div>
         <a class="btn btn-default btn-primary" href=<?="perdu.php" ?>>Fin de l'histoire</a>
-        <?php
-      }else{
-      ?>
-      </div>
       <?php
+      } else{
       $req2 = "SELECT * FROM choix WHERE id_page = '{$pageHist}' AND id_hist = {$_SESSION['id_hist']}";
       $res2 = $BDD->prepare($req2);
-      $res2->execute();
-      while ($ligne2 = $res2->fetch()) { ?>
-        <div>
-          <a class="btn btn-default btn-primary" href=<?= "jeu.php?idPageCible=" . $ligne2['id_page_cible']; ?> a> <?= $ligne2['id_page_cible']; ?> </a>
-        </div>
+      $res2->execute();?>
+      <div class='row align-items-end'>
+      <?php while ($ligne2 = $res2->fetch()) { 
+        if($ligne2['id_page_cible'] == 'FIN'){?>
+            <div class = 'col-4'> <!--Il faudra voir comment on gère avec bootstrap -->
+              Vous avez gagné !
+            </div>
+            <a class="btn btn-default btn-primary" href=<?="gagne.php" ?>>Fin de l'histoire</a>
+        <?php break;
+        }
+        else { ?>
+          <div class = 'col-4'> <!--Il faudra voir comment on gère avec bootstrap -->
+            <a class="btn btn-default btn-primary" href=<?= "jeu.php?idPageCible=" . $ligne2['id_page_cible']; ?> a> <?= $ligne2['contenu']; ?> </a>
+          </div>
+        <?php }
+        } ?>
+      </div>
       <?php }
-      }
     }
   } ?>
 

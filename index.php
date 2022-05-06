@@ -129,7 +129,7 @@ require_once 'php/connect.php' ?>
         $res2 = $BDD->query($req2);
         $maLigne = $res2->fetch();
         if (isset($_SESSION['login'])) {
-          $demarrage = "php/jeu.php?id={$ligne['id_hist']}&pageDebut=0&nbPdv=3";
+          $demarrage = "php/jeu.php?id={$ligne['id_hist']}";
         }
         if (!in_array($ligne['id_hist'], $tabHistJouee)) {
       ?>
