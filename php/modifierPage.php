@@ -9,7 +9,6 @@ require_once 'connect.php';?>
 <div class="container">
   <?php include 'templatesHTML/navbar.php';
   if($BDD){
-    $modifImage = "pasdeModif";
   if(isset($_POST['pageChoisie'])){
     $_SESSION['pageModifiee'] = $_POST['pageChoisie'];
     $req = "SELECT * FROM histoire WHERE id_hist = '{$_SESSION['id_hist']}'";
@@ -32,10 +31,8 @@ require_once 'connect.php';?>
     for ($i = 1; $i < 6; $i++) {
       $nom = "img_" . $i;
       if (isset($_FILES[$nom]['name'])) {
-        $modifImage = "detecte une image envoyée";
         $_FILES[$nom]['name'] =  strtolower("img_{$_SESSION['id_hist']}_{$_SESSION['pageModifiee']}_{$i}" . substr($_FILES[$nom]['name'], strpos($_FILES[$nom]['name'], '.')));
         if (move_uploaded_file($_FILES[$nom]['tmp_name'], "../images/" . $_SESSION['nom_hist'] . '/' . $_FILES[$nom]['name'])) {
-          $modifImage = "image envoyée et transmise au dossier";
           $req = $BDD -> prepare("UPDATE page_hist SET {$nom} =:nomImg WHERE id_page =:nomPage  AND id_hist=:numHist"); 
           $req->execute(array(
             'nomImg' => $_FILES[$nom]['name'], //N'est pas renseigné dans la BDD
@@ -67,7 +64,6 @@ require_once 'connect.php';?>
     }
     header('Location:modifier.php');
     unset($_SESSION['pageModifiee']);
-    $_SESSION['modifImage'] = $modifImage;
   }
 ?>
 

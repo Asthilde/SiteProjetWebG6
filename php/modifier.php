@@ -7,7 +7,6 @@ require_once 'connect.php';?>
 if(isset($_SESSION['pageModifiee'])){
   unset($_SESSION['pageModifiee']);
 }
-echo $_SESSION['modifImage'];
 ?>
 
 <body>
