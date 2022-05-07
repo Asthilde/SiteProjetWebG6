@@ -126,7 +126,6 @@ if ($BDD) {
     </div>
     <div class="well">
       <form class="form-horizontal" role="form" enctype="multipart/form-data" action="ajout_page.php" method="post">
-        <input type="hidden" name="id" value="">
         <div class="form-group">
           <label class="col-sm-4 control-label">Page à remplir</label>
           <div class="col-sm-6">

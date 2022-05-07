@@ -7,6 +7,7 @@ require_once 'connect.php';?>
 if(isset($_SESSION['pageModifiee'])){
   unset($_SESSION['pageModifiee']);
 }
+echo $_SESSION['modifImage'];
 ?>
 
 <body>
@@ -14,7 +15,6 @@ if(isset($_SESSION['pageModifiee'])){
   <?php include 'templatesHTML/navbar.php'; ?>
   <div class="well">
     <form class="form-horizontal" role="form" action="modifierPage.php" method="post">
-      <input type="hidden" name="id" value="">
       <div class="form-group">
         <label class="col-sm-4 control-label">Page à modifier</label>
         <div class="col-sm-6">
