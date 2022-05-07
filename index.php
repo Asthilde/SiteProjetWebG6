@@ -138,10 +138,10 @@ require_once 'php/connect.php' ?>
               <h3><?php echo $ligne['nom_hist']; ?></h3>
               <div id="nomCreateur"> une histoire créée par <?= $maLigne['pseudo']; ?> </div>
             </div>
-            <div class="row">
-              <div class="col-sm"><?= $ligne['synopsis'] ?></div>
+            <div class="d-flex flex-row justify-content-center">
+              <div class="p-2"><?= $ligne['synopsis'] ?></div>
 
-              <div class="col-sm form-group">
+              <div class="p-2 form-group">
                 <a class="btn btn-default btn-success" href="<?= $demarrage ?>"> Démarrer </a>
                 <?php
                 if (isset($_SESSION["admin"]) &&  $_SESSION["admin"] == 1) {
