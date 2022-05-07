@@ -52,6 +52,7 @@ if ($BDD) {
       $req2->execute();
       $ligne2 = $req2->fetch();
       if ($ligne2['nb'] == 0) {
+        echo "Je rentre ici";
         for ($i = 1; $i < 4; $i++) {
           $nom = "choix" . $i;
           if ($_POST['pageChoisie'] == '0') {
@@ -63,7 +64,6 @@ if ($BDD) {
           }
           $nomPdv = "pdv" . $i;
           $nomChoix = "fin" . $i;
-          if($_POST[$nom] != ''){
             $sql = "INSERT INTO choix (id_page, id_page_cible, id_hist, contenu, nb_pdv_perdu) VALUES (:numPage, :numPageCible, :numHist, :choix, :nbPdv)";
             $req = $BDD->prepare($sql);
             $req->execute(array(
@@ -73,7 +73,6 @@ if ($BDD) {
               'choix' => $_POST[$nom],
               'nbPdv' => (-1 * $_POST[$nomPdv])
             )); 
-          }
           if (isset($_POST[$nomChoix]) || strlen($nomPageCible) == 8) {
             $req = $BDD->prepare($sql);
             $req->execute(array(
@@ -83,6 +82,9 @@ if ($BDD) {
               'choix' => '',
               'nbPdv' => 0
             ));
+          }
+          else{
+            echo "Je ne rentre pas pour les choix";
           }
         }
       }
@@ -227,7 +229,6 @@ if ($BDD) {
     <?php include 'templatesHTML/footer.php'; ?>
   </div>
 
-  <script src="../js/affichageChoix.js"></script>
   <!-- jQuery -->
   <script src="../lib/jquery/jquery.min.js"></script>
   <!-- JavaScript Boostrap plugin -->

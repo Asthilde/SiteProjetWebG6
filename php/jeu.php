@@ -15,8 +15,8 @@ require_once("connect.php");
       $pageHist;
       //Cas ou on démarre l'histoire
       if (isset($_GET['id']) && !empty($_GET['id'])) {
+        $_SESSION['id_hist'] = (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8', false);
         if (isset($_GET['nbPdv']) && $_GET['nbPdv'] >= 0 && $_GET['nbPdv'] <= 3 && isset($_GET['pageDebut'])) {
-          $_SESSION['id_hist'] = (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8', false);
           $res = $BDD->prepare("SELECT * FROM histoire WHERE id_hist = :idHist");
           $res->execute(array(
             'idHist' => $_SESSION['id_hist']
@@ -85,7 +85,6 @@ require_once("connect.php");
             </div>
           </div>
           <div class='row align-items-end'>
-            <!--remodifier le nom de la source-->
             <div class='col'>
               <img src="../images/<?= $_SESSION['nom_hist'] . '/' . $ligne[$image]; ?>" alt="<?= $ligne[$image]; ?>" />
             </div>
