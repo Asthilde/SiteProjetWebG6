@@ -15,10 +15,10 @@ require_once("connect.php");
         "numero" => htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8', false)
       ));
       $ligne = $res->fetch(); ?>
-      <div class="jumbotron">
-        <div class="row">
-          <div class="col-md-5 col-sm-7">
-            <img class="img-responsive movieImage" src="../images/<?php echo $ligne['nom_hist'] . '/' . strtolower($ligne['illustration']); ?>" alt="Affiche histoire" title="<?= $ligne['nom_hist']; ?>" />
+      <div class="d-flex justify-content-center p-3">
+        <div class="row align-items-center">
+          <div class="col-md-5 col-sm-7 text-center ">
+            <img class="img-responsive movieImage" src="../images/<?php echo $ligne['nom_hist'] . '/' . strtolower($ligne['illustration']); ?>" alt="Affiche histoire" title="<?= $ligne['nom_hist']; ?>" width="300" />
           </div>
           <div class="col-md-7 col-sm-5">
             <h2><?= $ligne['nom_hist']; ?></h2>

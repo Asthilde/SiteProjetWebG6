@@ -105,8 +105,8 @@ if ($BDD) {
   <div class="container">
     <?php include 'templatesHTML/navbar.php'; ?>
     <h2 class="text-center">Ajout d'une page</h2>
-    <div class="col-sm-4 col-sm-offset-4">
-      <div>
+    <div class="d-flex flex-column justify-content-center mt-5 px-5">
+    <div class="row text-align-center m-auto">
         Liste des choix déja renseignés :
         <?php $tabPages = array();
         if($BDD){
@@ -121,15 +121,16 @@ if ($BDD) {
             echo ($pageRenseignee . ', ');
           } 
         }?>
-      </div>
-      <a href="fin_hist.php" class="btn btn-default btn-primary"> Terminer l'histoire</a>
     </div>
-    <div class="well">
-      <form class="form-horizontal" role="form" enctype="multipart/form-data" action="ajout_page.php" method="post">
+    <div class="row text-align-center m-auto">
+        <a href="fin_hist.php" class="btn btn-default btn-success m-1"> Terminer l'histoire</a>
+    </div>
+      </div>
+    <div class="d-flex justify-content-center mt-5 px-5">
+      <form class="form-horizontal w-75" role="form" enctype="multipart/form-data" action="ajout_page.php" method="post">
         <div class="form-group">
-          <label class="col-sm-4 control-label">Page à remplir</label>
-          <div class="col-sm-6">
-            <select class="form-control" id="pageChoisie" name="pageChoisie" required>
+          Page à remplir</br>
+            <select class="form-control w-25" id="pageChoisie" name="pageChoisie" required>
               <?php if (count($tabPages) == 0) { ?>
                 <option value="0">0</option>
                 <?php }
@@ -178,50 +179,44 @@ if ($BDD) {
               } 
               ?>
             </select>
-          </div>
         </div>
         <?php
         for ($i = 1; $i < 6; $i++) { ?>
           <div class="form-group">
-            <label class="col-sm-4 control-label">Paragraphe <?= $i ?></label>
-            <div class="col-sm-6">
-              <input type="text" name="para_<?= $i ?>" value=" " class="form-control" placeholder="Ecrivez votre paragraphe" <?php if ($i == 1) { ?> <?php } ?> autofocus>
-            </div>
+            Paragraphe <?= $i ?></br>
+            <input type="text" name="para_<?= $i ?>" value=" " class="form-control" placeholder="Ecrivez votre paragraphe" <?php if ($i == 1) { ?> <?php } ?> autofocus>
           </div>
           <div class="form-group">
-            <label class="col-sm-4 control-label">Image <?= $i ?></label>
-            <div class="col-sm-4">
-              <input type="file" name="img_<?= $i ?>" />
-            </div>
+            Image <?= $i ?></br>
+            <input type="file" name="img_<?= $i ?>" />
           </div>
         <?php } //Trouver un moyen de gérer l'affichage si on a rentré tous les choix possibles
-        for ($i = 1; $i < 4; $i++) { ?>
+        ?>
+        <div class="d-flex p-3">
+        <?php for ($i = 1; $i < 4; $i++) { ?>
           <div id="choix<?= $i ?>" class="form-group">
-            <label class="col-sm-4 control-label">Choix <?= $i ?></label>
-            <div class="col-sm-6"> <!-- Trouver le moyen d'enlever le required pour une fin -->
-              <input type="text" name="choix<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le choix <?= $i ?>" <?php if ($i == 1) { ?>required <?php } ?> autofocus>
-            </div>
-            <div class="col-sm-6">
-              <input type="checkbox" id="fin<?= $i ?>" name="fin<?= $i ?>" value="<?= $i ?>" class="form-control">
-              <label for="fin<?= $i ?>">Fin de l'histoire ?</label>
-            </div>
-            <div class="col-sm-6">
-              Nombre de points de vie perdus :
-              <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="0" class="form-control" required>
-              <label for="pdv<?= $i ?>">0</label>
-              <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="1" class="form-control">
-              <label for="pdv<?= $i ?>">1</label>
-              <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="2" class="form-control">
-              <label for="pdv<?= $i ?>">2</label>
-              <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="3" class="form-control">
-              <label for="pdv<?= $i ?>">3</label>
-            </div>
+            Choix <?= $i ?></br>
+            <input type="text" name="choix<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le choix <?= $i ?>" <?php if ($i == 1) { ?>required <?php } ?> autofocus>
           </div>
-        <?php } ?>
-        <div class="form-group">
-          <div class="col-sm-4 col-sm-offset-4">
-            <button type="submit" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-save"></span> Enregistrer</button>
+          <div class="form-group">
+            <input type="checkbox" id="fin<?= $i ?>" name="fin<?= $i ?>" value="<?= $i ?>" class="form-control">
+            <label for="fin<?= $i ?>">Fin de l'histoire ?</label>
           </div>
+          <div class="form-group">
+            Nombre de points de vie perdus :
+            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="0" class="form-control" required>
+            <label for="pdv<?= $i ?>">0</label>
+            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="1" class="form-control">
+            <label for="pdv<?= $i ?>">1</label>
+            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="2" class="form-control">
+            <label for="pdv<?= $i ?>">2</label>
+            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="3" class="form-control">
+            <label for="pdv<?= $i ?>">3</label>
+          </div>
+          <?php } ?>
+        </div>
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-default btn-success m-1"><span class="glyphicon glyphicon-save"></span> Enregistrer</button>
         </div>
       </form>
     </div>
