@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 06 mai 2022 à 10:23
+-- Généré le : dim. 08 mai 2022 à 16:50
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.1.2
 
@@ -50,15 +50,7 @@ INSERT INTO `choix` (`id_page`, `id_page_cible`, `id_hist`, `contenu`, `nb_pdv_p
 ('A2', 'A2B2', 13, 'hejhdsd', 0),
 ('A2B2', 'A2B2C1', 13, 'DDDD', 0),
 ('A2B2', 'A2B2C2', 13, 'kjsdf', 0),
-('A2B2', 'A2B2C3', 13, 'pouet ouille', -3),
-('A2B2C2', 'A2B2C2D1', 13, 'vraie fin omg', 0),
-('A2B2C2', 'A2B2C2D2', 13, 'pipopipopipolapi', 0),
-('A3', '0', 13, 'fejkjfsf', 0),
-('A3', 'A3B1', 13, 'FIN', 0),
-('A3B1', 'A3B1C1', 13, 'ouch', -1),
-('A3B1', 'A3B1C2', 13, 'ouch ouch', -2),
-('A3B1C1', 'A3B1C1D1', 13, 'ouch ouch ouch', 0),
-('A3B1C1', 'A3B1C1D2', 13, 'ouille', -1);
+('A2B2', 'A2B2C3', 13, 'pouet ouille', -3);
 
 -- --------------------------------------------------------
 
@@ -98,6 +90,13 @@ CREATE TABLE `hist_jouee` (
   `type_fin` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Déchargement des données de la table `hist_jouee`
+--
+
+INSERT INTO `hist_jouee` (`id_hist`, `id_user`, `choix_eff`, `nb_pts_vie`, `type_fin`) VALUES
+(13, 1, '0', 3, 0),
+
 -- --------------------------------------------------------
 
 --
@@ -132,7 +131,9 @@ INSERT INTO `page_hist` (`id_page`, `id_hist`, `para_1`, `para_2`, `para_3`, `pa
 ('A2', 13, 'Zoubi prend son courage à demain, et marche voûté sous la petite arche. Plus il avance, plus la lumière orangée se fait distincte. Il est fasciné par les variétés d’arbres qui constituent ce drôle de chemin. Au bout de cette sorte de tunnel, un champ de zulipes aux couleurs vives et chaudes s’étend dans une clairière. Le soleil vient directement taper les fleurs de son éclat. De l’autre côté de l’étendue de fleurs, une petite grenouille lit sous un pommier. Zoubi est émerveillé par cette vue incroyable. Une chose le tire de ce rêve : juste à côté de lui, il y a un petit panneau en bois. Le jeune homme lit dans sa tête son message : “Ne pas crier !! Merci <3”.\r\n\r\n    Zoubi ne peut s’empêcher un rictus, très tenté de voir qu’est-ce que ça provoquerait. Alors, il crie ou ne crie pas ?\r\n', '', '', '', '', 'img_13_a2_1.jpg', '', '', '', ''),
 ('A2B1', 13, 'Zoubi se ravise. Il ne s’agirait pas de faire une grosse bêtise. Il s’avance vers le champ de zulipes. Juste avant qu’il ne s’avance plus, la petite grenouille remarque sa présence, et fait une tête terrible en voyant Zoubi si près du champ. Aussitôt, elle pousse un cri, mais il est trop tard : notre jeune homme a marché sur un piège entourant la parcelle de fleurs. Ce qu’il ne savait pas, c’est que celui-ci se serait désactivé au bruit. Le piège métallique se referme sur son mollet et Zoubi hurle de toutes ses forces. La petite grenouille accourt vers lui, les pièges étant maintenant tous désactivés. Elle est horrifiée devant la scène qui s’offre à elle : les zulipes sont maintenant bien rouges, et notre jeune Zelophylax continue de crier de douleur et de pleurer…', 'On peut dire qu’il est mal en point, petit euphémisme pour dire qu’il a la jambe en sang. Heureusement que la jeune fille a un téléphone de la marque ZiPhone pour appeler les urgences… Zoubi aura peut-être sa jambe de sauvée, mais en tout cas, il n’aura pas de zulipes à ramener à Zadie.', NULL, NULL, NULL, 'img_a2b1.jpg', NULL, NULL, NULL, NULL),
 ('A2B2', 13, 'Zoubi bombe le torse en prenant une grande inspiration, et crie, je cite, “wesh alors”, en hommage à son auteur-compositeur-interprète préféré. Plusieurs claquements stridents résonnent alors dans la clairière, et la jeune grenouille au loin sursaute, décrochant complètement de sa lecture. Voyant Zoubi qui vient de crier, elle souffle de soulagement.\r\n- C’était quoi cet énorme bruit ? Demande notre jeune Zelophylax, étonné.\r\n- C’était le bruit des pièges qui se ferment ! Répondit l’autre. On protège notre exploitation de zulipes des voleurs qui viennent les dérober en catimini avec des pièges activés aux bruits. Heureusement que tu as crié, sinon tu te serais fait bouffer le pied.\r\n- Ah, bah c’est sympa ça dis d…\r\n- T’es pas un voleur au moins hein ? s’écrie la jeune fille.\r\n- Non non pas du tout ! Enfin, je cherche des fleurs, mais je ne suis pas là pour les voler. \r\nLa grenouille inconnue se lève et traverse les tulipes sans les écraser pour s’arrêter devant Zoubi.\r\n', '- Enchantée dans ce cas, je m’appelle Zeele, je suis la fille des fleuristes de la ville, déclare-t-elle en tendant sa main à Zoubi.\r\n- Oh mais trop chanmax ! s’exclame le jeune homme, en serrant sa patte. Moi c’est Zoubi, enchanté également. Dis, tu me donnerais une de tes belles zulipes ? Elles sont incroyables, et j’aimerai vraiment offrir un beau bouquet à ma dulcinée.\r\n- Tu as déjà une dulcinée ? Tu ne m’as pas l’air très vieux pourtant…\r\n- J’ai 13 ans ! …Et demi…!\r\n- D’accord, je vois… Je veux bien t’en donner, mais uniquement si tu acceptes d’être mon ami, proclame-t-elle.\r\n- Avec plaisir ! répond  Zoubi, enthousiaste.', 'Esquissant un sourire, Zeele se penche et récupère délicatement trois zulipes oranges. Prenant en plus des herbes sauvages, la jeune grenouille construit un sublime bouquet qu’elle s’empresse d’offrir à Zoubi. En prenant les fleurs dans ses pattes, le cœur de Zoubi palpite. Zadie semble soudainement avoir disparu…\r\nTout à coût, une voix grave résonne dans la clairière. \r\n- Ne t’approche pas de ma fille de la sorte ! ordonne l’homme. Et rends les fleurs que tu viens de lui voler.', 'Zoubi se retourne, apeuré et les genoux tremblants. C’est le jardinier du village ! Il paraît aussi menaçant que Ganondorf aux yeux du jeune homme. Il commence à bégayer mais Zeele intervient :\r\n- Papa, Zoubi est gentil, et c’est moi qui lui ai offert les fleurs.\r\n\r\nL’immense père grenouille ne répond pas. Il attend les bras croisés, et semble prêt à en découdre.\r\nZoubi ne voit que trois solutions. Dans l’immédiat, il songe à fuir le plus vite possible vers un endroit sécurisé, avec la charmante Zeele. Cependant, sa raison le pousse à négocier pour garder les fleurs. Ou alors, il fait l’énorme taré et il attaque ce daron ultra stock.\r\n\r\nAlors, que doit faire Zoubi ?\r\n', NULL, 'img_a2b2.jpg', NULL, NULL, NULL, NULL),
-('A3', 13, 'djsdkjsd;,n', '', '', '', '', '', '', '', '', '');
+('A2B2C1', 13, 'Le temps est venu des négociations. Zoubi inspire un bon coup, et proclame calmement :\r\n- Ce que dit votre fille est vrai Monsieur. Zeele m’a offert ces fleurs, car j’en cherchais dans la forêt. Je ne souhaitais vraiment pas les voler, ni déranger votre fille pendant sa lecture, je suis désolé. J’aurais cependant besoin de ces fleurs, malgré tout. Si cela vous convient, je m’en vais par où je suis venu, sans plus faire d’histoire. Qu’en dites-vous ?\r\n\r\n    Le jardinier souffle fort. D’un geste de la main, lassé, il lui fait signe de partir. Zoubi sourit, un peu soulagé. Il se tourne vers Zeele, qui a un petit sourire en coin, mais le regard triste. Elle lui fait un signe de la main, et Zoubi le lui rend, tout en débarrassant le plancher, de peur que son père ne change d’avis avant qu’il n’ait pu déguerpir.\r\n    Zoubi va pouvoir ramener ses fleurs à Zadie, en espérant qu’elle les aime et qu’elle ne soit pas allergique aux zulipes.\r\n', NULL, NULL, NULL, NULL, 'img_a2b2c1.jpg', NULL, NULL, NULL, NULL),
+('A2B2C2', 13, 'Pas le temps de niaiser, il faut courir. Zoubi prend Zeele par la patte, fleurs sous le bras, et ils se lancent dans une course effrénée. Le jardinier se met à leur poursuite. Si le jeune homme a réellement la trouille, Zeele prend ça plutôt comme un jeu et rigole à gorge déployée pendant ce sprint. Ca saute au-dessus de troncs d’arbres et contourne des obstacles que la forêt crée devant eux. Après un certain temps, Zoubi ose un regard derrière lui, et constate que le papa de la jeune fille ne les suit plus. Il freine automatiquement sa course, haletant, maintenant poussé de l’avant par Zeele. \r\n- Je vais te montrer le chemin pour sortir de la forêt, ne t’inquiète pas, dit-elle, aussi essoufflée. Mais d’abord, on va aller à ma cabane secrète !\r\n    Les yeux de Zoubi se mettent à briller : trop stylax une cabane ! En effet, quelques mètres plus loin, une petite construction de bois et de fleurs se dresse sous un cerisier en fleur. Zeele l’invite à rentrer, et Zoubi découvre avec merveille un tapis de fleurs colorées, douces et délicates. C’est littéralement l’endroit le plus fantastique qu’il n’ait jamais vu. Peut-être qu’il va rester avec Zeele plus longtemps que prévu…!', NULL, NULL, NULL, NULL, 'img_a2b2c2.jpg', NULL, NULL, NULL, NULL),
+('A2B2C3', 13, 'Ok. Visiblement Zoubi a un élan beaucoup trop soudain de courage. Il fronce les sourcils, et s’avance de manière très déterminée vers le jardinier, les points serrés. Notre protagoniste n’a pas le temps de dire un mot que le papa très baraqué lui décoche le plus gros uppercut qu’il ne se soit jamais pris de sa vie. Zoubi est complètement KO, et s’il a de la chance, il s’en sortira avec seulement deux dents cassées.\r\n    Fallait s’y attendre en même temps…\r\n', NULL, NULL, NULL, NULL, 'img_a2b2c3.jpg', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
