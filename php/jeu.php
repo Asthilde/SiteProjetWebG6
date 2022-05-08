@@ -65,10 +65,12 @@ require_once("connect.php");
       } else { ?>
         <div class='row align-items-end'>
           <div class='col'>Le numéro d'histoire ou de page n'est pas renseigné, veuillez recommencer.</div>
-          <a href='../index.php' class='btn btn-default btn-primary'>Retour accueil</a>
+          <a href='../index.php' class='btn btn-default btn-success'>Retour accueil</a>
         </div>
-        <?php "</div>";
-      }
+      <?php "</div>";
+      } ?>
+      <div class="p-4"></div>
+      <?php
       if (isset($_SESSION['id_hist']) && (!empty($pageHist) || $pageHist == 0)) {
         $res = $BDD->prepare("SELECT * FROM page_hist WHERE id_page = :idPage AND id_hist = :idHist");
         $res->execute(array(
@@ -79,42 +81,37 @@ require_once("connect.php");
         for ($i = 1; $i <= 5; $i++) {
           $para = "para_" . $i;
           $image = "img_" . $i; ?>
+
           <div class='row align-items-end'>
-            <div class='col'>
-              <?= $ligne[$para]; ?>
-            </div>
+            <?= $ligne[$para]; ?>
           </div>
           <div class='row align-items-end'>
-            <div class='col'>
-              <img src="../images/<?= $_SESSION['nom_hist'] . '/' . $ligne[$image]; ?>" alt="<?= $ligne[$image]; ?>" />
-            </div>
+            <img src="../images/<?= $_SESSION['nom_hist'] . '/' . $ligne[$image]; ?>" alt="<?= $ligne[$image]; ?>" />
           </div>
         <?php }
         if ($_SESSION['nbpv'] == 0) { ?>
           <div class='row align-items-end'>
-            <div class='col'>
-              Vous avez perdu ...
-            </div>
+            Vous avez perdu...
           </div>
-          <a class="btn btn-default btn-primary" href=<?= "perdu.php" ?>>Fin de l'histoire</a>
+          <a class="btn btn-default btn-success" href=<?= "perdu.php" ?>>Fin de l'histoire</a>
         <?php
         } else {
           $req2 = "SELECT * FROM choix WHERE id_page = '{$pageHist}' AND id_hist = {$_SESSION['id_hist']}";
           $res2 = $BDD->prepare($req2);
           $res2->execute(); ?>
-          <div class='row align-items-end'>
-            <?php while ($ligne2 = $res2->fetch()) {
-              if ($ligne2['id_page_cible'] == 'FIN') { ?>
-                <div class='col-4'>
+          <div class='d-flex justify-content-center p-2'>
+            <?php while ($ligne2 = $res2->fetch()) { ?>
+              <?php if ($ligne2['id_page_cible'] == 'FIN') { ?>
+                <div class='p-2'>
                   <!--Il faudra voir comment on gère avec bootstrap -->
                   Vous avez gagné !
                 </div>
-                <a class="btn btn-default btn-primary" href=<?= "gagne.php" ?>>Fin de l'histoire</a>
+                <a class="btn btn-default btn-success p-2 m-2" href=<?= "gagne.php" ?>>Fin de l'histoire</a>
               <?php break;
               } else { ?>
-                <div class='col-4'>
+                <div class=''>
                   <!--Il faudra voir comment on gère avec bootstrap -->
-                  <a class="btn btn-default btn-primary" href=<?= "jeu.php?idPageCible=" . $ligne2['id_page_cible']; ?> a> <?= $ligne2['contenu']; ?> </a>
+                  <a class="btn btn-default btn-success p-2 m-2" href=<?= "jeu.php?idPageCible=" . $ligne2['id_page_cible']; ?> a> <?= $ligne2['contenu']; ?> </a>
                 </div>
             <?php }
             } ?>

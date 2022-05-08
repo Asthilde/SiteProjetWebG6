@@ -39,16 +39,16 @@ require_once 'connect.php' ?>
           <article>
 
             <div class="p-2 form-group">
-              <a class="btn btn-default btn-success" href="<?= $demarrage ?>"> Démarrer </a>
-              <div class="row align-items-end">
+              <!--<a class="btn btn-default btn-success" href="<?= $demarrage ?>"> Démarrer </a>-->
+              <div class="align-items-end">
                 <h3><?php echo $ligne2['nom_hist']; ?></h3>
                 <div id="nomCreateur">Une histoire créée par <?= $maLigne['pseudo']; ?> </div>
               </div>
               <div class="d-flex flex-row justify-content-center">
-                <div class="contenuHistoire"><?= $ligne2['synopsis'] ?></div>
+                <div class="p-2"><?= $ligne2['synopsis'] ?></div>
                 <div class="form-group">
                   <div>
-                    <a class="btn btn-default btn-success" href="<?= $demarrage ?>">Continuer</a>
+                    <a class="btn btn-default btn-success m-1" href="<?= $demarrage ?>">Continuer</a>
                   </div>
                 </div>
                 <?php
