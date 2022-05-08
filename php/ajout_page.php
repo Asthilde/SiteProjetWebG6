@@ -122,10 +122,10 @@ if ($BDD) {
           } 
         }?>
     </div>
-    <div class="row text-align-center m-auto">
-        <a href="fin_hist.php" class="btn btn-default btn-success m-1"> Terminer l'histoire</a>
-    </div>
+      <div class="row text-align-center m-auto">
+          <a href="fin_hist.php" class="btn btn-default btn-success m-1"> Terminer l'histoire</a>
       </div>
+    </div>
     <div class="d-flex justify-content-center mt-5 px-5">
       <form class="form-horizontal w-75" role="form" enctype="multipart/form-data" action="ajout_page.php" method="post">
         <div class="form-group">
@@ -182,35 +182,39 @@ if ($BDD) {
         </div>
         <?php
         for ($i = 1; $i < 6; $i++) { ?>
-          <div class="form-group">
+          <div class="form-group mb-4">
             Paragraphe <?= $i ?></br>
             <input type="text" name="para_<?= $i ?>" value=" " class="form-control" placeholder="Ecrivez votre paragraphe" <?php if ($i == 1) { ?> <?php } ?> autofocus>
           </div>
-          <div class="form-group">
+          <div class="form-group mb-4">
             Image <?= $i ?></br>
             <input type="file" name="img_<?= $i ?>" />
           </div>
         <?php } //Trouver un moyen de gérer l'affichage si on a rentré tous les choix possibles
         ?>
-        <div class="d-flex p-3">
+        <div class="d-flex flex-column mt-3 mb-3">
         <?php for ($i = 1; $i < 4; $i++) { ?>
-          <div id="choix<?= $i ?>" class="form-group">
+          <div class="d-flex flex-row mb-3">
+          <div id="choix<?= $i ?>" class="col pr-5 pl-0">
             Choix <?= $i ?></br>
             <input type="text" name="choix<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le choix <?= $i ?>" <?php if ($i == 1) { ?>required <?php } ?> autofocus>
           </div>
-          <div class="form-group">
-            <input type="checkbox" id="fin<?= $i ?>" name="fin<?= $i ?>" value="<?= $i ?>" class="form-control">
-            <label for="fin<?= $i ?>">Fin de l'histoire ?</label>
+          <div class="align-items-end pt-3">
+            <input type="checkbox" id="fin<?= $i ?>" name="fin<?= $i ?>" value="<?= $i ?>" class="col">
+            <label for="fin<?= $i ?>" class="col">Fin de l'histoire ?</label>
           </div>
-          <div class="form-group">
-            Nombre de points de vie perdus :
-            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="0" class="form-control" required>
+          </div>
+          <div class="d-flex flex-row mb-4">
+          <div id="choix<?= $i ?>" class="col-7 pr-2 pl-0">
+            Nombre de points de vie perdus  
+          </div> <!--Voir si on fait des div pour réunir le radio avec le label-->
+            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="0" class="col pl-3" required>
             <label for="pdv<?= $i ?>">0</label>
-            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="1" class="form-control">
+            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="1" class="col pl-3">
             <label for="pdv<?= $i ?>">1</label>
-            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="2" class="form-control">
+            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="2" class="col pl-3">
             <label for="pdv<?= $i ?>">2</label>
-            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="3" class="form-control">
+            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="3" class="col pl-3">
             <label for="pdv<?= $i ?>">3</label>
           </div>
           <?php } ?>
