@@ -51,14 +51,11 @@ h3 {
   padding-left: 150px;
 }
 
-* {
+body {
+  background-color: rgb(18, 24, 18);
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   color: rgb(84, 198, 99);
-}
-
-body {
-  background-color: rgb(18, 24, 18);
 }
 
 a:hover {
