@@ -50,42 +50,29 @@ if (isset($_POST['nom']) && ($_POST['nom'] != ' ') && isset($_POST['resume']) &&
   <div class="container">
     <?php include 'templatesHTML/navbar.php'; ?>
     <h2 class="text-center">Ajout d'une histoire</h2>
-    <div class="well">
+    <div class="d-flex justify-content-center p-3">
       <?php if (count($_POST) > 0) { ?>
-        <div class="alert alert-danger">
+        <div class="alert alert-danger w-50 m-auto">
           <strong>Attention</strong> Un des champs n'a pas été renseigné !
         </div>
       <?php } ?>
-      <form class="form-horizontal" role="form" enctype="multipart/form-data" action="ajout_hist.php" method="post">
-        <input type="hidden" name="id" value="">
+    </div>
+    <div class="d-flex justify-content-center p-3">
+      <form class="form-horizontal w-50" role="form" enctype="multipart/form-data" action="ajout_hist.php" method="post">
         <div class="form-group">
-          <label class="col-sm-4 control-label">Titre</label>
-          <div class="col-sm-6">
             <input type="text" name="nom" value="<?php if (isset($_POST['nom'])) {
                                                     echo $_POST['nom'];
                                                   } ?>" class="form-control" placeholder="Entrez le nom de votre histoire" required autofocus>
-          </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-4 control-label">Synopsis</label>
-          <div class="col-sm-6">
-            <textarea name="resume" class="form-control" placeholder="Entrez son synopsis" required>
-              <?php if (isset($_POST['resume'])) {
-                echo str_replace('  ', '', $_POST['resume']);
-              } ?>
-            </textarea>
-          </div>
+            <input type="text" name="resume" value="" class="form-control" placeholder="Entrez son synopsis" required>
         </div>
         <div class="form-group">
-          <label class="col-sm-4 control-label">Image</label>
-          <div class="col-sm-4">
-            <input type="file" name="image" />
-          </div>
+          Image <br/>
+          <input type="file" name="image" />
         </div>
-        <div class="form-group">
-          <div class="col-sm-4 col-sm-offset-4">
-            <button type="submit" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-save"></span> Enregistrer</button>
-          </div>
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-default btn-success m-1"><span class="glyphicon glyphicon-save"></span> Enregistrer</button>
         </div>
       </form>
     </div>
