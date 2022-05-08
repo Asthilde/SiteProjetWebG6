@@ -7,7 +7,7 @@
     </div>
     <div>
       <?php if (isset($_SESSION['admin']) &&  $_SESSION['admin'] == 1) { ?>
-        <a href="php/ajout_hist.php">Ajouter une histoire</a>
+        <a href="ajout_hist.php">Ajouter une histoire</a>
     </div>
 
   <?php } ?>
@@ -21,10 +21,10 @@
     </a>
     <div class="dropdown-menu">
       <?php if (isset($_SESSION['login'])) { ?>
-        <a class="dropdown-item" href="../php/deconnexion.php">Se déconnecter</a>
+        <a class="dropdown-item" href="deconnexion.php">Se déconnecter</a>
       <?php } else { ?>
-        <a class="dropdown-item" href="../php/connexion.php">Se connecter</a>
-        <a class="dropdown-item" href="../php/creation_compte.php">Se créer un compte</a>
+        <a class="dropdown-item" href="connexion.php">Se connecter</a>
+        <a class="dropdown-item" href="creation_compte.php">Se créer un compte</a>
       <?php } ?>
     </div>
   </div>

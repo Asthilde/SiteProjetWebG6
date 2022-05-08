@@ -28,8 +28,8 @@ require_once("connect.php");
               $ligne2 = $req2->fetch();?>
             <p>Créateur : <?= $ligne2['pseudo']; ?></p>
             <p>Nombre de fois joué : <?= $ligne['nb_fois_jouee']; ?><br />
-              Nombre de réussites : <?= $ligne['nb_reussites']; ?><br />
-              Nombre d'échecs : <?= $ligne['nb_morts']; ?></p>
+              Pourcentage de réussite : <?php if($ligne['nb_fois_jouee'] == 0) {echo '0%'; } else {echo (($ligne['nb_reussites']/$ligne['nb_fois_jouee'])*100) . '%';} ?><br />
+              Pourcentage d'échec : <?php if($ligne['nb_fois_jouee'] == 0) {echo '0%'; } else {echo (($ligne['nb_morts']/$ligne['nb_fois_jouee'])*100). '%';} ?></p>
             <p><small><?= $ligne['synopsis']; ?></small></p>
           </div>
         </div>
