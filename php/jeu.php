@@ -63,7 +63,7 @@ require_once("connect.php");
           'idUser' => $_SESSION['id_user']
         ));
       } else { ?>
-        <div class='row align-items-end'>
+        <div class='d-flex flex-row justify-content-center m-3'>
           <div class='col'>Le numéro d'histoire ou de page n'est pas renseigné, veuillez recommencer.</div>
           <a href='../index.php' class='btn btn-default btn-success'>Retour accueil</a>
         </div>
@@ -82,15 +82,15 @@ require_once("connect.php");
           $para = "para_" . $i;
           $image = "img_" . $i; ?>
 
-          <div class='row align-items-end'>
+          <div class='d-flex flex-row justify-content-center m-5'>
             <?= $ligne[$para]; ?>
           </div>
-          <div class='row align-items-end'>
-            <img src="../images/<?= $_SESSION['nom_hist'] . '/' . $ligne[$image]; ?>" alt="<?= $ligne[$image]; ?>" />
+          <div class='d-flex flex-row justify-content-center m-3'>
+            <img src="../images/<?= $_SESSION['nom_hist'] . '/' . $ligne[$image]; ?>" alt="<?= "../images/" . $_SESSION['nom_hist'] . "/" . $ligne[$image]; ?>" />
           </div>
         <?php }
         if ($_SESSION['nbpv'] == 0) { ?>
-          <div class='row align-items-end'>
+          <div class='d-flex flex-row justify-content-center m-4'>
             Vous avez perdu...
           </div>
           <a class="btn btn-default btn-success" href=<?= "perdu.php" ?>>Fin de l'histoire</a>
@@ -99,7 +99,7 @@ require_once("connect.php");
           $req2 = "SELECT * FROM choix WHERE id_page = '{$pageHist}' AND id_hist = {$_SESSION['id_hist']}";
           $res2 = $BDD->prepare($req2);
           $res2->execute(); ?>
-          <div class='d-flex justify-content-center p-2'>
+          <div class='d-flex justify-content-center 3-2'>
             <?php while ($ligne2 = $res2->fetch()) { ?>
               <?php if ($ligne2['id_page_cible'] == 'FIN') { ?>
                 <div class='p-2'>
