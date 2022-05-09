@@ -37,7 +37,6 @@ require_once 'connect.php' ?>
           $res3 = $BDD->query($req3);
           $maLigne = $res3->fetch(); ?>
           <article>
-
             <div class="p-2 form-group">
               <!--<a class="btn btn-default btn-success" href="<?= $demarrage ?>"> Démarrer </a>-->
               <div class="align-items-end">
@@ -81,7 +80,6 @@ require_once 'connect.php' ?>
         <?php } else { ?>
           <h2 class="col p-5 ">Histoires</h2>
         <?php } ?>
-
       </div>
       <?php $req = "SELECT * FROM histoire ORDER BY nom_hist";
       $res = $BDD->query($req);
@@ -92,17 +90,15 @@ require_once 'connect.php' ?>
         if (isset($_SESSION['login'])) {
           $demarrage = "jeu.php?id={$ligne['id_hist']}";
         }
-        if (!in_array($ligne['id_hist'], $tabHistJouee)) {
-      ?>
-          <div class='container'>
+        if (!in_array($ligne['id_hist'], $tabHistJouee)) { ?>
+          <div class='container mb-3'>
             <!--Il faut vérifier ici si l'utilisateur est connecté -->
             <div class="align-items-end">
               <h3><?php echo $ligne['nom_hist']; ?></h3>
               <div id="nomCreateur"> une histoire créée par <?= $maLigne['pseudo']; ?> </div>
             </div>
-            <div class="d-flex flex-row justify-content-center">
-              <div class="p-2"><?= $ligne['synopsis'] ?></div>
-
+            <div class="d-flex flex-row justify-content-between">
+              <div class="pt-2"><?= $ligne['synopsis'] ?></div>
               <div class="form-group">
                 <a class="btn btn-default btn-success m-1" href="<?= $demarrage ?>"> Démarrer </a>
                 <?php
@@ -120,20 +116,15 @@ require_once 'connect.php' ?>
                   <div class="m-1">
                     <a class="btn btn-default btn-success" href="histoires.php?id=<?= $ligne2['id_hist'] ?>"> Plus d'infos </a>
                   </div>
-
                 <?php
                 }
                 ?>
               </div>
             </div>
-
-
-
-
-      <?php }
-      }
-    } ?>
           </div>
+      <?php }
+        }
+      } ?>
   </div>
   <?php include 'templatesHTML/footer.php'; ?>
 
