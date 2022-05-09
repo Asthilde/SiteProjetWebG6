@@ -46,7 +46,7 @@ if (isset($_POST['nom']) && ($_POST['nom'] != ' ') && isset($_POST['resume']) &&
 <html>
 <?php include 'templatesHTML/head.php'; ?>
 
-<body class=>
+<body>
   <div class="container">
     <?php include 'templatesHTML/navbar.php'; ?>
     <h2 class="text-center">Ajout d'une histoire</h2>

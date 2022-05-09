@@ -67,60 +67,66 @@ require_once 'connect.php';?>
   }
 ?>
 
-  <div class="well">
-    <?php 
-    if(isset($_POST['pageChoisie'])){
-       $req = $BDD->prepare("SELECT * FROM page_hist WHERE id_page='{$_POST['pageChoisie']}' AND id_hist = '{$_SESSION['id_hist']}'");
-       $req->execute();
-       $ligne = $req->fetch();
-    ?>
-    <h2 class="text-center">Modification de la page <?= $_POST['pageChoisie'] ?></h2>
-    <form class="form-horizontal" role="form" enctype="multipart/form-data" action="modifierPage.php" method="post">
-      <?php for ($i = 1; $i < 6; $i++) {
-        $nomPara = "para_".$i; 
-        $nomImg = "img_".$i;?>
-      <div class="form-group">
-        <label class="col-sm-4 control-label">Paragraphe <?= $i ?></label>
-        <div class="col-sm-6">
-          <input type="text" name="<?= $nomPara ?>" value="<?= $ligne[$nomPara]?>" class="form-control" placeholder="Ecrivez votre paragraphe" <?php if ($i == 1) { ?> <?php } ?> autofocus>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-4 control-label">Image <?= $i ?></label>
-        <div class="col-sm-4"> 
-          <p>Image renseignée : <?= $ligne[$nomImg]?></p><!--Afficher le nom de l'image -->
-          <input type="file" name="img_<?= $i ?>"/>
-        </div>
-      </div>
-      <?php }  //Faire une requête pour récupérer le nom des choix
-      $req = $BDD->prepare("SELECT * FROM choix WHERE id_page='{$_POST['pageChoisie']}' AND id_hist = '{$_SESSION['id_hist']}'");
+<div class="d-flex flex-column mt-5 px-3">
+  <?php 
+  if(isset($_POST['pageChoisie'])){
+      $req = $BDD->prepare("SELECT * FROM page_hist WHERE id_page='{$_POST['pageChoisie']}' AND id_hist = '{$_SESSION['id_hist']}'");
       $req->execute();
-      $i = 1;
-      while($ligne = $req->fetch()){?>
-      <div id="choix<?= $i ?>" class="form-group">
-        <label class="col-sm-4 control-label">Choix <?= $i ?></label>
-        <div class="col-sm-6">
-          <input type="text" name="choix<?= $i ?>" value="<?=$ligne['contenu']?>" class="form-control" placeholder="Ecrivez le choix <?= $i ?>" <?php if ($i == 1) { ?>required <?php } ?> autofocus>
-        </div>
-        <div class="col-sm-6">
-          Nombre de points de vie perdus :
-          <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="0" class="form-control" required <?php if ($ligne['nb_pdv_perdu'] == '0'){ echo 'checked' ; }?>>
-          <label for="pdv<?= $i ?>">0</label>   
-          <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="1" class="form-control" <?php if ($ligne['nb_pdv_perdu'] == -1){ echo 'checked' ; }?>>
-          <label for="pdv<?= $i ?>">1</label> 
-          <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="2" class="form-control" <?php if ($ligne['nb_pdv_perdu'] == -2){ echo 'checked' ; }?>>
-          <label for="pdv<?= $i ?>">2</label> 
-          <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="3" class="form-control" <?php if ($ligne['nb_pdv_perdu'] == -3){ echo 'checked' ; }?>>
-          <label for="pdv<?= $i ?>">3</label>        
-        </div>
+      $ligne = $req->fetch();
+  ?>
+  <div class="mb-5">
+    <h2 class="text-center">Modification de la page <?= $_POST['pageChoisie'] ?></h2>
+  </div>
+  <form class="form-horizontal" role="form" enctype="multipart/form-data" action="modifierPage.php" method="post">
+    <?php for ($i = 1; $i < 6; $i++) {
+      $nomPara = "para_".$i; 
+      $nomImg = "img_".$i;?>
+    <div class="form-group text-center mb-4">
+      <div class="pb-1">
+        Paragraphe <?= $i ?>
       </div>
-      <?php $i++; } ?>
-      <div class="form-group">
-        <div class="col-sm-4 col-sm-offset-4">
-          <button type="submit" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-save"></span> Enregistrer</button>
-        </div>
+      <input type="text" name="<?= $nomPara ?>" value="<?= $ligne[$nomPara]?>" class="form-control" placeholder="Ecrivez votre paragraphe" <?php if ($i == 1) { ?> <?php } ?> autofocus>
+    </div>
+    <div class="form-group text-center mb-4">
+      <div class="pb-1">
+        Image <?= $i ?>
       </div>
-    </form>
+      <?php if (!empty($ligne[$nomImg])) { ?>
+        <div class="pb-1"> 
+          Image renseignée : <?= $ligne[$nomImg]?>
+        </div>
+      <?php } ?>   
+      <input type="file" name="img_<?= $i ?>"/>
+    </div>
+    <?php }  //Faire une requête pour récupérer le nom des choix
+    $req = $BDD->prepare("SELECT * FROM choix WHERE id_page='{$_POST['pageChoisie']}' AND id_hist = '{$_SESSION['id_hist']}'");
+    $req->execute();
+    $i = 1;
+    while($ligne = $req->fetch()){?>
+    <div id="choix<?= $i ?>" class="form-group text-center">
+      <div class="d-flex flex-column mb-3">
+        <div class="pb-1"> 
+          Choix <?= $i ?>
+        </div>
+        <input type="text" name="choix<?= $i ?>" value="<?=$ligne['contenu']?>" class="form-control" placeholder="Ecrivez le choix <?= $i ?>" <?php if ($i == 1) { ?>required <?php } ?> autofocus>
+      </div>
+      <div class="d-flex flex-row justify-content-start mb-4">
+        <div class="col-8 pr-2 pl-0">
+          Nombre de points de vie perdus
+        </div>
+        <div class="d-flex flex-row pr-2">
+          <?php for ($j=0; $j<4; $j++){ ?>
+            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="<?= $j ?>" class="col-3 px-1" required>
+            <label class="mr-3" for="pdv<?= $i ?>"><?= $j ?></label>
+          <?php } ?>
+        </div>     
+      </div>
+    </div>
+    <?php $i++; } ?>
+    <div class="form-group text-center">
+        <button type="submit" class="btn btn-default btn-success m-1"><span class="glyphicon glyphicon-save"></span> Enregistrer</button>
+    </div>
+  </form>
   <?php } 
   }?>
   <?php include 'templatesHTML/footer.php'; ?>
