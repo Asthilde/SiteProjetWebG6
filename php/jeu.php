@@ -77,7 +77,9 @@ require_once("connect.php");
           'idPage' => $pageHist,
           'idHist' => $_SESSION['id_hist']
         ));
-        $ligne = $res->fetch();
+        $ligne = $res->fetch(); ?>
+        <div class="d-flex justify-content-center">
+        <?php
         for ($i = 1; $i <= 5; $i++) {
           $para = "para_" . $i;
           $image = "img_" . $i; ?>
@@ -106,7 +108,9 @@ require_once("connect.php");
                   <!--Il faudra voir comment on gère avec bootstrap -->
                   Vous avez gagné !
                 </div>
-                <a class="btn btn-default btn-success p-2 m-2" href=<?= "gagne.php" ?>>Fin de l'histoire</a>
+                <div>
+                  <a class="btn btn-default btn-success p-2 m-2" href=<?= "gagne.php" ?>>Fin de l'histoire</a>
+                </div>
               <?php break;
               } else { ?>
                 <div class=''>
@@ -116,7 +120,9 @@ require_once("connect.php");
             <?php }
             } ?>
           </div>
-    <?php }
+    <?php } ?>
+    </div>
+    <?php
       }
     } ?>
 
