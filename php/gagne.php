@@ -22,8 +22,8 @@ if($BDD){
     'idHist' => $_SESSION['id_hist']
   )); 
 }
-session_unset($_SESSION['id_hist']);
-session_unset($_SESSION['nbpv']);
+unset($_SESSION['id_hist']);
+unset($_SESSION['nbpv']);
 $urlAccueil = substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'],'php/perdu')).'index.php';
 header("Location:{$urlAccueil}");
 ?>

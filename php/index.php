@@ -36,15 +36,14 @@ require_once 'connect.php' ?>
           $req3 = "SELECT * FROM user WHERE id_user = {$idCrea}";
           $res3 = $BDD->query($req3);
           $maLigne = $res3->fetch(); ?>
-          <article>
-            <div class="p-2 form-group">
+            <div class="form-group">
               <!--<a class="btn btn-default btn-success" href="<?= $demarrage ?>"> Démarrer </a>-->
               <div class="align-items-end">
                 <h3><?php echo $ligne2['nom_hist']; ?></h3>
                 <div id="nomCreateur">Une histoire créée par <?= $maLigne['pseudo']; ?> </div>
               </div>
-              <div class="d-flex flex-row justify-content-center">
-                <div class="p-2"><?= $ligne2['synopsis'] ?></div>
+              <div class="d-flex flex-row justify-content-between">
+                <div class="pt-2"><?= $ligne2['synopsis'] ?></div>
                 <div class="form-group">
                   <div>
                     <a class="btn btn-default btn-success m-1" href="<?= $demarrage ?>">Continuer</a>
@@ -71,7 +70,6 @@ require_once 'connect.php' ?>
                 </div>
               </div>
             </div>
-          </article>
       <?php }
       } ?>
       <div class="row align-items-end">

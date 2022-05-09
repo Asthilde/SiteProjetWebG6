@@ -8,8 +8,9 @@ require_once("connect.php");
 <?php include 'templatesHTML/head.php'; ?>
 
 <body>
+  <?php include 'templatesHTML/navbar.php'; ?>
   <div class="container">
-    <?php include 'templatesHTML/navbar.php';
+    <?php 
     $ligne = "rien";
     if ($BDD) {
       if (isset($_POST['login']) && isset($_POST['mdp'])) {
