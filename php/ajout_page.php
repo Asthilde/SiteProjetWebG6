@@ -54,24 +54,25 @@ if ($BDD) {
       if ($ligne2['nb'] == 0) {
         for ($i = 1; $i < 4; $i++) {
           $nom = "choix" . $i;
-          if ($_POST['pageChoisie'] == '0') {
-            $nivSuiv = 'A';
-            $nomPageCible = 'A' . $i;
-          } else {
-            $nivSuiv = chr(ord(substr($_POST['pageChoisie'], -2, 1)) + 1);
-            $nomPageCible = $_POST['pageChoisie'] . $nivSuiv . $i;
-          }
-          $nomPdv = "pdv" . $i;
-          $nomChoix = "fin" . $i;
-          $sql = "INSERT INTO choix (id_page, id_page_cible, id_hist, contenu, nb_pdv_perdu) VALUES (:numPage, :numPageCible, :numHist, :choix, :nbPdv)";
-          $req = $BDD->prepare($sql);
-          $req->execute(array(
-            'numPage' => $_POST['pageChoisie'],
-            'numPageCible' => $nomPageCible,
-            'numHist' => $_SESSION['id_hist'],
-            'choix' => $_POST[$nom],
-            'nbPdv' => (-1 * $_POST[$nomPdv])
-          ));
+          if(isset($_POST[$nom]) && !empty($_POST[$nom])){
+            if ($_POST['pageChoisie'] == '0') {
+              $nivSuiv = 'A';
+              $nomPageCible = 'A' . $i;
+            } else {
+              $nivSuiv = chr(ord(substr($_POST['pageChoisie'], -2, 1)) + 1);
+              $nomPageCible = $_POST['pageChoisie'] . $nivSuiv . $i;
+            }
+            $nomPdv = "pdv" . $i;
+            $nomChoix = "fin" . $i;
+            $sql = "INSERT INTO choix (id_page, id_page_cible, id_hist, contenu, nb_pdv_perdu) VALUES (:numPage, :numPageCible, :numHist, :choix, :nbPdv)";
+            $req = $BDD->prepare($sql);
+            $req->execute(array(
+              'numPage' => $_POST['pageChoisie'],
+              'numPageCible' => $nomPageCible,
+              'numHist' => $_SESSION['id_hist'],
+              'choix' => $_POST[$nom],
+              'nbPdv' => (-1 * $_POST[$nomPdv])
+            ));
           if (isset($_POST[$nomChoix]) || strlen($nomPageCible) == 8) {
             $req = $BDD->prepare($sql);
             $req->execute(array(
@@ -81,9 +82,8 @@ if ($BDD) {
               'choix' => '',
               'nbPdv' => 0
             ));
-          } else {
-            echo "Je ne rentre pas pour les choix";
           }
+        }
         }
       }
     } else {
@@ -121,7 +121,7 @@ if ($BDD) {
         } ?>
       </div>
       <div class="row text-align-center m-auto">
-        <a href="fin_hist.php" class="btn btn-default btn-success m-1"> Terminer l'histoire</a>
+        <a href="fin_hist.php" class="btn btn-default btn-success mt-3"> Terminer l'histoire</a>
       </div>
     </div>
     <div class="d-flex justify-content-center mt-5 px-5">
@@ -203,18 +203,15 @@ if ($BDD) {
               </div>
             </div>
             <div class="d-flex flex-row mb-4">
-              <div id="choix<?= $i ?>" class="col-7 pr-2 pl-0">
+              <div id="choix<?= $i ?>" class="col pr-2 pl-0">
                 Nombre de points de vie perdus
               </div>
-              <!--Voir si on fait des div pour réunir le radio avec le label-->
-              <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="0" class="col pl-3" required>
-              <label for="pdv<?= $i ?>">0</label>
-              <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="1" class="col pl-3">
-              <label for="pdv<?= $i ?>">1</label>
-              <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="2" class="col pl-3">
-              <label for="pdv<?= $i ?>">2</label>
-              <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="3" class="col pl-3">
-              <label for="pdv<?= $i ?>">3</label>
+              <div class="d-flex flex-row pr-2">
+                <?php for ($j=0; $j<4; $j++){ ?>
+                  <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="<?= $j ?>" class="col-3 px-1" required>
+                  <label class="mr-3" for="pdv<?= $i ?>"><?= $j ?></label>
+                <?php } ?>
+              </div>
             </div>
           <?php } ?>
         </div>
