@@ -52,7 +52,6 @@ if ($BDD) {
       $req2->execute();
       $ligne2 = $req2->fetch();
       if ($ligne2['nb'] == 0) {
-        echo "Je rentre ici";
         for ($i = 1; $i < 4; $i++) {
           $nom = "choix" . $i;
           if ($_POST['pageChoisie'] == '0') {

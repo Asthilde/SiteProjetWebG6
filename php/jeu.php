@@ -28,15 +28,19 @@ require_once("connect.php");
         } else {
           $pageHist = 0;
           $_SESSION['nbpv'] = 3;
-          $sql = "INSERT INTO hist_jouee (id_hist, id_user, choix_eff, nb_pts_vie, type_fin) VALUES (:idHist, :idUser, :choix, :nbPV, :fin)";
-          $req = $BDD->prepare($sql);
-          $req->execute(array(
-            'idHist' => $_SESSION['id_hist'],
-            'idUser' => $_SESSION['id_user'],
-            'choix' => $pageHist,
-            'nbPV' => 3,
-            'fin' => ''
-          ));
+          try {
+            $sql = "INSERT INTO hist_jouee (id_hist, id_user, choix_eff, nb_pts_vie, type_fin) VALUES (:idHist, :idUser, :choix, :nbPV, :fin)";
+            $req = $BDD->prepare($sql);
+            $req->execute(array(
+              'idHist' => $_SESSION['id_hist'],
+              'idUser' => $_SESSION['id_user'],
+              'choix' => $pageHist,
+              'nbPV' => 3,
+              'fin' => ''
+            ));
+          } catch (Exception $e) {
+            echo 'Histoire déja dans la base';
+          }
         }
       }
       //Cas où on est en train de jouer
@@ -67,10 +71,8 @@ require_once("connect.php");
           <div class='col'>Le numéro d'histoire ou de page n'est pas renseigné, veuillez recommencer.</div>
           <a href='../index.php' class='btn btn-default btn-success'>Retour accueil</a>
         </div>
-      <?php "</div>";
-      } ?>
-      <div class="p-4"></div>
-      <?php
+        <?php echo "</div>";
+      }
       if (isset($_SESSION['id_hist']) && (!empty($pageHist) || $pageHist == 0)) {
         $res = $BDD->prepare("SELECT * FROM page_hist WHERE id_page = :idPage AND id_hist = :idHist");
         $res->execute(array(
@@ -81,13 +83,14 @@ require_once("connect.php");
         for ($i = 1; $i <= 5; $i++) {
           $para = "para_" . $i;
           $image = "img_" . $i; ?>
-
-          <div class='d-flex flex-row justify-content-center m-5'>
-            <?= $ligne[$para]; ?>
-          </div>
-          <?php if ($ligne[$image] != '') { ?>
+          <?php if ($ligne[$para] != ' ' && !empty($ligne[$para])) { ?>
+            <div class='d-flex flex-row justify-content-center my-5 mx-2'>
+              <?= $ligne[$para]; ?>
+            </div>
+          <?php }
+          if ($ligne[$image] != ' ' && !empty($ligne[$image])) { ?>
             <div class='d-flex flex-row justify-content-center m-3'>
-              <img src="../images/<?= $_SESSION['nom_hist'] . '/' . $ligne[$image]; ?>" alt="<?= "../images/" . $_SESSION['nom_hist'] . "/" . $ligne[$image]; ?>" />
+              <img src="../images/<?= $_SESSION['nom_hist'] . '/' . $ligne[$image]; ?>" alt="<?= "../images/" . $_SESSION['nom_hist'] . "/" . $ligne[$image]; ?>" class="w-100" />
             </div>
           <?php }
         }
@@ -106,8 +109,8 @@ require_once("connect.php");
           $res2 = $BDD->prepare($req2);
           $res2->execute(); ?>
           <div class='d-flex justify-content-center'>
-            <?php while ($ligne2 = $res2->fetch()) { ?>
-              <?php if ($ligne2['id_page_cible'] == 'FIN') { ?>
+            <?php while ($ligne2 = $res2->fetch()) { 
+               if ($ligne2['id_page_cible'] == 'FIN') { ?>
                 <div class='d-flex flex-column p-2 m-auto'>
                   <!--Il faudra voir comment on gère avec bootstrap -->
                   <div class="m-auto pb-2">
