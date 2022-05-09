@@ -77,9 +77,7 @@ require_once("connect.php");
           'idPage' => $pageHist,
           'idHist' => $_SESSION['id_hist']
         ));
-        $ligne = $res->fetch(); ?>
-        <div class="d-flex justify-content-center">
-        <?php
+        $ligne = $res->fetch();
         for ($i = 1; $i <= 5; $i++) {
           $para = "para_" . $i;
           $image = "img_" . $i; ?>
@@ -101,28 +99,24 @@ require_once("connect.php");
           $req2 = "SELECT * FROM choix WHERE id_page = '{$pageHist}' AND id_hist = {$_SESSION['id_hist']}";
           $res2 = $BDD->prepare($req2);
           $res2->execute(); ?>
-          <div class='d-flex justify-content-center 3-2'>
+          <div class='d-flex flex-column'>
             <?php while ($ligne2 = $res2->fetch()) { ?>
               <?php if ($ligne2['id_page_cible'] == 'FIN') { ?>
-                <div class='p-2'>
+                <div class='p-2 m-auto'>
                   <!--Il faudra voir comment on gère avec bootstrap -->
                   Vous avez gagné !
                 </div>
-                <div>
-                  <a class="btn btn-default btn-success p-2 m-2" href=<?= "gagne.php" ?>>Fin de l'histoire</a>
-                </div>
+                <a class="btn btn-default btn-success p-2 m-auto" href=<?= "gagne.php" ?>>Fin de l'histoire</a>
               <?php break;
               } else { ?>
-                <div class=''>
+                <div class='m-auto'>
                   <!--Il faudra voir comment on gère avec bootstrap -->
                   <a class="btn btn-default btn-success p-2 m-2" href=<?= "jeu.php?idPageCible=" . $ligne2['id_page_cible']; ?> a> <?= $ligne2['contenu']; ?> </a>
                 </div>
             <?php }
             } ?>
           </div>
-    <?php } ?>
-    </div>
-    <?php
+    <?php }
       }
     } ?>
 
