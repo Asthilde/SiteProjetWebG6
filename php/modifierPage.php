@@ -116,7 +116,7 @@ require_once 'connect.php';?>
         </div>
         <div class="d-flex flex-row pr-2">
           <?php for ($j=0; $j<4; $j++){ ?>
-            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="<?= $j ?>" class="col-3 px-1" required>
+            <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="<?= $j ?>" class="col-3 px-1" <?php if($ligne['nb_pdv_perdu'] == -1*$j){ echo "checked" ; } ?> required>
             <label class="mr-3" for="pdv<?= $i ?>"><?= $j ?></label>
           <?php } ?>
         </div>     
