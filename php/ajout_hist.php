@@ -60,19 +60,19 @@ if (isset($_POST['nom']) && ($_POST['nom'] != ' ') && isset($_POST['resume']) &&
     <div class="d-flex justify-content-center p-3">
       <form class="form-horizontal w-50" role="form" enctype="multipart/form-data" action="ajout_hist.php" method="post">
         <div class="form-group">
-            <input type="text" name="nom" value="<?php if (isset($_POST['nom'])) {
-                                                    echo $_POST['nom'];
-                                                  } ?>" class="form-control" placeholder="Entrez le nom de votre histoire" required autofocus>
+          <input type="text" name="nom" value="<?php if (isset($_POST['nom'])) {
+                                                  echo $_POST['nom'];
+                                                } ?>" class="form-control" placeholder="Entrez le nom de votre histoire" required autofocus>
         </div>
         <div class="form-group">
-            <input type="text" name="resume" value="" class="form-control" placeholder="Entrez son synopsis" required>
+          <input type="text" name="resume" value="" class="form-control" placeholder="Entrez son synopsis" required>
         </div>
         <div class="form-group">
-          Image <br/>
+          Image <br />
           <input type="file" name="image" />
         </div>
         <div class="form-group text-center">
-            <button type="submit" class="btn btn-default btn-success m-1"><span class="glyphicon glyphicon-save"></span> Enregistrer</button>
+          <button type="submit" class="btn btn-default btn-success m-1"><span class="glyphicon glyphicon-save"></span> Enregistrer</button>
         </div>
       </form>
     </div>

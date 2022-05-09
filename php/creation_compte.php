@@ -32,7 +32,7 @@ require_once("connect.php");
       Bienvenue sur notre site ! Inscrivez-vous :
     </div>
     <div class="d-flex justify-content-center p-3">
-      <form class="form-signin form-horizontal" role="form" action="creation_compte.php" method="post">
+      <form class="form-signin form-horizontal w-25" role="form" action="creation_compte.php" method="post">
         <div class="form-group">
           <input type="text" name="login" class="form-control" placeholder="Entrez votre login" required autofocus>
         </div>
