@@ -20,7 +20,7 @@ if (isset($_SESSION['pageModifiee'])) {
             <?php
             if ($BDD) {
               if (isset($_GET['id']) && !empty($_GET['id']))
-                $_SESSION['id_hist'] = $_GET['id'];
+                $_SESSION['id_hist'] = (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8', false);
               if (isset($_SESSION['id_hist'])) {
                 $req = $BDD->prepare("SELECT * FROM page_hist WHERE id_hist=:numero");
                 $req->execute(array(
