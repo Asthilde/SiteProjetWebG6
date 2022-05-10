@@ -16,7 +16,7 @@ if (isset($_SESSION['pageModifiee'])) {
       <form class="form-horizontal w-75 text-center" role="form" action="modifierPage.php" method="post">
       <div class="form-group mx-auto">    
       <h3>Page à modifier</h3>
-          <select class="form-control text-center" id="pageChoisie" name="pageChoisie" required>
+          <select class="form-control text-center w-50 m-auto" id="pageChoisie" name="pageChoisie" required>
             <?php
             if ($BDD) {
               if (isset($_GET['id']) && !empty($_GET['id']))
