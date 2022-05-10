@@ -15,9 +15,22 @@
     return $res->fetch();
   }
 
-  /*function afficherIdUser($BDD, $pseudoUser){
+  function obtenirUser($BDD){
+    $req = $BDD->prepare("SELECT * FROM user WHERE pseudo=:nomUser");
+    $req->execute(array(
+      "nomUser" => htmlspecialchars($_POST['login'], ENT_QUOTES, 'UTF-8', false),
+    ));
+    return $req->fetch();
+  }
 
-  }*/
+  function verifierUserConnu($BDD){
+    $req = $BDD->prepare("SELECT * FROM user WHERE pseudo=:nomUser AND mdp = :mdp");
+    $req->execute(array(
+      "nomUser" => htmlspecialchars($_POST['login'], ENT_QUOTES, 'UTF-8', false),
+      "mdp" => password_hash($_POST['mdp'], PASSWORD_BCRYPT)
+    ));
+    return $req->fetch();
+  }
 
   function afficherPseudoUser($BDD, $idCrea){
     $res = $BDD->prepare("SELECT pseudo FROM user WHERE id_user = :idCrea");
@@ -168,7 +181,7 @@
           'numPage' => $_POST['pageChoisie'],
           'numPageCible' => $nomPageCible,
           'numHist' => $_SESSION['id_hist'],
-          'choix' => $_POST[$nom],
+          'choix' => htmlspecialchars($_POST[$nom], ENT_QUOTES, 'UTF-8', false),
           'nbPdv' => $pdv
         ));
         //On rajoute dans la BDD la page cible suivante si c'est une page de fin de jeu.
@@ -184,6 +197,19 @@
         }
       }
     }
+  }
+
+  function ajouterUser($BDD){
+    $req = $BDD->prepare("INSERT INTO user(est_admin,pseudo,mdp) VALUES (?,?,?)");
+    $req->execute(array(0, htmlspecialchars($_POST['login'], ENT_QUOTES, 'UTF-8', false), password_hash($_POST['mdp'], PASSWORD_BCRYPT)));
+  }
+
+  function cacherHistoire($BDD){
+    $req = $BDD -> prepare("UPDATE histoire SET cache=:cacher WHERE id_hist=:numHist"); 
+    $req->execute(array(
+      'cacher' => 1,
+      'numHist' => $_SESSION['id_hist']
+    )); 
   }
 
   function mettreAJourDonneesHistoireEnCours($BDD, $pageChoisie){

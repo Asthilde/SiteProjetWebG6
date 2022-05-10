@@ -18,7 +18,7 @@ require_once("connect.php");
       <div class="d-flex justify-content-center p-3">
         <div class="row align-items-center">
           <div class="col-md-5 col-sm-7 text-center ">
-            <img class="img-responsive movieImage" src="../images/<?php echo $ligne['nom_hist'] . '/' . strtolower($ligne['illustration']); ?>" alt="Affiche histoire" title="<?= $ligne['nom_hist']; ?>" width="300" />
+            <img class="img-responsive movieImage pr-3" src="../images/<?php echo $ligne['nom_hist'] . '/' . strtolower($ligne['illustration']); ?>" alt="Affiche histoire" title="<?= $ligne['nom_hist']; ?>" width="300" />
           </div>
           <div class="col-md-7 col-sm-5">
             <h2><?= $ligne['nom_hist']; ?></h2>

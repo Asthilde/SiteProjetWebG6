@@ -10,7 +10,7 @@
         <a class="btn btn-default btn-success m-1" href="<?= $demarrage ?>">Jouer</a>
       </div>
       <?php
-      if (isset($_SESSION["admin"]) &&  $_SESSION["admin"] == 1) {
+      if (isset($_SESSION["admin"])) {
         $idHist = (int)$infosHist['id_hist'];
         if(!empty($idHist) && !empty($infosHist['nom_hist'])) { ?>
           <div class="m-1" id="imgModifSuppr">
