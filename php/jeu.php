@@ -105,11 +105,14 @@ require_once('requetes.php');
                   </div>
                 </div>
               <?php break;
-              } else { ?>
-                <div class='flex-row m-auto'>
-                  <a class="btn btn-default btn-success p-2 m-2" href=<?= "jeu.php?idPageCible=" . $choix['id_page_cible']; ?> a> <?= $choix['contenu']; ?> </a>
-                </div>
-            <?php }
+              } 
+              else { 
+                if(!empty($choix['contenu'])) {?>
+                  <div class='flex-row m-auto'>
+                    <a class="btn btn-default btn-success p-2 m-2" href=<?= "jeu.php?idPageCible=" . $choix['id_page_cible']; ?> a> <?= $choix['contenu']; ?> </a>
+                  </div>
+                <?php }
+              }
             } ?>
           </div>
     <?php }
