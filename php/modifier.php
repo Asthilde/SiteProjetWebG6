@@ -1,6 +1,7 @@
 <?php
 session_start();
-require_once 'connect.php'; ?>
+require_once 'connect.php'; 
+require_once 'requetes.php'; ?>
 <!doctype html>
 <html>
 <?php include 'templatesHTML/head.php';
@@ -22,12 +23,9 @@ if (isset($_SESSION['pageModifiee'])) {
               if (isset($_GET['id']) && !empty($_GET['id']))
                 $_SESSION['id_hist'] = (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8', false);
               if (isset($_SESSION['id_hist'])) {
-                $req = $BDD->prepare("SELECT * FROM page_hist WHERE id_hist=:numero");
-                $req->execute(array(
-                  "numero" => $_SESSION['id_hist']
-                ));
-                while ($ligne = $req->fetch()) { ?>
-                  <option value="<?= $ligne['id_page'] ?>"><?= $ligne['id_page'] ?></option>
+                $pagesRenseignees = afficherPagesRenseignees($BDD);
+                foreach($pagesRenseignees as $page) { ?>
+                  <option value="<?= $page ?>"><?= $page ?></option>
             <?php }
               }
             } ?>

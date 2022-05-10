@@ -227,6 +227,57 @@
     ));
   }
 
+  function mettreAJourDonneesPage($BDD){
+    for ($i = 1; $i < 6; $i++) {
+      $nom = "para_" . $i;
+      if (isset($_POST[$nom])) {
+        $req = $BDD -> prepare("UPDATE page_hist SET {$nom}=:nomPara WHERE id_page =:nomPage  AND id_hist=:numHist"); 
+        $req->execute(array(
+          'nomPara' => htmlspecialchars($_POST[$nom], ENT_QUOTES, 'UTF-8', false),
+          'nomPage' => $_SESSION['pageModifiee'],
+          'numHist' => $_SESSION['id_hist']
+        )); 
+      }
+      $nom = "img_" . $i;
+      if (isset($_FILES[$nom])) {
+        $_FILES[$nom]['name'] =  strtolower("img_{$_SESSION['id_hist']}_{$_SESSION['pageModifiee']}_{$i}" . substr($_FILES[$nom]['name'], strpos($_FILES[$nom]['name'], '.')));
+        if (move_uploaded_file($_FILES[$nom]['tmp_name'], "../images/" . $_SESSION['nom_hist'] . '/' . $_FILES[$nom]['name'])) {
+          $req = $BDD->prepare("UPDATE page_hist SET {$nom} =:nomImg WHERE id_page =:nomPage  AND id_hist=:numHist"); 
+          $req->execute(array(
+            'nomImg' => $_FILES[$nom]['name'], //N'est pas renseigné dans la BDD
+            'nomPage' => $_SESSION['pageModifiee'],
+            'numHist' => $_SESSION['id_hist']
+        ));
+        }
+      }
+    }
+  }
+
+  function mettreAJourChoixPage($BDD, $donneesChoix){
+    $i=1;
+    foreach($donneesChoix as $choix){
+      $nom = "choix" . $i;
+      $nomPdv = "pdv" . $i;
+      if (isset($_POST[$nom])) {
+        $req2 = $BDD -> prepare("UPDATE choix SET contenu =:texte WHERE id_page = :idPage AND id_page_cible = :idPageCible"); 
+        $req2->execute(array(
+          'texte' => htmlspecialchars($_POST[$nom], ENT_QUOTES, 'UTF-8', false),
+          'idPage' => $_SESSION['pageModifiee'],
+          'idPageCible' => $choix['id_page_cible']
+        ));
+      }
+      if(isset($_POST[$nomPdv])){
+        $req2 = $BDD -> prepare("UPDATE choix SET nb_pdv_perdu =:nbPdv WHERE id_page = :idPage AND id_page_cible = :idPageCible"); 
+        $req2->execute(array(
+          'nbPdv' => (-1*$_POST[$nomPdv]),
+          'idPage' => $_SESSION['pageModifiee'],
+          'idPageCible' => $choix['id_page_cible']
+        ));
+      }
+      $i++;
+    }
+  }
+
   function verifierPresenceHistoire($BDD) {
     $req = $BDD->prepare("SELECT COUNT(*) as nb FROM page_hist WHERE id_page=:idPage AND id_hist =:idHist");
     $req->execute(array(

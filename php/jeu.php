@@ -87,7 +87,7 @@ require_once('requetes.php');
               Vous avez perdu...
             </div>
             <div class="m-auto">
-              <a class="btn btn-default btn-success" href=<?= "perdu.php" ?>>Fin de l'histoire</a>
+              <a class="btn btn-default btn-success" href=<?= "fin.php" ?>>Fin de l'histoire</a>
             </div>
           </div>
         <?php } 
@@ -95,13 +95,14 @@ require_once('requetes.php');
           $choixPage = afficherChoixPage($BDD, $pageHist);?>
           <div class='d-flex justify-content-center'>
             <?php foreach($choixPage as $choix) {
-               if ($choix['id_page_cible'] == 'FIN') { ?>
+               if ($choix['id_page_cible'] == 'FIN') { 
+                 $_SESSION['gagne'] = 1 ;?>
                 <div class='d-flex flex-column p-2 m-auto'>
                   <div class="m-auto pb-2">
                     Vous avez gagné !
                   </div>
                   <div class="m-auto">
-                    <a class="btn btn-default btn-success p-2" href=<?= "gagne.php" ?>>Fin de l'histoire</a>
+                    <a class="btn btn-default btn-success p-2" href=<?= "fin.php" ?>>Fin de l'histoire</a>
                   </div>
                 </div>
               <?php break;
