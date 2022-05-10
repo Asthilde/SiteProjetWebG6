@@ -26,13 +26,13 @@ function afficherPagesARenseigner($BDD, $tabPages){
         "numero" => $_SESSION['id_hist']
       ));
       while ($ligne = $req->fetch()) {
-        if ($ligne['id_page_cible'] == "FIN" || $ligne['contenu'] == '') {
+        if ($ligne['id_page_cible'] == "FIN" || (empty($ligne['contenu']) || $ligne['contenu'] == ' ')) {
           //On parcourt les pages possibles pour enlever celles impossibles
           foreach ($pagesARenseigner as $pagePossible) {
             if(strpos($pagePossible, $ligne['id_page']) !== false){
-              if($ligne['contenu'] == '' && strlen($pagePossible) > (2*strlen($ligne['id_page'])))
+              if((empty($ligne['contenu']) || $ligne['contenu'] == '') && strlen($pagePossible) > (2*strlen($ligne['id_page'])))
                 array_push($pagesImpossibles, $pagePossible);
-              else if ($ligne['contenu'] != '' && strlen($pagePossible) > strlen($ligne['id_page']))
+              else if ((!empty($ligne['contenu']) && $ligne['contenu'] != ' ') && strlen($pagePossible) > strlen($ligne['id_page']))
                 array_push($pagesImpossibles, $pagePossible);
             }
           }

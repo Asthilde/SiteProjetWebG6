@@ -24,7 +24,7 @@ require_once 'requetes.php'; ?>
       <?php
             $i++;
           }
-          $demarrage = "jeu.php?id={$histoire['id_hist']}&pageDebut={$histoire['choix_eff']}&nbPdv={$histoire['nb_pts_vie']}";
+          $demarrage = "jeu.php?id={$histoire['id_hist']}";
           array_push($tabHistJouee, $histoire['id_hist']);
           $infosHist = afficherInfosHistoire($BDD, (int) $histoire['id_hist']);
           $pseudoCreateur = afficherPseudoUser($BDD, $infosHist['id_createur']);

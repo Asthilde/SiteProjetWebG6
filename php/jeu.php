@@ -19,33 +19,16 @@ require_once('requetes.php');
         $_SESSION['id_hist'] = (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8', false);
         $infosHist = afficherInfosHistoire($BDD,  $_SESSION['id_hist']);
         $_SESSION['nom_hist'] = $infosHist['nom_hist'];
+        $infosHistEnCours = afficherInfosHistEnCours($BDD, $_SESSION['id_user']);
         //Lorsqu'il reprend une histoire en cours de partie
-        if (isset($_GET['nbPdv']) && $_GET['nbPdv'] >= 0 && $_GET['nbPdv'] <= 3 && isset($_GET['pageDebut'])) {
-          $_SESSION['nbpv'] = (int) htmlspecialchars($_GET['nbPdv'], ENT_QUOTES, 'UTF-8', false);
-          $pageHist = htmlspecialchars($_GET['pageDebut'], ENT_QUOTES, 'UTF-8', false);
-          /*$res = $BDD->prepare("SELECT * FROM histoire WHERE id_hist = :idHist");
-          $res->execute(array(
-            'idHist' => $_SESSION['id_hist']
-          ));
-          $ligne = $res->fetch();*/
-          
-          
-        } else { //Lorsqu'il démarre une nouvelle histoire
-          $pageHist = 0;
-          $_SESSION['nbpv'] = 3;
-          /*try {
-            $sql = "INSERT INTO hist_jouee (id_hist, id_user, choix_eff, nb_pts_vie, type_fin) VALUES (:idHist, :idUser, :choix, :nbPV, :fin)";
-            $req = $BDD->prepare($sql);
-            $req->execute(array(
-              'idHist' => $_SESSION['id_hist'],
-              'idUser' => $_SESSION['id_user'],
-              'choix' => $pageHist,
-              'nbPV' => 3,
-              'fin' => ''
-            ));
-          } catch (Exception $e) {
-            echo 'Histoire déja dans la base';
-          }*/
+        if(isset($infosHistEnCours) && !empty($infosHistEnCours)){
+          $_SESSION['nbpv'] = (int) $infosHistEnCours['nb_pts_vie'];
+          $pageHist = $infosHistEnCours['choix_eff'];
+          $_SESSION['choix'] = $infosHistEnCours['choix'];
+        } 
+        else { //Lorsqu'il démarre une nouvelle histoire
+          $pageHist = '0';
+          $_SESSION['choix'] = '0';
           insererDebuterHistoire($BDD, $pageHist);
         }
       }
@@ -53,6 +36,7 @@ require_once('requetes.php');
       else if (isset($_GET['idPageCible']) && (!empty($_GET['idPageCible']) || $_GET['idPageCible'] == '0')) {
         $pageHist = htmlspecialchars($_GET['idPageCible'], ENT_QUOTES, 'UTF-8', false);
         $_SESSION['nbpv'] += recupererPDVPerdus($BDD, $pageHist);
+        $_SESSION['choix'] .= ' ' . $pageHist;
         $pageChoisie = htmlspecialchars($_GET['idPageCible'], ENT_QUOTES, 'UTF-8', false);
         mettreAJourDonneesHistoireEnCours($BDD, $pageChoisie);
       } 
@@ -80,11 +64,13 @@ require_once('requetes.php');
             </div>
           <?php }
         }
-
         if ($_SESSION['nbpv'] == 0) { ?>
           <div class='d-flex flex-column m-auto'>
-            <div class="m-auto pb-2">
+            <div class="m-auto pb-1">
               Vous avez perdu...
+            </div>
+            <div class="m-auto pb-2">
+              Vous avez fait les choix suivants : <?= $_SESSION['choix'] ;?>
             </div>
             <div class="m-auto">
               <a class="btn btn-default btn-success" href=<?= "fin.php" ?>>Fin de l'histoire</a>
@@ -98,8 +84,11 @@ require_once('requetes.php');
                if ($choix['id_page_cible'] == 'FIN') { 
                  $_SESSION['gagne'] = 1 ;?>
                 <div class='d-flex flex-column p-2 m-auto'>
-                  <div class="m-auto pb-2">
+                  <div class="m-auto pb-1">
                     Vous avez gagné !
+                  </div>
+                  <div class="m-auto pb-2">
+                    Vous avez fait les choix suivants : <?= $_SESSION['choix'] ;?>
                   </div>
                   <div class="m-auto">
                     <a class="btn btn-default btn-success p-2" href=<?= "fin.php" ?>>Fin de l'histoire</a>
@@ -112,14 +101,16 @@ require_once('requetes.php');
                   <div class='flex-row m-auto'>
                     <a class="btn btn-default btn-success p-2 m-2" href=<?= "jeu.php?idPageCible=" . $choix['id_page_cible']; ?> a> <?= $choix['contenu']; ?> </a>
                   </div>
-                <?php }
-              }
+                <?php } 
+                }
             } ?>
+          </div>
+          <div class='flex-row text-center mt-2'>
+            Il vous reste <?= $_SESSION['nbpv'] ?> points de vie.
           </div>
     <?php }
       }
     } ?>
-
     <?php include 'templatesHTML/footer.php'; ?>
   </div>
   <!-- jQuery -->

@@ -34,6 +34,7 @@ if($BDD){
 unset($_SESSION['id_hist']);
 unset($_SESSION['nbpv']);
 unset($_SESSION['gagne']);
+unset($_SESSION['choix']);
 $urlAccueil = substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'],'php/perdu')).'index.php';
 header("Location:{$urlAccueil}");
 ?>

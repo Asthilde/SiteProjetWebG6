@@ -7,6 +7,15 @@
     return $res->fetchAll();
   }
 
+  function afficherInfosHistEnCours($BDD, $idUser){
+    $res = $BDD->prepare("SELECT * FROM hist_jouee WHERE id_user = :idUser and id_hist = :idHist");
+    $res->execute(array(
+      'idUser' => $idUser,
+      'idHist' =>  $_SESSION['id_hist']
+    ));
+    return $res->fetch();
+  }
+
   function afficherInfosHistoire($BDD, $idHist){
     $res = $BDD->prepare("SELECT * FROM histoire WHERE id_hist = :idHist");
     $res->execute(array(
@@ -97,14 +106,14 @@
 
   function insererDebuterHistoire($BDD, $pageHist){
     try {
-      $sql = "INSERT INTO hist_jouee (id_hist, id_user, choix_eff, nb_pts_vie, type_fin) VALUES (:idHist, :idUser, :choix, :nbPV, :fin)";
+      $sql = "INSERT INTO hist_jouee (id_hist, id_user, choix_eff, nb_pts_vie, choix) VALUES (:idHist, :idUser, :dernierchoix, :nbPV, :choix)";
       $req = $BDD->prepare($sql);
       $req->execute(array(
         'idHist' => $_SESSION['id_hist'],
         'idUser' => $_SESSION['id_user'],
-        'choix' => $pageHist,
+        'dernierchoix' => $pageHist,
         'nbPV' => 3,
-        'fin' => ''
+        'choix' => ''
       ));
     } catch (Exception $e) {
       echo 'Histoire déja dans la base';
@@ -222,6 +231,12 @@
     $req2 = $BDD->prepare("UPDATE hist_jouee SET nb_pts_vie =:nbPV WHERE id_hist = :idHist AND id_user = :idUser");
     $req2->execute(array(
       'nbPV' => $_SESSION['nbpv'],
+      'idHist' => $_SESSION['id_hist'],
+      'idUser' => $_SESSION['id_user']
+    ));
+    $req3 = $BDD->prepare("UPDATE hist_jouee SET choix =:choix WHERE id_hist = :idHist AND id_user = :idUser");
+    $req3->execute(array(
+      'choix' => $_SESSION['choix'],
       'idHist' => $_SESSION['id_hist'],
       'idUser' => $_SESSION['id_user']
     ));
