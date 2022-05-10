@@ -6,7 +6,7 @@ require_once("connect.php");
 <!doctype html>
 <html>
 <?php include 'templatesHTML/head.php'; ?>
-
+<!-- Faire une variable de session string avec la liste des choix !-->
 <body>
   <div class="container">
     <?php include 'templatesHTML/navbar.php';

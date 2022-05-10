@@ -1,8 +1,8 @@
 <?php
-  function afficherHistoireEnCours($BDD){
+  function afficherHistoireEnCours($BDD, $idUser){
     $res = $BDD->prepare("SELECT * FROM hist_jouee WHERE id_user = :idUser");
     $res->execute(array(
-      'idUser' => $_SESSION['id_user']
+      'idUser' => $idUser
     ));
     return $res->fetchAll();
   }
@@ -23,4 +23,10 @@
     $tab = $res->fetch();
     return $tab['pseudo'];
   }
+
+  function afficherHistoires($BDD){
+    $res = $BDD->query("SELECT * FROM histoire ORDER BY nom_hist");
+    return $res->fetchAll();
+  }
+
 ?>
