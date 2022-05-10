@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once("connect.php");
+require_once('requetes.php');
 ?>
 
 <!doctype html>
@@ -13,22 +14,26 @@ require_once("connect.php");
     if ($BDD) {
       $_SESSION['nbpv'] = 3;
       $pageHist;
-      //Cas ou on démarre l'histoire
+      //Cas ou l'utilisateur démarre une histoire
       if (isset($_GET['id']) && !empty($_GET['id'])) {
         $_SESSION['id_hist'] = (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8', false);
+        $infosHist = afficherInfosHistoire($BDD,  $_SESSION['id_hist']);
+        $_SESSION['nom_hist'] = $infosHist['nom_hist'];
+        //Lorsqu'il reprend une histoire en cours de partie
         if (isset($_GET['nbPdv']) && $_GET['nbPdv'] >= 0 && $_GET['nbPdv'] <= 3 && isset($_GET['pageDebut'])) {
-          $res = $BDD->prepare("SELECT * FROM histoire WHERE id_hist = :idHist");
+          $_SESSION['nbpv'] = (int) htmlspecialchars($_GET['nbPdv'], ENT_QUOTES, 'UTF-8', false);
+          $pageHist = htmlspecialchars($_GET['pageDebut'], ENT_QUOTES, 'UTF-8', false);
+          /*$res = $BDD->prepare("SELECT * FROM histoire WHERE id_hist = :idHist");
           $res->execute(array(
             'idHist' => $_SESSION['id_hist']
           ));
-          $ligne = $res->fetch();
-          $_SESSION['nom_hist'] = $ligne['nom_hist'];
-          $_SESSION['nbpv'] = (int) htmlspecialchars($_GET['nbPdv'], ENT_QUOTES, 'UTF-8', false);
-          $pageHist = $_GET['pageDebut'];
-        } else {
+          $ligne = $res->fetch();*/
+          
+          
+        } else { //Lorsqu'il démarre une nouvelle histoire
           $pageHist = 0;
           $_SESSION['nbpv'] = 3;
-          try {
+          /*try {
             $sql = "INSERT INTO hist_jouee (id_hist, id_user, choix_eff, nb_pts_vie, type_fin) VALUES (:idHist, :idUser, :choix, :nbPV, :fin)";
             $req = $BDD->prepare($sql);
             $req->execute(array(
@@ -40,60 +45,42 @@ require_once("connect.php");
             ));
           } catch (Exception $e) {
             echo 'Histoire déja dans la base';
-          }
+          }*/
+          insererDebuterHistoire($BDD, $pageHist);
         }
       }
       //Cas où on est en train de jouer
-      else if (isset($_GET['idPageCible']) && (!empty($_GET['idPageCible'])) || $_GET['idPageCible'] == '0') {
+      else if (isset($_GET['idPageCible']) && (!empty($_GET['idPageCible']) || $_GET['idPageCible'] == '0')) {
         $pageHist = htmlspecialchars($_GET['idPageCible'], ENT_QUOTES, 'UTF-8', false);
-        $res = $BDD->prepare("SELECT * FROM choix WHERE id_hist = :idHist AND id_page_cible = :idPageCible");
-        $res->execute(array(
-          'idHist' => $_SESSION['id_hist'],
-          'idPageCible' => $pageHist
-        ));
-        $ligne = $res->fetch();
-        $_SESSION['nbpv'] += $ligne['nb_pdv_perdu'];
-        //Mise à jour des données dans la base de données
-        $req2 = $BDD->prepare("UPDATE hist_jouee SET choix_eff =:choix WHERE id_hist = :idHist AND id_user = :idUser");
-        $req2->execute(array(
-          'choix' => htmlspecialchars($_GET['idPageCible'], ENT_QUOTES, 'UTF-8', false),
-          'idHist' => $_SESSION['id_hist'],
-          'idUser' => $_SESSION['id_user']
-        ));
-        $req2 = $BDD->prepare("UPDATE hist_jouee SET nb_pts_vie =:nbPV WHERE id_hist = :idHist AND id_user = :idUser");
-        $req2->execute(array(
-          'nbPV' => $_SESSION['nbpv'],
-          'idHist' => $_SESSION['id_hist'],
-          'idUser' => $_SESSION['id_user']
-        ));
-      } else { ?>
+        $_SESSION['nbpv'] += recupererPDVPerdus($BDD, $pageHist);
+        $pageChoisie = htmlspecialchars($_GET['idPageCible'], ENT_QUOTES, 'UTF-8', false);
+        mettreAJourDonneesHistoireEnCours($BDD, $pageChoisie);
+      } 
+      else { ?>
         <div class='d-flex flex-row justify-content-center m-3'>
           <div class='col'>Le numéro d'histoire ou de page n'est pas renseigné, veuillez recommencer.</div>
           <a href='../index.php' class='btn btn-default btn-success'>Retour accueil</a>
         </div>
         <?php echo "</div>";
       }
-      if (isset($_SESSION['id_hist']) && (!empty($pageHist) || $pageHist == 0)) {
-        $res = $BDD->prepare("SELECT * FROM page_hist WHERE id_page = :idPage AND id_hist = :idHist");
-        $res->execute(array(
-          'idPage' => $pageHist,
-          'idHist' => $_SESSION['id_hist']
-        ));
-        $ligne = $res->fetch();
+
+      if (isset($_SESSION['id_hist']) && isset($pageHist) && (!empty($pageHist) || $pageHist == 0)) {
+        $infosPage = afficherPageHistoire($BDD, $pageHist);
         for ($i = 1; $i <= 5; $i++) {
           $para = "para_" . $i;
-          $image = "img_" . $i; ?>
-          <?php if ($ligne[$para] != ' ' && !empty($ligne[$para])) { ?>
+          $image = "img_" . $i; 
+          if ($infosPage[$para] != ' ' && !empty($infosPage[$para])) { ?>
             <div class='d-flex flex-row justify-content-center my-5 mx-2'>
-              <?= $ligne[$para]; ?>
+              <?= $infosPage[$para]; ?>
             </div>
           <?php }
-          if ($ligne[$image] != ' ' && !empty($ligne[$image])) { ?>
+          if ($infosPage[$image] != ' ' && !empty($infosPage[$image])) { ?>
             <div class='d-flex flex-row justify-content-center m-3'>
-              <img src="../images/<?= $_SESSION['nom_hist'] . '/' . $ligne[$image]; ?>" alt="<?= "../images/" . $_SESSION['nom_hist'] . "/" . $ligne[$image]; ?>" class="w-100" />
+              <img src="../images/<?= $_SESSION['nom_hist'] . '/' . $infosPage[$image]; ?>" alt="<?= "../images/" . $_SESSION['nom_hist'] . "/" . $infosPage[$image]; ?>" class="w-100" />
             </div>
           <?php }
         }
+
         if ($_SESSION['nbpv'] == 0) { ?>
           <div class='d-flex flex-column m-auto'>
             <div class="m-auto pb-2">
@@ -103,16 +90,13 @@ require_once("connect.php");
               <a class="btn btn-default btn-success" href=<?= "perdu.php" ?>>Fin de l'histoire</a>
             </div>
           </div>
-        <?php
-        } else {
-          $req2 = "SELECT * FROM choix WHERE id_page = '{$pageHist}' AND id_hist = {$_SESSION['id_hist']}";
-          $res2 = $BDD->prepare($req2);
-          $res2->execute(); ?>
+        <?php } 
+        else {
+          $choixPage = afficherChoixPage($BDD, $pageHist);?>
           <div class='d-flex justify-content-center'>
-            <?php while ($ligne2 = $res2->fetch()) { 
-               if ($ligne2['id_page_cible'] == 'FIN') { ?>
+            <?php foreach($choixPage as $choix) {
+               if ($choix['id_page_cible'] == 'FIN') { ?>
                 <div class='d-flex flex-column p-2 m-auto'>
-                  <!--Il faudra voir comment on gère avec bootstrap -->
                   <div class="m-auto pb-2">
                     Vous avez gagné !
                   </div>
@@ -123,8 +107,7 @@ require_once("connect.php");
               <?php break;
               } else { ?>
                 <div class='flex-row m-auto'>
-                  <!--Il faudra voir comment on gère avec bootstrap -->
-                  <a class="btn btn-default btn-success p-2 m-2" href=<?= "jeu.php?idPageCible=" . $ligne2['id_page_cible']; ?> a> <?= $ligne2['contenu']; ?> </a>
+                  <a class="btn btn-default btn-success p-2 m-2" href=<?= "jeu.php?idPageCible=" . $choix['id_page_cible']; ?> a> <?= $choix['contenu']; ?> </a>
                 </div>
             <?php }
             } ?>
