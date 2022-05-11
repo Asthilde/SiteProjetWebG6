@@ -58,7 +58,7 @@ if ($BDD) {
             <div class="d-flex flex-row mb-3">
               <div id="choix<?= $i ?>" class="col pr-5 pl-0">
                 Choix <?= $i ?></br>
-                <input type="text" name="choix<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le choix <?= $i ?>" <?php if ($i == 1) { ?>required <?php } ?> autofocus>
+                <input type="text" name="choix<?= $i ?>" value="" class="form-control" placeholder="Ecrivez le choix <?= $i ?>" required autofocus>
               </div>
               <div class="d-flex flex-row pt-3">
                 <input type="checkbox" id="fin<?= $i ?>" name="fin<?= $i ?>" value="<?= $i ?>" class="col-2">
@@ -71,7 +71,7 @@ if ($BDD) {
               </div>
               <div class="d-flex flex-row pr-2">
                 <?php for ($j=0; $j<4; $j++){ ?>
-                  <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="<?= $j ?>" class="col-3 px-1" <?php if ($i == 1) { ?>required <?php } ?> autofocus>
+                  <input type="radio" name="pdv<?= $i ?>" id="pdv<?= $i ?>" value="<?= $j ?>" class="col-3 px-1" required autofocus>
                   <label class="mr-3" for="pdv<?= $i ?>"><?= $j ?></label>
                 <?php } ?>
               </div>

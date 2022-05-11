@@ -33,11 +33,13 @@ require_once 'connect.php'; ?>
         $req->execute(array(
           "numero" => $_SESSION['id_hist']
         ));
-        $fichiers = glob("../images/" . $_SESSION['nom_hist'] . "/*");
-        foreach ($fichiers as $fichier) {
-          unlink($fichier);
+        if(isset($_SESSION['nom_hist'])){
+          $fichiers = glob("../images/" . $_SESSION['nom_hist'] . "/*");
+          foreach ($fichiers as $fichier) {
+            unlink($fichier);
+          }
+          rmdir("../images/" . $_SESSION['nom_hist']);
         }
-        rmdir("../images/" . $_SESSION['nom_hist']);
       } else {
     ?>
         <div class="d-flex flex-column mt-5 px-5">

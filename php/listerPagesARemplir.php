@@ -18,7 +18,6 @@ function afficherPagesARenseigner($BDD, $tabPages){
   $pagesImpossibles = array();
   if ($BDD) {
     //On enlève les pages déja renseignées
-    $pagesARenseigner = array_diff($pagesARenseigner, $tabPages);
     if (count($tabPages) > 0) {
       //On regarde parmi les choix déja renseignés pour voir les fins prématurées ou choix non écrits
       $req = $BDD->prepare("SELECT * FROM choix WHERE id_hist=:numero");
@@ -26,20 +25,17 @@ function afficherPagesARenseigner($BDD, $tabPages){
         "numero" => $_SESSION['id_hist']
       ));
       while ($ligne = $req->fetch()) {
-        if ($ligne['id_page_cible'] == "FIN" || (empty($ligne['contenu']) || $ligne['contenu'] == ' ')) {
+        if ($ligne['id_page_cible'] == "FIN") {
           //On parcourt les pages possibles pour enlever celles impossibles
           foreach ($pagesARenseigner as $pagePossible) {
-            if(strpos($pagePossible, $ligne['id_page']) !== false){
-              if((empty($ligne['contenu']) || $ligne['contenu'] == '') && strlen($pagePossible) > (2*strlen($ligne['id_page'])))
+            if (strpos($pagePossible, $ligne['id_page']) !== false && strlen($pagePossible) > strlen($ligne['id_page']))
                 array_push($pagesImpossibles, $pagePossible);
-              else if ((!empty($ligne['contenu']) && $ligne['contenu'] != ' ') && strlen($pagePossible) > strlen($ligne['id_page']))
-                array_push($pagesImpossibles, $pagePossible);
-            }
           }
+        }
       }
-      $pagesARenseigner = array_diff($pagesARenseigner, $pagesImpossibles);
+      $pagesARenseigner = array_diff($pagesARenseigner, $pagesImpossibles);//Problème car efface trop d'infos maintenant
+      $pagesARenseigner = array_diff($pagesARenseigner, $tabPages);
     }
-  }
   }
   return $pagesARenseigner;
 } ?>
