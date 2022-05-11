@@ -10,6 +10,7 @@ require_once 'connect.php' ?>
   <div class="container">
     <?php
     include 'templatesHTML/navbar.php';
+    echo $_SESSION['id_user'];
     if ($BDD) {
       $tabHistJouee = array();
       $demarrage = "connexion.php";
