@@ -10,6 +10,7 @@ require_once 'requetes.php'; ?>
   <div class="container">
     <?php
     include 'templatesHTML/navbar.php';
+    echo $_SESSION['id_user'];
     if ($BDD) {
       $tabHistJouee = array();
       $demarrage = "connexion.php";
@@ -21,7 +22,7 @@ require_once 'requetes.php'; ?>
             <div class="row align-items-end">
               <h2 class="col p-5">Histoires en cours</h2>
             </div>
-      <?php
+          <?php
             $i++;
           }
           $demarrage = "jeu.php?id={$histoire['id_hist']}";
