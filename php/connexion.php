@@ -15,7 +15,7 @@ require_once 'requetes.php';
     $ligne = "rien";
     if ($BDD) {
       if (isset($_POST['login']) && isset($_POST['mdp'])) {
-        $userBDD = obtenirUser($BDD);
+        $userBDD = obtenirUser($BDD, htmlspecialchars($_POST['login'], ENT_QUOTES, 'UTF-8', false));
         if (!empty($userBDD) && password_verify($_POST['mdp'], $userBDD['mdp'])) {
           $_SESSION['login'] = $_POST['login'];
           $_SESSION['id_user'] = (int) $userBDD['id_user'];

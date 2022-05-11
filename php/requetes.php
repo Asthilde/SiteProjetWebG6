@@ -24,10 +24,10 @@
     return $res->fetch();
   }
 
-  function obtenirUser($BDD){
+  function obtenirUser($BDD, $nomUser){
     $req = $BDD->prepare("SELECT * FROM user WHERE pseudo=:nomUser");
     $req->execute(array(
-      "nomUser" => htmlspecialchars($_POST['login'], ENT_QUOTES, 'UTF-8', false),
+      "nomUser" => $nomUser,
     ));
     return $req->fetch();
   }
