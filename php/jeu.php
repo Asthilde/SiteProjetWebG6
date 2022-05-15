@@ -16,21 +16,6 @@ require_once("connect.php");
       //Cas ou on démarre l'histoire
       if (isset($_GET['id']) && !empty($_GET['id'])) {
         $_SESSION['id_hist'] = (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8', false);
-<<<<<<< HEAD
-        $infosHist = afficherInfosHistoire($BDD,  $_SESSION['id_hist']);
-        $_SESSION['nom_hist'] = $infosHist['nom_hist'];
-        $infosHistEnCours = afficherInfosHistEnCours($BDD, $_SESSION['id_user'], $_SESSION['id_hist']);
-        //Lorsqu'il reprend une histoire en cours de partie
-        if(isset($infosHistEnCours) && !empty($infosHistEnCours)){
-          $_SESSION['nbpv'] = (int) $infosHistEnCours['nb_pts_vie'];
-          $pageHist = $infosHistEnCours['choix_eff'];
-          $_SESSION['choix'] = $infosHistEnCours['choix'];
-        } 
-        else { //Lorsqu'il démarre une nouvelle histoire
-          $pageHist = '0';
-          $_SESSION['choix'] = '0';
-          insererDebuterHistoire($BDD, $_SESSION['id_hist'], $_SESSION['id_user'], $pageHist);
-=======
         if (isset($_GET['nbPdv']) && $_GET['nbPdv'] >= 0 && $_GET['nbPdv'] <= 3 && isset($_GET['pageDebut'])) {
           $res = $BDD->prepare("SELECT * FROM histoire WHERE id_hist = :idHist");
           $res->execute(array(
@@ -56,20 +41,11 @@ require_once("connect.php");
           } catch (Exception $e) {
             echo 'Histoire déja dans la base';
           }
->>>>>>> b9651dbab425bea5484d3b498dd4f211c2979ebd
         }
       }
       //Cas où on est en train de jouer
       else if (isset($_GET['idPageCible']) && (!empty($_GET['idPageCible'])) || $_GET['idPageCible'] == '0') {
         $pageHist = htmlspecialchars($_GET['idPageCible'], ENT_QUOTES, 'UTF-8', false);
-<<<<<<< HEAD
-        $_SESSION['nbpv'] += recupererPDVPerdus($BDD, $pageHist, $_SESSION['id_hist']);
-        $_SESSION['choix'] .= ' ' . $pageHist;
-        $pageChoisie = htmlspecialchars($_GET['idPageCible'], ENT_QUOTES, 'UTF-8', false);
-        mettreAJourDonneesHistoireEnCours($BDD, $pageChoisie);
-      } 
-      else { ?>
-=======
         $res = $BDD->prepare("SELECT * FROM choix WHERE id_hist = :idHist AND id_page_cible = :idPageCible");
         $res->execute(array(
           'idHist' => $_SESSION['id_hist'],
@@ -91,22 +67,12 @@ require_once("connect.php");
           'idUser' => $_SESSION['id_user']
         ));
       } else { ?>
->>>>>>> b9651dbab425bea5484d3b498dd4f211c2979ebd
         <div class='d-flex flex-row justify-content-center m-3'>
           <div class='col'>Le numéro d'histoire ou de page n'est pas renseigné, veuillez recommencer.</div>
           <a href='../index.php' class='btn btn-default btn-success'>Retour accueil</a>
         </div>
         <?php echo "</div>";
       }
-<<<<<<< HEAD
-
-      if (isset($_SESSION['id_hist']) && isset($pageHist) && (!empty($pageHist) || $pageHist == 0)) {
-        $infosPage = afficherPageHistoire($BDD, $pageHist, $_SESSION['id_hist']);
-        for ($i = 1; $i <= 5; $i++) {
-          $para = "para_" . $i;
-          $image = "img_" . $i; 
-          if (isset($infosPage[$para]) &&  $infosPage[$para]!= ' ' && !empty($infosPage[$para])) { ?>
-=======
       if (isset($_SESSION['id_hist']) && (!empty($pageHist) || $pageHist == 0)) {
         $res = $BDD->prepare("SELECT * FROM page_hist WHERE id_page = :idPage AND id_hist = :idHist");
         $res->execute(array(
@@ -118,16 +84,11 @@ require_once("connect.php");
           $para = "para_" . $i;
           $image = "img_" . $i; ?>
           <?php if ($ligne[$para] != ' ' && !empty($ligne[$para])) { ?>
->>>>>>> b9651dbab425bea5484d3b498dd4f211c2979ebd
             <div class='d-flex flex-row justify-content-center my-5 mx-2'>
               <?= $ligne[$para]; ?>
             </div>
           <?php }
-<<<<<<< HEAD
-          if (isset($infosPage[$image]) && $infosPage[$image]!= ' ' && !empty($infosPage[$image])) { ?>
-=======
           if ($ligne[$image] != ' ' && !empty($ligne[$image])) { ?>
->>>>>>> b9651dbab425bea5484d3b498dd4f211c2979ebd
             <div class='d-flex flex-row justify-content-center m-3'>
               <img src="../images/<?= $_SESSION['nom_hist'] . '/' . $ligne[$image]; ?>" alt="<?= "../images/" . $_SESSION['nom_hist'] . "/" . $ligne[$image]; ?>" class="w-100" />
             </div>
@@ -142,17 +103,11 @@ require_once("connect.php");
               <a class="btn btn-default btn-success" href=<?= "perdu.php" ?>>Fin de l'histoire</a>
             </div>
           </div>
-<<<<<<< HEAD
-        <?php } 
-        else {
-          $choixPage = afficherChoixPage($BDD, $pageHist, $_SESSION['id_hist']);?>
-=======
         <?php
         } else {
           $req2 = "SELECT * FROM choix WHERE id_page = '{$pageHist}' AND id_hist = {$_SESSION['id_hist']}";
           $res2 = $BDD->prepare($req2);
           $res2->execute(); ?>
->>>>>>> b9651dbab425bea5484d3b498dd4f211c2979ebd
           <div class='d-flex justify-content-center'>
             <?php while ($ligne2 = $res2->fetch()) { 
                if ($ligne2['id_page_cible'] == 'FIN') { ?>
