@@ -1,7 +1,6 @@
 <?php
 session_start();
-require_once 'connect.php'; 
-require_once 'requetes.php'; ?>
+require_once 'connect.php'; ?>
 <!doctype html>
 <html>
 <?php include 'templatesHTML/head.php'; ?>
@@ -14,8 +13,12 @@ require_once 'requetes.php'; ?>
       $_SESSION['id_hist'] = (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8', false);
     }
     if ($BDD) {
-      if (isset($_POST['cache']) && isset($_SESSION['id_hist'])) {
-        cacherHistoire($BDD);
+      if (isset($_POST['cache'])) {
+        $req = $BDD -> prepare("UPDATE histoire SET cache=:cacher WHERE id_hist=:numHist"); 
+        $req->execute(array(
+          'cacher' => 1,
+          'numHist' => $_SESSION['id_hist'] //Ne fonctionne pas à retester sur phpMyAdmin
+        )); 
       } else { ?>
         <div class="d-flex flex-column mt-5 px-5">
             <div class="text-center mb-3">
