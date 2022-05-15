@@ -1,29 +1,21 @@
 <?php
 session_start();
 require_once("connect.php");
+require_once("requetes.php");
 ?>
 <!doctype html>
 <html>
 <?php include 'templatesHTML/head.php'; ?>
-
 <body>
   <div class="container">
     <?php
     include 'templatesHTML/navbar.php';
-
     if (isset($_POST['login']) && isset($_POST['mdp'])) {
-      $pseudo = $_POST['login'];
-      $mdp = password_hash($_POST['mdp'], PASSWORD_BCRYPT);
-      $sql = "INSERT INTO user(est_admin,pseudo,mdp) VALUES (?,?,?)";
-      $req = $BDD->prepare($sql);
-      $req->execute(array(0, $pseudo, $mdp));
-
-      $sql2 = "SELECT * FROM user WHERE pseudo='{$pseudo}' AND mdp = '{$mdp}'";
-      $req2 = $BDD->prepare($sql2);
-      $req2->execute();
-      $ligne = $req2->fetch();
-      if (!empty($ligne)) {
-        $_SESSION['login'] = $pseudo;
+      ajouterUser($BDD);
+      $user = obtenirUser($BDD, htmlspecialchars($_POST['login'], ENT_QUOTES, 'UTF-8', false));
+      if (!empty($user)) {
+        $_SESSION['login'] = htmlspecialchars($_POST['login'], ENT_QUOTES, 'UTF-8', false);
+        $_SESSION['id_user'] = $user['id_user'];
         header('Location: ../index.php');
       }
     } ?>
@@ -32,7 +24,7 @@ require_once("connect.php");
       Bienvenue sur notre site ! Inscrivez-vous :
     </div>
     <div class="d-flex justify-content-center p-3">
-      <form class="form-signin form-horizontal w-25" role="form" action="creation_compte.php" method="post">
+      <form class="form-signin form-horizontal w-50" role="form" action="creation_compte.php" method="post">
         <div class="form-group">
           <input type="text" name="login" class="form-control" placeholder="Entrez votre login" required autofocus>
         </div>
@@ -47,7 +39,6 @@ require_once("connect.php");
         </div>
       </form>
     </div>
-
     <?php include 'templatesHTML/footer.php'; ?>
   </div>
 
@@ -56,5 +47,4 @@ require_once("connect.php");
   <!-- JavaScript Boostrap plugin -->
   <script src="../lib/bootstrap/js/bootstrap.min.js"></script>
 </body>
-
 </html>

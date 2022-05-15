@@ -265,19 +265,21 @@
       $nom = "choix" . $i;
       $nomPdv = "pdv" . $i;
       if (isset($_POST[$nom])) {
-        $req2 = $BDD -> prepare("UPDATE choix SET contenu =:texte WHERE id_page = :idPage AND id_page_cible = :idPageCible"); 
+        $req2 = $BDD -> prepare("UPDATE choix SET contenu =:texte WHERE id_page = :idPage AND id_page_cible = :idPageCible AND id_hist = :idHist"); 
         $req2->execute(array(
           'texte' => htmlspecialchars($_POST[$nom], ENT_QUOTES, 'UTF-8', false),
           'idPage' => $_SESSION['pageModifiee'],
-          'idPageCible' => $choix['id_page_cible']
+          'idPageCible' => $choix['id_page_cible'],
+          "idHist" => $_SESSION['id_hist']
         ));
       }
       if(isset($_POST[$nomPdv])){
-        $req2 = $BDD -> prepare("UPDATE choix SET nb_pdv_perdu =:nbPdv WHERE id_page = :idPage AND id_page_cible = :idPageCible"); 
+        $req2 = $BDD -> prepare("UPDATE choix SET nb_pdv_perdu =:nbPdv WHERE id_page = :idPage AND id_page_cible = :idPageCible AND id_hist = :idHist"); 
         $req2->execute(array(
           'nbPdv' => (-1*$_POST[$nomPdv]),
           'idPage' => $_SESSION['pageModifiee'],
-          'idPageCible' => $choix['id_page_cible']
+          'idPageCible' => $choix['id_page_cible'],
+          "idHist" => $_SESSION['id_hist']
         ));
       }
       $i++;

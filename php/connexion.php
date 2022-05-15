@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once("connect.php");
+require_once 'requetes.php'; 
 ?>
 
 <!doctype html>
@@ -14,31 +15,25 @@ require_once("connect.php");
     $ligne = "rien";
     if ($BDD) {
       if (isset($_POST['login']) && isset($_POST['mdp'])) {
-        $sql = "SELECT * FROM user WHERE pseudo=:nom_user";
-        $req = $BDD->prepare($sql);
-        $req->execute(array(
-          "nom_user" => $_POST['login']
-        ));
-        $ligne = $req->fetch();
-        if (!empty($ligne) && password_verify($_POST['mdp'], $ligne['mdp'])) {
-          $_SESSION['login'] = $_POST['login']; //Il faut faire une variable de session pour avoir l'idUser
-          $_SESSION['id_user'] = (int) $ligne['id_user'];
-
-          if ($ligne["est_admin"] == 1) {
+        $userBDD = obtenirUser($BDD, htmlspecialchars($_POST['login'], ENT_QUOTES, 'UTF-8', false));
+        if (!empty($userBDD) && password_verify($_POST['mdp'], $userBDD['mdp'])) {
+          $_SESSION['login'] = $_POST['login'];
+          $_SESSION['id_user'] = (int) $userBDD['id_user'];
+          if ($userBDD["est_admin"] == 1) {
             $_SESSION['admin'] = 1;
-          } else
-            $_SESSION['admin'] = 0;
+          }
           header('Location: ../index.php');
         }
+        else {
+          session_destroy();
+          $ligne = "inconnu";
+        }
       }
-    }
-    if (empty($ligne) || $ligne === "rien") {
-      session_destroy(); ?>
+    } ?>
       <h2 class="text-center p-5">Connexion</h2>
       <?php if ($ligne !== "rien") { ?>
         <div class="alert alert-danger">
           <strong>Erreur</strong> Utilisateur et / ou mot de passe non connus !
-          <!--A voir si on fait plus détaillé-->
         </div>
       <?php } ?>
       <div class="d-flex justify-content-center">
@@ -61,9 +56,6 @@ require_once("connect.php");
           </div>
         </form>
       </div>
-
-    <?php } ?>
-
     <?php include 'templatesHTML/footer.php'; ?>
   </div>
 

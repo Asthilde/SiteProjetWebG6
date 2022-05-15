@@ -11,10 +11,12 @@ require_once 'connect.php'; ?>
     include 'templatesHTML/navbar.php';
     if (isset($_GET['id'])) {
       $_SESSION['id_hist'] = (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8', false);
+    }
+    if (isset($_GET['nomHist'])) {
       $_SESSION['nom_hist'] = htmlspecialchars($_GET['nomHist'], ENT_QUOTES, 'UTF-8', false);
     }
     if ($BDD) {
-      if (isset($_POST['suppr'])) {
+      if (isset($_POST['suppr']) && isset($_SESSION['id_hist'])) {
         $req = $BDD->prepare("DELETE FROM page_hist WHERE id_hist=:numero");
         $req->execute(array(
           "numero" => $_SESSION['id_hist']
@@ -31,11 +33,13 @@ require_once 'connect.php'; ?>
         $req->execute(array(
           "numero" => $_SESSION['id_hist']
         ));
-        $fichiers = glob("../images/" . $_SESSION['nom_hist'] . "/*");
-        foreach ($fichiers as $fichier) {
-          unlink($fichier);
+        if(isset($_SESSION['nom_hist'])){
+          $fichiers = glob("../images/" . $_SESSION['nom_hist'] . "/*");
+          foreach ($fichiers as $fichier) {
+            unlink($fichier);
+          }
+          rmdir("../images/" . $_SESSION['nom_hist']);
         }
-        rmdir("../images/" . $_SESSION['nom_hist']);
       } else {
     ?>
         <div class="d-flex flex-column mt-5 px-5">
