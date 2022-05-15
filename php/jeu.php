@@ -19,7 +19,7 @@ require_once('requetes.php');
         $_SESSION['id_hist'] = (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8', false);
         $infosHist = afficherInfosHistoire($BDD,  $_SESSION['id_hist']);
         $_SESSION['nom_hist'] = $infosHist['nom_hist'];
-        $infosHistEnCours = afficherInfosHistEnCours($BDD, $_SESSION['id_user']);
+        $infosHistEnCours = afficherInfosHistEnCours($BDD, $_SESSION['id_user'], $_SESSION['id_hist']);
         //Lorsqu'il reprend une histoire en cours de partie
         if(isset($infosHistEnCours) && !empty($infosHistEnCours)){
           $_SESSION['nbpv'] = (int) $infosHistEnCours['nb_pts_vie'];
@@ -29,13 +29,13 @@ require_once('requetes.php');
         else { //Lorsqu'il démarre une nouvelle histoire
           $pageHist = '0';
           $_SESSION['choix'] = '0';
-          insererDebuterHistoire($BDD, $pageHist);
+          insererDebuterHistoire($BDD, $_SESSION['id_hist'], $_SESSION['id_user'], $pageHist);
         }
       }
       //Cas où on est en train de jouer
       else if (isset($_GET['idPageCible']) && (!empty($_GET['idPageCible']) || $_GET['idPageCible'] == '0')) {
         $pageHist = htmlspecialchars($_GET['idPageCible'], ENT_QUOTES, 'UTF-8', false);
-        $_SESSION['nbpv'] += recupererPDVPerdus($BDD, $pageHist);
+        $_SESSION['nbpv'] += recupererPDVPerdus($BDD, $pageHist, $_SESSION['id_hist']);
         $_SESSION['choix'] .= ' ' . $pageHist;
         $pageChoisie = htmlspecialchars($_GET['idPageCible'], ENT_QUOTES, 'UTF-8', false);
         mettreAJourDonneesHistoireEnCours($BDD, $pageChoisie);
@@ -49,16 +49,16 @@ require_once('requetes.php');
       }
 
       if (isset($_SESSION['id_hist']) && isset($pageHist) && (!empty($pageHist) || $pageHist == 0)) {
-        $infosPage = afficherPageHistoire($BDD, $pageHist);
+        $infosPage = afficherPageHistoire($BDD, $pageHist, $_SESSION['id_hist']);
         for ($i = 1; $i <= 5; $i++) {
           $para = "para_" . $i;
           $image = "img_" . $i; 
-          if ($infosPage[$para] != ' ' && !empty($infosPage[$para])) { ?>
+          if (isset($infosPage[$para]) &&  $infosPage[$para]!= ' ' && !empty($infosPage[$para])) { ?>
             <div class='d-flex flex-row justify-content-center my-5 mx-2'>
               <?= $infosPage[$para]; ?>
             </div>
           <?php }
-          if ($infosPage[$image] != ' ' && !empty($infosPage[$image])) { ?>
+          if (isset($infosPage[$image]) && $infosPage[$image]!= ' ' && !empty($infosPage[$image])) { ?>
             <div class='d-flex flex-row justify-content-center m-3'>
               <img src="../images/<?= $_SESSION['nom_hist'] . '/' . $infosPage[$image]; ?>" alt="<?= "../images/" . $_SESSION['nom_hist'] . "/" . $infosPage[$image]; ?>" class="w-100" />
             </div>
@@ -78,7 +78,7 @@ require_once('requetes.php');
           </div>
         <?php } 
         else {
-          $choixPage = afficherChoixPage($BDD, $pageHist);?>
+          $choixPage = afficherChoixPage($BDD, $pageHist, $_SESSION['id_hist']);?>
           <div class='d-flex justify-content-center'>
             <?php foreach($choixPage as $choix) {
                if ($choix['id_page_cible'] == 'FIN') { 

@@ -1,1 +1,2 @@
-<?php header("Location: php/index.php"); ?>
+<?php session_start();
+header("Location: php/index.php"); ?>

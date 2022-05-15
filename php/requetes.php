@@ -7,11 +7,11 @@
     return $res->fetchAll();
   }
 
-  function afficherInfosHistEnCours($BDD, $idUser){
+  function afficherInfosHistEnCours($BDD, $idUser, $idHist){
     $res = $BDD->prepare("SELECT * FROM hist_jouee WHERE id_user = :idUser and id_hist = :idHist");
     $res->execute(array(
       'idUser' => $idUser,
-      'idHist' =>  $_SESSION['id_hist']
+      'idHist' =>  $idHist
     ));
     return $res->fetch();
   }
@@ -32,15 +32,6 @@
     return $req->fetch();
   }
 
-  function verifierUserConnu($BDD){
-    $req = $BDD->prepare("SELECT * FROM user WHERE pseudo=:nomUser AND mdp = :mdp");
-    $req->execute(array(
-      "nomUser" => htmlspecialchars($_POST['login'], ENT_QUOTES, 'UTF-8', false),
-      "mdp" => password_hash($_POST['mdp'], PASSWORD_BCRYPT)
-    ));
-    return $req->fetch();
-  }
-
   function afficherPseudoUser($BDD, $idCrea){
     $res = $BDD->prepare("SELECT pseudo FROM user WHERE id_user = :idCrea");
     $res->execute(array(
@@ -55,48 +46,48 @@
     return $res->fetchAll();
   }
 
-  function recupererPDVPerdus($BDD, $pageHist){
+  function recupererPDVPerdus($BDD, $pageHist, $idHist){
     $res = $BDD->prepare("SELECT nb_pdv_perdu FROM choix WHERE id_hist = :idHist AND id_page_cible = :idPageCible");
     $res->execute(array(
-      'idHist' => $_SESSION['id_hist'],
+      'idHist' => $idHist,
       'idPageCible' => $pageHist
     ));
     $ligne = $res->fetch();
     return $ligne['nb_pdv_perdu'];
   }
 
-  function recupererIdHistoire($BDD){
+  function recupererIdHistoire($BDD, $nomHist){
     $res = $BDD->prepare("SELECT id_hist FROM histoire WHERE nom_hist = :nomHist");
     $res->execute(array(
-      'nomHist' => $_SESSION['nom_hist']
+      'nomHist' => $nomHist
     ));
     $ligne = $res->fetch();
     return $ligne['id_hist'];
   }
 
-  function afficherPageHistoire($BDD, $pageHist){
+  function afficherPageHistoire($BDD, $pageHist, $idHist){
     $res = $BDD->prepare("SELECT * FROM page_hist WHERE id_page = :idPage AND id_hist = :idHist");
     $res->execute(array(
       'idPage' => $pageHist,
-      'idHist' => $_SESSION['id_hist']
+      'idHist' => $idHist
     ));
     return $res->fetch();
   }
 
-  function afficherChoixPage($BDD, $pageHist){
+  function afficherChoixPage($BDD, $pageHist, $idHist){
     $res = $BDD->prepare("SELECT * FROM choix WHERE id_page = :idPage AND id_hist = :idHist");
     $res->execute(array(
       'idPage' => $pageHist,
-      'idHist' => $_SESSION['id_hist']
+      'idHist' => $idHist
     ));
     return $res->fetchAll();
   }
 
-  function afficherPagesRenseignees($BDD){
+  function afficherPagesRenseignees($BDD, $idHist){
     $tabPages = array();
     $req = $BDD->prepare("SELECT id_page FROM page_hist WHERE id_hist=:numero");
     $req->execute(array(
-      "numero" => $_SESSION['id_hist']
+      "numero" => $idHist
     ));
     while ($ligne = $req->fetch()) {
       array_push($tabPages, $ligne['id_page']);
@@ -104,19 +95,19 @@
     return $tabPages;
   }
 
-  function insererDebuterHistoire($BDD, $pageHist){
+  function insererDebuterHistoire($BDD, $idHist, $idUser, $pageHist){
     try {
       $sql = "INSERT INTO hist_jouee (id_hist, id_user, choix_eff, nb_pts_vie, choix) VALUES (:idHist, :idUser, :dernierchoix, :nbPV, :choix)";
       $req = $BDD->prepare($sql);
       $req->execute(array(
-        'idHist' => $_SESSION['id_hist'],
-        'idUser' => $_SESSION['id_user'],
+        'idHist' => $idHist,
+        'idUser' => $idUser,
         'dernierchoix' => $pageHist,
         'nbPV' => 3,
         'choix' => ''
       ));
     } catch (Exception $e) {
-      echo 'Histoire déja dans la base';
+      echo $e->getMessage();
     }
   }
 

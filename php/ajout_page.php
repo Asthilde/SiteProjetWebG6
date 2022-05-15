@@ -5,7 +5,7 @@ require_once("requetes.php");
 require_once("listerPagesARemplir.php");
 if ($BDD) {
   if (!isset($_POST['pageChoisie']) || isset($_SESSION['num_page'])) {
-    $_SESSION['id_hist'] = recupererIdHistoire($BDD);
+    $_SESSION['id_hist'] = recupererIdHistoire($BDD, $_SESSION['nom_hist']);
     unset($_SESSION['num_page']);
   } 
   else {
@@ -26,7 +26,7 @@ if ($BDD) {
     $tabPages = array();
     if($BDD) {
       include 'listerPagesRenseignees.php';
-      $tabPages = afficherPagesRenseignees($BDD); ?>
+      $tabPages = afficherPagesRenseignees($BDD, $_SESSION['id_hist']); ?>
     <div class="d-flex justify-content-center mt-5 px-5">
       <form class="form-horizontal w-75" role="form" enctype="multipart/form-data" action="ajout_page.php" method="post">
         <div class="form-group">

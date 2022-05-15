@@ -12,9 +12,10 @@ require_once("requetes.php");
     include 'templatesHTML/navbar.php';
     if (isset($_POST['login']) && isset($_POST['mdp'])) {
       ajouterUser($BDD);
-      $user = verifierUserConnu($BDD);
+      $user = obtenirUser($BDD, htmlspecialchars($_POST['login'], ENT_QUOTES, 'UTF-8', false));
       if (!empty($user)) {
         $_SESSION['login'] = htmlspecialchars($_POST['login'], ENT_QUOTES, 'UTF-8', false);
+        $_SESSION['id_user'] = $user['id_user'];
         header('Location: ../index.php');
       }
     } ?>

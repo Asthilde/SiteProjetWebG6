@@ -4,7 +4,7 @@
   <div class="row text-align-center m-auto">
     Liste des choix déja renseignés :
     <?php
-    $tabPages = afficherPagesRenseignees($BDD);
+    $tabPages = afficherPagesRenseignees($BDD, $_SESSION['id_hist']);
     foreach ($tabPages as $pageRenseignee) {
       echo ($pageRenseignee . ', ');
     }

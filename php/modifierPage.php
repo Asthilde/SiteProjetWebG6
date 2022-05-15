@@ -16,7 +16,7 @@ require_once 'requetes.php'; ?>
   }
   else if(isset($_SESSION['pageModifiee'])){
     mettreAJourDonneesPage($BDD);
-    $donneesChoix = afficherChoixPage($BDD, $_SESSION['pageModifiee']);
+    $donneesChoix = afficherChoixPage($BDD, $_SESSION['pageModifiee'], $_SESSION['id_hist']);
     mettreAJourChoixPage($BDD, $donneesChoix);
     header('Location:modifier.php');
     unset($_SESSION['pageModifiee']);
@@ -25,7 +25,7 @@ require_once 'requetes.php'; ?>
 <div class="d-flex flex-column mt-5 px-3">
   <?php 
   if(isset($_POST['pageChoisie'])){
-    $page = afficherPageHistoire($BDD, $_POST['pageChoisie']); ?>
+    $page = afficherPageHistoire($BDD, $_POST['pageChoisie'], $_SESSION['id_hist']); ?>
     <div class="mb-5">
       <h2 class="text-center">Modification de la page <?= $_POST['pageChoisie'] ?></h2>
     </div>
@@ -51,7 +51,7 @@ require_once 'requetes.php'; ?>
           <input type="file" name="img_<?= $i ?>"/>
         </div>
       <?php } 
-      $tabChoix = afficherChoixPage($BDD, $_POST['pageChoisie']);
+      $tabChoix = afficherChoixPage($BDD, $_POST['pageChoisie'], $_SESSION['id_hist']);
       $i=1;
       foreach($tabChoix as $choix) { ?>
         <div id="choix<?= $i ?>" class="form-group text-center">

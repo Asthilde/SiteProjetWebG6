@@ -23,7 +23,7 @@ if (isset($_SESSION['pageModifiee'])) {
               if (isset($_GET['id']) && !empty($_GET['id']))
                 $_SESSION['id_hist'] = (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8', false);
               if (isset($_SESSION['id_hist'])) {
-                $pagesRenseignees = afficherPagesRenseignees($BDD);
+                $pagesRenseignees = afficherPagesRenseignees($BDD, $_SESSION['id_hist']);
                 foreach($pagesRenseignees as $page) { ?>
                   <option value="<?= $page ?>"><?= $page ?></option>
             <?php }
